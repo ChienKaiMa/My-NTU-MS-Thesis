@@ -1,0 +1,173 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amsthm,amsfonts,amssymb,amscd}
+\usepackage{multirow,booktabs}
+\usepackage[table]{xcolor}
+\usepackage{fullpage}
+\usepackage{lastpage}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{mathrsfs}
+\usepackage{wrapfig}
+\usepackage{setspace}
+\usepackage{calc}
+\usepackage{multicol}
+\usepackage{cancel}
+\usepackage[retainorgcmds]{IEEEtrantools}
+\usepackage[margin=3cm]{geometry}
+\usepackage{amsmath}
+\newlength{\tabcont}
+\setlength{\parindent}{0.0in}
+\setlength{\parskip}{0.05in}
+\usepackage{empheq}
+\usepackage{framed}
+% \usepackage{CJKutf8}
+\usepackage[most]{tcolorbox}
+\usepackage{xcolor}
+\usepackage[]{titlesec}
+
+% https://tex.stackexchange.com/questions/250052/custom-lstlisting-highlighting-for-symbols
+\usepackage{listings}
+
+\usepackage{tcolorbox}
+
+\usepackage{quantikz}
+
+\newcommand{\lstfont}[1]{\color{#1}\scriptsize\ttfamily}
+
+\lstset{
+    language=[ANSI]C++,
+    showstringspaces=false,
+    backgroundcolor=\color{black!90},
+    basicstyle=\lstfont{white},
+    identifierstyle=\lstfont{white},
+    keywordstyle=\lstfont{magenta!40},
+    frame=l,
+    framesep=4.5mm,
+    framexleftmargin=2.5mm,
+    numbers=left,                    
+    numbersep=5pt,
+    numberstyle=\lstfont{white},
+    stringstyle=\lstfont{cyan},
+    commentstyle=\lstfont{yellow!30},
+    emph={
+        cudaMalloc, cudaFree,
+        __global__, __shared__, __device__, __host__,
+        __syncthreads,
+    },
+    emphstyle={\lstfont{green!60!white}},
+    breaklines=true
+}
+
+\colorlet{shadecolor}{orange!15}
+\parindent 0in
+\parskip 12pt
+\geometry{margin=1in, headsep=0.25in}
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}
+\newtheorem{reg}{Rule}
+\newtheorem{exer}{Exercise}
+\newtheorem{note}{Note}
+% \renewcommand\thesection{Question \arabic{section}}
+% \renewcommand\thesubsection{\arabic{section}.(\alph{subsection})}
+
+
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}m{#1}}
+
+\begin{document}
+%\setcounter{section}{0}
+\title{Homework 5}
+
+\thispagestyle{empty}
+
+\begin{center}
+    {\LARGE \bf UQSD Problem formulation}\\
+    \bigskip
+    \today\\
+\end{center}
+
+\section{Optimal POVM for linearly independent pure states}
+% TODO \cite{}
+Denote a finite set of quantum states $\{\ket{\psi_{1}}, \ket{\psi_{2}}, \dots, \ket{\psi_{k}}\}$,
+where $k \in \mathbf{N}$, in finite size Hilbert space?, prepared in the prior probabilities
+$\{p_{1}, p_{2}, \dots, p_{k}\}$,
+and a set of measurement operators \dots
+The reciprocal states defined in %\cite{}
+can be calculated with \dots
+
+By precalculating the reciprocal states, the problem can be reduced to find a set of $k$ parameters that
+while keeping the operators positive semidefinite, maximizes the total joint success probability.
+These parameters actually correspond to the success probability of each outcome.
+The semidefinite programming problem can be formulated as follows:
+\begin{align*}
+    7788
+\end{align*}
+
+\section{Fixed rate of inconclusive outcome for mixed-state discrimination}
+%\cite{origin} \cite{application} \cite{follow-ups}
+A quantum state $\Psi$ can be denoted by a state vector $\ket{\psi}$ or a density matrix $\rho$.
+The prior probability for each input state $\Psi_{i}$ (expressed by $\ket{\psi_{i}}$ or $\rho_{i}$) is
+denoted by $p_{i}$, where $i$ ranges from 1 to $k$.
+The measurement operators are defined by $\Pi_{i}$, where $i$ ranges from 0 to $k$.
+Here $\Pi_{0}$ is designed to match the inconclusive results,
+and $\Pi_{1}$ to $\Pi_{k}$ designed to measure the $1$-st to $k$-th state respectively.
+$P_{D}$ denotes the total probability of correct discrimination,
+$P_{err}$ denotes the probability of incorrect/erroneous discrimination,
+and $P_{inc}$ denotes the probability of inconclusive outcomes.
+$\beta$ is a constant real number that is defined to be the target inconclusive probability.
+In practice, we use an inequality in place of an equality,
+and $\beta$ is the minimum rate of inconclusive outcomes.
+
+\begin{align}
+    P_{D} + P_{err} + P_{inc} = 1
+\end{align}
+
+\begin{align}
+     & \underset{\{\Pi\}}{\text{maximize}} &  & P_{D}=\sum_{i=1}^{k} p_{i} \operatorname{Tr}(\rho_{i} \Pi_{i})              \\
+     & \text{subject to}                   &  & \Pi_{i} \succeq 0, \quad i = 0, \ldots, k                                   \\
+     &                                     &  & \sum_{i=0}^{k} \Pi_i = I                                                    \\
+     &                                     &  & P_{inc}=\sum_{i=1}^{k} p_{i} \operatorname{Tr}(\rho_{i} \Pi_{0}) \geq \beta
+\end{align}
+
+\section{$\epsilon$-UQSD}
+In this work, we include a different set of constraints in the semidefinite programming problem
+such that a desired alternative POVM can be obtained.
+% Assume a set of $k$ input quantum states are expressed in density matrices,
+% denoted by $\{ \rho_{1}, \rho_{2}, \dots, \rho_{k}\}$.
+The notations are almost identical to FRIO, but our constraints further consider the error part of the conclusive results.
+It also resembles the max confidence discrimination scheme (TBA).
+The symbol $O_{i}$ denotes the event that the $i$-th outcome is measured.
+The density matrices could be treated without assuming that the states are related to some pure states.
+Later, we may assume the mixed states are related to some pure states or can be expressed by ensembles of pure states.
+The semidefinite programming formulation is as follows:
+
+\begin{align}
+     & \underset{\{\Pi\}}{\text{maximize}} &  & P_{D}=\sum_{i=1}^{k} p_{i} \operatorname{Tr}(\rho_{i} \Pi_{i})                                                                                                      \\
+     & \text{subject to}                   &  & \Pi_{i} \succeq 0, \quad i = 0, \ldots, k                                                                                                                           \\
+     &                                     &  & \sum_{i=0}^{k} \Pi_i = I                                                                                                                                            \\
+     &                                     &  & P(O_i \mid \rho_i) = \frac{p_i \, \operatorname{Tr}(\rho_i \Pi_i)}{\sum_{j=1}^{L} p_i \, \operatorname{Tr}(\rho_i \Pi_j)} \geq 1 - \alpha_i, \quad i = 1, \ldots, k \\
+     &                                     &  & P(\rho_i \mid O_i) = \frac{p_i \, \operatorname{Tr}(\rho_i \Pi_i)}{\sum_{j=1}^{L} p_j \, \operatorname{Tr}(\rho_j \Pi_i)} \geq 1 - \beta_i, \quad i = 1, \ldots, k
+\end{align}
+% &  & \gamma_{i} \ge \sum_{j=1, j \neq i}^{m} \rho_{i} \operatorname{Tr}(\rho_{i} \Pi_{j} ), 1≤𝑖≤𝑚, 𝛾∈𝑅^𝑚            \\
+% &  & P_{err} = \sum_{i=1}^{m} \sum_{j=1, j \neq i}^{m} \rho_{i} \operatorname{Tr}(\rho_{i} \Pi_{j} ) \label{eq:p_err} \\
+
+
+
+
+\section{Discrimination for multiple non-orthogonal quantum states}
+\section{Problem formulation}
+
+% TODO Rewrite old stuff from last year
+Suppose we have three 3-qubit states and we want to find a set of POVMs to
+\begin{align*}
+     & E^{\perp}_{1} \equiv |\psi^{\perp}_{[1]} \rangle \langle \psi^{\perp}_{[1]} |                                   \\
+     & Given: \; |\psi_{i} \rangle \; \forall i \in \{ 1 .. k \}                                                       \\
+     & Variables: \; |\psi^{\perp}_{[i]} \rangle \; \forall i \in \{ 0 .. k \}                                         \\
+     & Minimize \; \Sigma_{j=1}^{k} \: p_{j} \langle \psi_{j}|  E^{\perp}_{0} |\psi_{j} \rangle                        \\
+     & (1) \; \langle \psi_{j}|  E^{\perp}_{i} |\psi_{j} \rangle = 0 \; \forall i, j \in \{ 1 .. k \} \land (i \neq j) \\
+     & (2) \; \langle \psi^{\perp}_{[i]} |\psi^{\perp}_{[j]} \rangle  == \delta_{ij} \; \forall i, j \in \{ 1 .. k \}  \\
+     & (3) \; \Sigma_{i=0}^{k} E^{\perp}_{i} == I                                                                      \\
+\end{align*}
+
+\end{document}
