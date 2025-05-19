@@ -1,0 +1,82 @@
+\usetikzlibrary{shapes.geometric, arrows}
+
+\tikzstyle{startstop} = [rectangle, rounded corners,
+minimum width=3cm,
+minimum height=1cm,
+text centered,
+text width=3cm,
+draw=black,
+fill=red!30]
+
+\tikzstyle{io} = [trapezium,
+trapezium stretches=true, % A later addition
+trapezium left angle=70,
+trapezium right angle=110,
+minimum width=3cm,
+minimum height=1cm,
+align=center,
+text width=5cm,
+text centered,
+draw=black, fill=blue!30]
+
+\tikzstyle{process} = [rectangle,
+minimum width=3cm,
+minimum height=1cm,
+text centered,
+text width=4cm,
+draw=black,
+fill=orange!30]
+
+\tikzstyle{decision} = [diamond,
+minimum width=3cm,
+minimum height=1cm,
+text width=4cm,
+aspect=2,
+inner sep=-1ex,
+text centered,
+draw=black,
+fill=green!30]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+\begin{tikzpicture}[node distance=1.5cm]
+
+    \node (start) [startstop] {Start};
+    \node (in1) [io, below of=start] {%
+        A Set of Pure States $\{\ket{\psi_{i}}\}_{i}$\\
+        Noise channel $\mathcal{E}$\\
+    };
+
+    \node (pro1) [process, below of=in1] {
+        Optimal POVM for UQSD\\
+    };
+
+    \node (pro2) [process, right of=pro1, xshift=4cm] {
+        Fixed rate of inconclusive outcome (FRIO)\\
+    };
+
+    \node (pro3) [process, below of=pro2, yshift=-1cm] {
+        $\epsilon$-UQSD\\
+    };
+    \node (pro4) [process, left of=pro3, xshift=-4cm] {
+        New parameters with\\
+        Bayesian Optimization\\
+    };
+
+    \node (dec1) [decision, below of=pro3, yshift=-1cm] {JSD converges};
+    \node (out1) [io, below of=dec1, yshift=-1cm, text width=2cm] {
+        POVM
+    };
+    \node (stop) [startstop, right of=out1, xshift=3cm] {Stop};
+
+    \draw [arrow] (start) -- (in1);
+    \draw [arrow] (in1) -- (pro1);
+    \draw [arrow] (pro1) -- node[anchor=south] {$\gamma$, $\mathcal{E}$} (pro2);
+    \draw [arrow] (pro2) -- node[anchor=east] {$\{\alpha_{i}\}_{i}, \{\beta_{i}\}_{i}$, $\mathcal{E}$} (pro3);
+    \draw [arrow] (pro3) -- (dec1);
+    % \draw [arrow] (dec1) -- ++(-3,0) node[left] {no} |- (pro3.west);
+    \draw [arrow] (dec1) -| node[left] {no} (pro4);
+    \draw [arrow] (pro4) -- (pro3);
+    \draw [arrow] (dec1) -- node[anchor=east] {yes} (out1);
+    \draw [arrow] (out1) -- (stop);
+
+\end{tikzpicture}
