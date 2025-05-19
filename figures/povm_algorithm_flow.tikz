@@ -42,17 +42,19 @@ fill=green!30]
 
     \node (start) [startstop] {Start};
     \node (in1) [io, below of=start] {%
-    A Set of Pure States $\{\ket{\psi_{i}}\}_{i}$\\
+        A Set of Pure States $\{\ket{\psi_{i}}\}_{i}$\\
+        Noise channel $\mathcal{E}$\\
     };
+    % TODO Optimal POVM for UQSD no matter what
     \node (pro1) [process, below of=in1] {
         Check the overlap of each pair of states
     };
     \node (dec1) [decision, below of=pro1, yshift=-1cm] {
         The set of states is orthogonal
     };
-
+ 
     \node (pro2) [process, below of=dec1, yshift=-1cm] {
-        UQSD is not required\\
+        Perfect State Discrimination\\
     };
 
     \node (dec2) [decision, right of=dec1, xshift=4cm] {
