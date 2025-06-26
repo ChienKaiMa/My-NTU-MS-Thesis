@@ -1,0 +1,54 @@
+{
+    "cSpell.words": [
+        "asdfadsf",
+        "basicstyle",
+        "breaklines",
+        "CENG",
+        "cuda",
+        "Docsaurus",
+        "emphstyle",
+        "framesep",
+        "framexleftmargin",
+        "FRIO",
+        "Increaseing",
+        "informationally",
+        "IPFS",
+        "keywordstyle",
+        "Malloc",
+        "numbersep",
+        "numberstyle",
+        "POVM",
+        "QPSK",
+        "qubit",
+        "shadecolor",
+        "stringstyle",
+        "syncthreads",
+        "Todolist",
+        "UQSD"
+    ],
+    "latex-workshop.latex.recipes": [
+    {
+      "name": "xelatex → bibtex → xelatex ×2",
+      "tools": ["xelatex", "bibtex", "xelatex", "xelatex"]
+    }
+  ],
+  "latex-workshop.latex.tools": [
+    {
+      "name": "xelatex",
+      "command": "xelatex",
+      "args": [
+        "--shell-escape",
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "%DOC%"
+      ]
+    },
+    {
+      "name": "bibtex",
+      "command": "bibtex",
+      "args": ["%DOCFILE%"]
+    }
+  ],
+  "latex-workshop.latex.autoBuild.run": "onSave"
+}
