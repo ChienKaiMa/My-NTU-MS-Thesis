@@ -1,13 +1,101 @@
 % !TeX root = ../main.tex
 
-\chapter{英文測試}
+\chapter{Convex Optimization}
+In this chapter, we will introduce the basics of convex optimization problems.
+It will be useful for solving POVMs for quantum state discrimination.
 
-\section{出師表}
+\section{Basic terminology}
 
-\lipsum
 
-\section{短歌行}
+To solve the formulated semidefinite programming problems, we take advantage of
+the state-of-the-art framework CVXPY and solver SCS with acceleration
+techniques applied.
 
-\lipsum
+\section{CVXPY}
+CVXPY is an open source Python module for modeling convex optimization problems \cite{RN473}.
 
-This is just to test \cite{Krasnogor2004e} the cite function.
+
+
+\subsection{Disciplined convex programming (DCP)}
+Disciplined convex programming (DCP) is a system for constructing mathematical
+expressions with known curvature from a given library of base functions \cite{RN476}.
+DCP is used by the convex optimization modeling languages CVX, CVXPY, Convex.jl, and
+CVXR to ensure that the specified optimization problems are convex \cite{RN476}.
+
+In CVXPY, the building blocks such as variables, parameters, numerical constants,
+standard arithmetic operators and atomic functions form expressions \cite{RN481}.
+DCP analysis will decompose the expression and figure out if the whole expression
+is constant, affine, convex or concave. A problem consists of an objective and a list of
+constraints. A problem that follows the DCP rules is guaranteed to be solvable by CVXPY.
+
+In fact, the objective functions and constraints functions we use are mostly affine, which is both
+convex and concave. It implies that there is extra freedom to change the signs of the
+expressions to fit our needs.
+
+There is another rule called disciplined geometric programming (DGP) that we might mention,
+but it is much less relevant to our discussions.
+
+\subsection{Disciplined parametrized programming (DPP)}
+In CVXPY, Parameters are symbolic representations of constants \cite{RN480}. Disciplined parametrized
+programming (DPP) is simply DCP or DGP that has parameters, while satisfying additional restrictions.
+Though the problem compilation time is small relative to solution time, DPP can save some time when we
+repeatedly try a lot of different parameters, if the formulated problem is only slightly different.
+
+The extra rules for DPP explain why we only define some of the parameters as "Parameter" and the rest
+of the relevant numbers are set to constants as the problem is defined.
+\begin{itemize}
+    \item Under DPP, all parameters are classified as affine, just like variables.
+    \item Under DPP, the product of two expressions is affine when at least one of
+    the expressions is constant, or when one of the expressions is parameter-affine and the other is parameter-free.
+\end{itemize}
+
+
+\section{SCS}
+Splitting Conic Solver (SCS) \cite{scs} is an efficient, open-source solver for large-scale convex quadratic cone problems.
+Not only is it widely supported in frameworks such as CVX, CVXPY, YALMIP, Convex.jl and JuMP, it also has useful features like warm starts
+and infeasibility detection.
+The main reason we select this solver is because it, together with CVXPY, supports complex positive
+semidefinite cones in the problem formulation by vectorization \cite{RN482}.
+(While other solvers like .. can't or tedious)
+
+We show the transformation between a complex PSD and a vector of real values.
+Let $S$ be a $k \times k$ complex matrix
+\begin{align}
+    S = \begin{bmatrix}
+            S_{11} & S_{12} & \cdots & S_{1k} \\
+            S_{21} & S_{12} & \cdots & S_{1k} \\
+            \vdots & \vdots & \ddots & \vdots \\
+            S_{k1} & S_{k2} & \cdots & S_{kk} \\
+        \end{bmatrix}
+    \in \mathbf{C}^{k \times k}
+\end{align}
+
+The vectorization $\text{vec}(S)$ is done such that 
+$\text{Trace}(Y^\dagger S) = \text{vec}(Y)^\dagger \text{vec}(S)$.
+\begin{align}
+    \begin{split}\text{vec}(S) = (S_{11}, \sqrt{2} \Re(S_{21}), \sqrt{2} \Im(S_{21}), \ldots, \sqrt{2} \Re(S_{k1}), \sqrt{2} \Im(S_{k1}), S_{22}, \\\sqrt{2}\Re(S_{32}), \sqrt{2}\Im(S_{32}), \dots, S_{k-1,k-1}, \sqrt{2}\Re(S_{k,k-1}), \sqrt{2}\Im(S_{k,k-1}), S_{kk}) \in \mathbf{R}^{k^2}.\end{split}
+\end{align}
+
+To recover the complex matrix from a vectorized solution $s$,
+\begin{align}
+    \begin{split}\text{mat}(s) =  \begin{bmatrix}
+            s_{1}                             & (s_{2} - i s_3) / \sqrt{2}        & \ldots & (s_{2k-2} - is_{2k-1}) / \sqrt{2} \\
+            (s_{2} + i s_3) / \sqrt{2}        & s_{2k}                            & \ldots & (s_{4k-5} - is_{4k-4}) / \sqrt{2} \\
+            \vdots                            & \vdots                            & \ddots & \vdots                            \\
+            (s_{2k-2} + is_{2k-1}) / \sqrt{2} & (s_{4k-5} + is_{4k-4}) / \sqrt{2} & \ldots & s_{k^2}                           \\
+        \end{bmatrix}
+        ,\end{split}
+\end{align}
+
+General form
+
+Warm start
+
+MKL acceleration
+
+Python interface and arguments
+
+
+\subsection{Semidefinite programming}
+Why do I need sdp for my work?
+What is the overall complexity?
