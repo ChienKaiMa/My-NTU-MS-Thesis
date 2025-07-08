@@ -1,0 +1,34 @@
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning}
+
+\tikzstyle{process} = [rectangle, minimum width=3.2cm, minimum height=1cm, text centered, draw=black, fill=blue!20]
+\tikzstyle{input} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum height=1cm, text centered, draw=black, fill=orange!30]
+\tikzstyle{io} = [trapezium, text centered, draw=black, fill=yellow!20]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=green!30]
+\tikzstyle{arrow} = [thick, ->, >=stealth]
+
+\begin{tikzpicture}[node distance=1.5cm and 0.5cm]
+
+    \node (start) [input] {User input: \texttt{nq}, \texttt{ns}, \texttt{seed}, \texttt{tag}};
+    \node (load) [process, below=of start] {Load rank-1 POVM vectors from file};
+    \node (fix) [process, below=of load] {\shortstack{Fix POVM \\(complete PSD, sum to $I$)}};
+    \node (iso) [process, below=of fix] {Construct Naimark Isometry};
+    \node (extend) [process, below=of iso] {Extend to Unitary};
+    \node (synth) [process, below=of extend] {Decompose to Quantum Circuit (CCD)};
+    \node (est) [process, below=of synth] {Estimate CNOTs (CCD, CSD, Knill)};
+    \node (approx) [process, below=of est] {Optional: Approx. Compile (AQC)};
+    \node (transpile1) [process, below=of approx] {Transpile (no backend)};
+    \node (transpile2) [process, below=of transpile1] {Transpile (IBM backend)};
+    \node (save) [io, below=of transpile2] {\shortstack{Save QASM \\ and log outputs}};
+
+    \draw [arrow] (start) -- (load);
+    \draw [arrow] (load) -- (fix);
+    \draw [arrow] (fix) -- (iso);
+    \draw [arrow] (iso) -- (extend);
+    \draw [arrow] (extend) -- (synth);
+    \draw [arrow] (synth) -- (est);
+    \draw [arrow] (est) -- (approx);
+    \draw [arrow] (approx) -- (transpile1);
+    \draw [arrow] (transpile1) -- (transpile2);
+    \draw [arrow] (transpile2) -- (save);
+
+\end{tikzpicture}
