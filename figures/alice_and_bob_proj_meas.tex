@@ -1,0 +1,36 @@
+\begin{figure}[htbp]
+    \centering
+
+    % Begin communication diagram (manually layout each row)
+    \scalebox{0.85}{
+        \begin{tikzpicture}[x=1cm, y=-1cm]
+            \node at (0.5,0) {Alice \alice{}};
+            \node at (2,0) {\fbox{0}};
+            \node at (3,0) {$\rightarrow$};
+            \node at (4,0) {\fcolorbox{orange}{white}{$\ket{0}$}};
+            \node at (5.5,0) {\mail{}};
+            \node at (7,0) {\fbox{\search{} Z}};
+            \node at (8.75,0) {\fbox{0}};
+            \node at (10.5,0) {Bob \bob{}};
+
+            \node at (0.5,1) {Alice \alice{}};
+            \node at (2,1) {\fbox{1}};
+            \node at (3,1) {$\rightarrow$};
+            \node at (4,1) {\fcolorbox{orange}{white}{$\ket{1}$}};
+            \node at (5.5,1) {\mail{}};
+            \node at (7,1) {\fbox{\search{} Z}};
+            \node at (8.75,1) {\fbox{1}};
+            \node at (10.5,1) {Bob \bob{}};
+
+            \node at (0.5,2) {Alice \alice{}};
+            \node at (4,2) {\fcolorbox{orange}{white}{$\dfrac{\ket{0}+\ket{1}}{\sqrt{2}}$}};
+            \node at (5.5,2) {\mail{}};
+            \node at (7,2) {\fbox{\search{} Z}};
+            \node at (8.75,2) {\fbox{\shortstack{50\% 0\\50\% 1}}};
+            \node at (10.5,2) {Bob \bob{}};
+        \end{tikzpicture}
+    }
+    \caption{Alice selects a quantum state and sends it to Bob, who measures in the Z basis.}
+\end{figure}
+
+
