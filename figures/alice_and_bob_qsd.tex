@@ -1,0 +1,54 @@
+\begin{figure}
+    \centering
+
+    \scalebox{0.55}{
+        \begin{tikzpicture}[x=1cm, y=-1.3cm,
+                every node/.style={transform shape} % Ensures scaling affects nodes correctly
+            ]
+            % Expand the bounding box to include shadows
+            \useasboundingbox (-3,-1) rectangle (15,4); % Adjusted to fit content and shadows
+            \begin{scope}[yshift=0.5cm]
+                % Communication Row (Single Alice–Bob Interaction)
+                \node at (0.5,0) {\Large \textbf{Alice} \alice{}};
+                \node at (2.25,0) {\fbox{1}};
+                \node at (3,0) {$\rightarrow$};
+                \node at (4,0) {\fcolorbox{orange}{white}{$\ket{\psi_{1}}$}};
+                \node at (5.5,0) {\mail{}};
+                % \node at (7,0) {\fbox{\search{} $\{E_{m}\}$}};
+                \node at (8,0) { \search $\{\Pi_{m}\}$};
+                % \node at (9,0) {\fbox{\shortstack{1 (correct)\\ 2 (error)}}};
+                \node at (11,0) {\Large \textbf{Bob} \bob{}};
+
+                % Sticky Note under Alice
+                \node[draw, fill=yellow!30, drop shadow={shadow xshift=3pt, shadow yshift=-3pt},
+                    text width=5.2cm, rounded corners=4pt, inner sep=10pt, align=left]
+                at (0.5,2.0) {
+                    \begin{minipage}{\linewidth}
+                        \textbf{Alice’s knowledge}
+                        \begin{align*}
+                            \ket{\psi_{1}}   & = \ket{0}                            \\
+                            \ket{\psi_{2}}   & = \frac{\ket{0} + \ket{1}}{\sqrt{2}} \\
+                            S_{\text{prior}} & = \{p_1, p_2\} = \{0.5, 0.5\}
+                        \end{align*}
+                    \end{minipage}
+                };
+
+
+                % Sticky Note under Bob
+                \node[draw, fill=yellow!30, drop shadow={shadow xshift=3pt, shadow yshift=-3pt},
+                    text width=5.2cm, rounded corners=4pt, inner sep=10pt, align=left]
+                at (11,2.0) {
+                    \begin{minipage}{\linewidth}
+                        \textbf{Bob’s knowledge}
+                        \begin{align*}
+                            \ket{\psi_{1}}   & = \ket{0}                            \\
+                            \ket{\psi_{2}}   & = \frac{\ket{0} + \ket{1}}{\sqrt{2}} \\
+                            S_{\text{prior}} & = \{p_1, p_2\} = \{0.5, 0.5\}
+                        \end{align*}
+                    \end{minipage}
+                };
+            \end{scope}
+        \end{tikzpicture}
+    }
+    \caption{Alice selects a quantum state and sends it to Bob, who performs a measurement.}
+\end{figure}
