@@ -1,0 +1,14 @@
+\begin{quantikz}[column sep=0.5cm, row sep=0.4cm]
+    & \lstick[3]{$\ket{\psi_1}$} & \qw & \gate[3]{\textsf{POVM}} & \qw \\
+    & & \qw & \qw  & \qw                     \\
+    & & \qw & \qw  & \qw                     \\
+\end{quantikz}
+\hspace{0.5cm}
+$\equiv$
+\begin{quantikz}[column sep=0.5cm, row sep=0.4cm]
+    & \lstick[3]{$\ket{\psi_1}$} & \qw & \gate[5]{\textsf{PVM}} & \qw \\
+    & & \qw & & \qw                     \\
+    & & \qw & & \qw                     \\
+    & \lstick[2]{$\ket{\psi_{anc}}$}      & \qw & \qw      & \qw            \\
+    &      & \qw & \qw    & \qw          \\
+\end{quantikz}
