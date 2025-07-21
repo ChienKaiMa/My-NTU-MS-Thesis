@@ -6,6 +6,9 @@
 \usetheme{Berlin}
 \setbeamertemplate{navigation symbols}{}
 \setbeamertemplate{footline}[frame number]
+\makeatletter
+    \def\beamer@writeslidentry{\clearpage\beamer@notesactions}
+\makeatother
 
 % Title slide information
 \title{Unambiguous Quantum State Discrimination with Error Tolerance}
