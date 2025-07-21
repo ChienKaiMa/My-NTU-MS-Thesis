@@ -1,0 +1,771 @@
+\documentclass{beamer}
+% \documentclass[draft]{beamer}
+% \includeonlyframes{frame3}
+\graphicspath{ {../} {../figures/}}
+
+\usetheme{Berlin}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+
+% Title slide information
+\title{Unambiguous Quantum State Discrimination with Error Tolerance}
+\subtitle{}
+\author{Chien-Kai Ma}
+\institute{NTU GIEE}
+\date{July 22, 2025}
+
+% Insert section/subsection title slide at start of each section/subsection
+\AtBeginSection[]
+{
+    \begin{frame}[plain]
+        \centering
+        \vfill
+        \usebeamerfont{section title}
+        \insertsection
+        \vfill
+    \end{frame}
+}
+
+\AtBeginSubsection[]
+{
+    \begin{frame}<beamer>[plain]
+        \smallskip
+        \begin{center}
+        {\usebeamerfont{subsection title}\insertsection\\[0.3em]
+        \Large\insertsubsection}
+        \end{center}
+    \end{frame}
+}
+
+\usepackage{quantikz}
+\usepackage[edges]{forest}
+\usepackage{nccmath}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{pgfplots}
+\usepackage{amsmath}
+\usepackage{lmodern}                            % Latin Modern fonts
+\usepackage{tgpagella}                          % Text font
+\usepackage{mathpazo}                           % Math font
+
+\usepackage[authoryear, sort&compress]{natbib}  % 參考文獻
+\bibliographystyle{apalike}
+
+\pgfplotsset{compat=1.18}
+
+\newcommand{\alice}{\raisebox{-0.7em}{\includegraphics[height=2em]{../figures/emojis/1F467_color.png}} }    % 🧑
+\newcommand{\bob}{\raisebox{-0.7em}{\includegraphics[height=2em]{../figures/emojis/1F466_color.png}}   }    % 👦
+\newcommand{\mail}{\raisebox{-0.7em}{\includegraphics[height=2em]{../figures/emojis/1F4E8_color.png}}  }    % 📩
+\newcommand{\search}{\raisebox{-0.7em}{\includegraphics[height=2em]{../figures/emojis/1F50D_color.png}}}    % 🔍
+
+\forestset{
+    direction switch/.style={
+        for tree={edge+=thick, font=\sffamily},
+        where level>=1{folder, grow'=0}{for children=forked edge},
+        where level=3{}{draw},
+    },
+}
+
+% Tikz settings
+
+\usetikzlibrary{shapes.geometric, arrows, shadows}
+\usetikzlibrary{external}
+\tikzexternalize[prefix=tikz_figs/]  % Compiled TikZ goes to tikz_figs/
+
+\tikzstyle{startstop} = [rectangle, rounded corners, 
+    minimum width=3cm, 
+    minimum height=1cm,
+    text centered, 
+    text width=3cm,
+    draw=black, 
+    fill=red!30
+]
+
+\tikzstyle{io} = [trapezium, 
+    trapezium stretches=true, % A later addition
+    trapezium left angle=70,
+    trapezium right angle=110,
+    minimum width=3cm,
+    minimum height=1cm,
+    align=center,
+    text width=5cm,
+    text centered,
+    draw=black, fill=blue!30
+]
+
+\tikzstyle{process} = [rectangle, 
+    minimum width=3cm, 
+    minimum height=1cm, 
+    text centered, 
+    text width=4cm,
+    draw=black, 
+    fill=orange!30
+]
+
+\tikzstyle{decision} = [diamond, 
+    minimum width=3cm, 
+    minimum height=1cm, 
+    text width=4cm,
+    aspect=2,
+    inner sep=-1ex,
+    text centered, 
+    draw=black, 
+    fill=green!30
+]
+
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+
+\begin{document}
+
+% Title slide
+\begin{frame}
+    \titlepage
+    \centering
+    \small{Instructor: Jie-Hong Roland Jiang}
+\end{frame}
+
+% Table of Contents slide
+\begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents
+\end{frame}
+
+\section{Introduction}
+
+\begin{frame}
+    \frametitle{Motivation: Quantum transduction}
+    \cite{RN648}
+    \begin{quote}
+        (Future, large-scale quantum computers and quantum networks would)
+        leverage the complementary strengths of optical photons and
+        superconducting microwave circuits to reliably communicate
+        and process quantum information
+    \end{quote}
+
+    \centering
+    \vspace*{0.3cm}
+    \scalebox{0.7}{
+        \input{../figures/transduction.tikz}
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{Why non-orthogonal quantum states are important}
+    \begin{itemize}
+        \item BB84 - The first quantum key distribution protocol
+        \item Inspired by \underline{non-orthogonal quantum states}
+        \item Still the mainstream protocol with countermeasures for attacks
+              in mind
+    \end{itemize}
+    \begin{figure}
+        \begin{small}
+            \begin{center}
+                \includegraphics[width=0.95\textwidth]{figures/bb84.png}
+            \end{center}
+            \caption{The process of the BB84 protocol}
+            \label{fig:bb84}
+        \end{small}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{BB84 - Optical experiments}
+    \begin{itemize}
+        \item Doing research for QKD involves expensive infrastructure,
+              precise hardware, and domain knowledge in quantum optics
+    \end{itemize}
+    \begin{figure}
+        \begin{small}
+            \begin{center}
+                \scalebox{0.55}{
+                    \includegraphics[width=0.95\textwidth]{figures/HD-BB84-QKD-Warsaw.png}
+                }
+            \end{center}
+            \caption{The experiment architecture of decoy-state BB84}
+            \label{fig:bb84_warsaw}
+        \end{small}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Our motivation}
+    \begin{itemize}
+        \item Easier access of quantum computers may enable researchers to
+              bypass the difficulty of experimental demonstration
+        \item The performance of the quantum circuits may serve as a benchmark
+              from the view of quantum circuit optimization and quantum
+              hardware design
+        \item If lucky, quantum circuits for quantum state discrimination may
+              inspire new research topics
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Our contributions}
+    \begin{itemize}
+        \item New definitions for error-tolerant quantum state discrimination
+        \item A quantum circuit synthesis flow for quantum state discrimination
+    \end{itemize}
+\end{frame}
+
+% \begin{frame}
+%     \frametitle{What we won't discuss}
+%     \begin{itemize}
+%         \item The connection between our proposal and the actual QKD protocol
+%               (The concept of mutually unbiased bases (MUB) is too OP)
+%     \end{itemize}
+% \end{frame}
+
+
+\section{Preliminaries}
+
+\subsection{Basics of Quantum Computation}
+
+\begin{frame}
+    \frametitle{Dirac notation}
+    In quantum mechanics, we usually use the Dirac notation (bra-ket notation)
+    to denote quantum states.
+    \begin{itemize}
+        \item A ket in $\mathbb{C}^{n}$:
+              $\ket{\psi} \equiv \begin{pmatrix}
+                      x_{1} \\ x_{2} \\ \vdots \\ x_{n}
+                  \end{pmatrix}$ (state vector)
+        \item A bra $\bra{\psi} \equiv \ket{\psi}^{\dagger} = \begin{pmatrix}
+                      x_{1}^{*} & x_{2}^{*} & \cdots & x_{n}^{*}
+                  \end{pmatrix}$
+        \item Usually, $\Sigma_{i=1}^{n} |x_{i}|^{2} = 1$
+        \item For example, the state vector of a qubit is $\ket{\psi} = \begin{pmatrix}
+                      x_{1} \\ x_{2}
+                  \end{pmatrix}$, \\
+              where $|x_{1}|^{2} + |x_{2}|^{2} = 1$, $x_{1}, x_{2} \in \mathbb{C}$
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Describing composite systems}
+    \cite{qcqi}
+    \begin{quote}
+        Postulate 4 (of quantum mechanics):\\
+        The state space of a composite physical system is the tensor product
+        of the state spaces of the component physical systems.
+        Moreover, if we have systems numbered 1 through $n$, and system number
+        $i$ is prepared in the state
+        $\ket{\psi_{i}}$, then the joint state of the total system is
+        $\ket{\psi_{1}} \otimes \ket{\psi_{2}} \otimes \dots \otimes \ket{\psi_{n}}$.
+    \end{quote}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Density matrix}
+    However, when the system we concern (denoted as A) is not closed (dependent of the
+    environment, denoted as B), the state vector alone is not enough to describe the system.
+    We can expand the state vector to be a density matrix.
+    \begin{itemize}
+        \item Density matrix for $\ket{\psi}$: $\rho \equiv \ket{\psi}\bra{\psi}$
+        \item Important property: $\operatorname{tr}\rho = 1$
+        \item For independent systems: $\rho^{AB} = \rho^{A} \otimes \rho^{B}$
+        \item For dependent systems: $\rho^{AB} \neq \rho^{A} \otimes \rho^{B}$
+    \end{itemize}
+    We can think of the system's density matrix as the partial trace
+    of the density matrix of the system and the environment together (AB).
+    \begin{itemize}
+        \item $\rho^{A} = \operatorname{tr}_{B}\rho^{AB}$
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Quantum measurements}
+    \cite{qcqi}
+    \begin{quote}
+        Postulate 3 (of quantum mechanics):\\
+        Quantum measurements are described by a collection ${M_{m}}$ of
+        measurement operators. These are operators acting on the state space of the
+        system being measured. The index $m$ refers to the measurement outcomes that
+        may occur in the experiment. If the state of the quantum system is $\ket{\psi}$
+        immediately before the measurement then the probability that result $m$ occurs is
+        given by
+        \begin{align}
+            p(m) = \bra{\psi} M_{m}^{\dagger} M_{m}\ket{\psi}.
+        \end{align}
+        where $\Sigma_{m} M_{m}^{\dagger} M_{m} = I$.
+    \end{quote}
+\end{frame}
+
+\begin{frame}[label=frame3]
+    \frametitle{Positive Operator-Valued Measure (POVM)}
+    We define a POVM element $\Pi_{m} \equiv M_{m}^{\dagger} M_{m}$.
+    A POVM is the complete set of POVM elements $\{\Pi_{m}\}$ such that
+    \begin{itemize}
+        \item $\Pi_{m}$ is a positive operator.
+        \item $\Sigma_{m} \Pi_{m} = I$
+        \item $p(m) = \bra{\psi} \Pi_{m} \ket{\psi}$
+    \end{itemize}
+
+    \begin{center}
+        \input{../figures/povm_pvm.tikz}
+    \end{center}
+
+    POVMs are necessary to describe the effect on a subsystem of a
+    projective measurement performed on a larger system.
+\end{frame}
+
+\subsection{Basics of Quantum State Discrimination (QSD)}
+
+\begin{frame}
+    \frametitle{Problem description (1/2)}
+    Let $S_{\ket{\psi}} \equiv \{\ket{\psi_{1}}, \ket{\psi_{2}}, \dots, \ket{\psi_{l}}\}$
+    is a set of non-orthogonal quantum states, known to Alice and Bob before
+    communication.
+    \vspace*{0.2cm}
+
+    Let $S_{prior} \equiv \{p_{1}, p_{2}, \dots, p_{l}\}$ be the set of prior
+    probabilities corresponding to each state in $S_{\ket{\psi}}$.
+    The prior probability $p_{i}$ can be understood as the assumed ratio of Alice
+    preparing and sending the state $\ket{\psi_{i}}$ to Bob.
+    \vspace*{0.2cm}
+
+    For example, $l = 2$, $\ket{\psi_{1}} = \ket{0}$ and
+    $\ket{\psi_{2}} = \dfrac{\ket{0}+\ket{1}}{\sqrt{2}}$.
+    $\braket{\psi_{1}}{\psi_{2}} \neq 0$.
+    $S_{prior} = \{p_{1}, p_{2}\} = \{0.5, 0.5\}$.
+\end{frame}
+
+\begin{frame}
+    \frametitle{Problem description (2/2)}
+    Given the predefined set of states $S_{\ket{\psi}}$ and the prior probabilities
+    $S_{prior}$, the quantum state discrimination problem discusses different
+    ways to measure and identify the quantum state prepared by Alice.
+
+    \input{../figures/alice_and_bob_qsd.tex}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Projective measurements}
+    \input{../figures/alice_and_bob_qsd.tex}
+    % Add a circuit diagram
+
+    If Bob measures with $\Pi_{1} = \ket{0}\bra{0}, \Pi_{2} = \ket{1}\bra{1}$,
+    $P_{succ} = p_{1} \bra{\psi_{1}} \Pi_{1} \ket{\psi_{1}} +
+        p_{2} \bra{\psi_{2}} \Pi_{2} \ket{\psi_{2}}
+        = 0.5 \times 1 + 0.5 \times 0.5 = 0.75$
+\end{frame}
+
+\begin{frame}
+    \frametitle{Probability matrix}
+    We will show the probabilities of each state {i} and measurement outcome
+        {m} in the following "probability matrices".
+    \begin{align*}
+         & p(m,i) \equiv p(\textnormal{Bob measures } m, \textnormal{Alice prepares } i)  \\
+         & p(m|i) \equiv p(\textnormal{Bob measures } m | \textnormal{Alice prepares } i)
+    \end{align*}
+    \begin{table}[ht]
+        \begin{tabular}{c | c c}
+                             & $\Pi_{1}$ & $\Pi_{2}$ \\
+            \hline
+            $\ket{\psi_{1}}$ & $p(1, 1)$ & $p(2, 1)$ \\
+            $\ket{\psi_{2}}$ & $p(1, 2)$ & $p(2, 2)$ \\
+        \end{tabular}
+        \caption{Probability matrix $p(m,i) = p_{i} \bra{\psi_{i}} \Pi_{m} \ket{\psi_{i}}$}
+        \label{tab:prob_mat}
+    \end{table}
+
+    % \vspace*{0.2cm}
+
+    % \input{../figures/alice_and_bob_med.tex}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Minimum error discrimination (MED)}
+    If Bob measures with $\Pi_{1} = \ket{0}\bra{0}, \Pi_{2} = \ket{1}\bra{1}$,
+    $P_{succ} = 0.75$.
+
+    Can we do better?
+
+    Minimum error discrimination aims to find a POVM with $l$ elements such
+    that the overall probability of success is maximized.
+    \begin{table}[ht]
+        \begin{tabular}{c | c c}
+                             & $\Pi_{1}$ & $\Pi_{2}$ \\
+            \hline
+            $\ket{\psi_{1}}$ & correct   & error     \\
+            $\ket{\psi_{2}}$ & error     & correct   \\
+        \end{tabular}
+        \caption{Probability matrix $p(m,i) = p_{i} \bra{\psi_{i}} \Pi_{m} \ket{\psi_{i}}$}
+        \label{tab:med_ex}
+    \end{table}
+\end{frame}
+
+\begin{frame}
+    \label{frame:med_return}
+    \frametitle{Minimum error discrimination for two states}
+    For $l = 2$, the optimal probability of success $P_{succ}$ can be
+    analytically solved.
+    \begin{align}
+         & \Sigma_{i=1}^{l} \Pi_{i} = \Pi_{1} + \Pi_{2} = I                          \\
+         & P_{succ} = \Sigma_{i = 1}^{l} p_{i} \bra{\psi_{i}} \Pi_{i} \ket{\psi_{i}} \\
+         & = p_{1} \bra{\psi_{1}} \Pi_{1} \ket{\psi_{1}}
+        + p_{2} \bra{\psi_{2}} \Pi_{2} \ket{\psi_{2}}                                \\
+         & = p_{1} \bra{\psi_{1}} \Pi_{1} \ket{\psi_{1}}
+        + p_{2} \bra{\psi_{2}} (I - \Pi_{1}) \ket{\psi_{2}}                          \\
+         & = p_{2} + \operatorname{Tr} \left[
+            \left( p_{1} \ket{\psi_{1}}\bra{\psi_{1}}
+            - p_{2} \ket{\psi_{2}}\bra{\psi_{2}} \right) \Pi_{1}
+            \right] \label{eq:psucc}
+    \end{align}
+
+    For our example, the probability of success for MED is
+    \begin{align}
+         & P_{succ} = (2 + \sqrt{2})/4 = 0.85355\dots > 0.75
+    \end{align}
+    (Go to Frame \ref{frame:med_math} for details)
+\end{frame}
+
+\begin{frame}
+    \frametitle{Unambiguous quantum state discrimination (UQSD)}
+    Continue with $\ket{\psi_{1}} = \ket{0}$ and
+    $\ket{\psi_{2}} = \dfrac{\ket{0}+\ket{1}}{\sqrt{2}}$,
+    $S_{prior} = \{p_{1}, p_{2}\} = \{0.5, 0.5\}$.
+    \vspace*{0.2cm}
+
+    Below is an example of a POVM that performs UQSD.
+    \begin{align}
+         & \Pi_{1} \equiv \Pi_{1}^{\not\perp} \equiv \frac{\sqrt{2}}{1 + \sqrt{2}}
+        \frac{(\ket{0} - \ket{1})(\bra{0} - \bra{1})}{2}                                          \\
+         & \Pi_{2} \equiv \Pi_{2}^{\not\perp} \equiv \frac{\sqrt{2}}{1 + \sqrt{2}} \ket{1}\bra{1} \\
+         & \Pi_{3} \equiv \Pi_{?} \equiv I - \Pi_{1} - \Pi_{2}
+    \end{align}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Probability matrices for the UQSD example}
+    \begin{table}[ht]
+        % \begin{tabular}{c | c c c}
+        %                      & $\Pi_{1}$                          & $\Pi_{2}$                          & $\Pi_{?}$                              \\
+        %     \hline
+        %     $\ket{\psi_{1}}$ & $\frac{\sqrt{2}}{2(1 + \sqrt{2})}$ & 0                                  & $1 - \frac{\sqrt{2}}{2(1 + \sqrt{2})}$ \\
+        %     $\ket{\psi_{2}}$ & 0                                  & $\frac{\sqrt{2}}{2(1 + \sqrt{2})}$ & $1 - \frac{\sqrt{2}}{2(1 + \sqrt{2})}$ \\
+        % \end{tabular}
+        \begin{tabular}{c | c c c}
+                             & $\Pi_{1} (\Pi_{1}^{\not\perp})$ & $\Pi_{2} (\Pi_{2}^{\not\perp})$ & $\Pi_{3} (\Pi_{?})$ \\
+            \hline
+            $\ket{\psi_{1}}$ & 0.293                           & 0                               & 0.707               \\
+            $\ket{\psi_{2}}$ & 0                               & 0.293                           & 0.707               \\
+        \end{tabular}
+        \caption{Probability matrix $p(m|i) = \bra{\psi_{i}} \Pi_{m} \ket{\psi_{i}}$}
+        \begin{tabular}{c | c c c}
+                             & $\Pi_{1} (\Pi_{1}^{\not\perp})$ & $\Pi_{2} (\Pi_{2}^{\not\perp})$ & $\Pi_{3} (\Pi_{?})$ \\
+            \hline
+            $\ket{\psi_{1}}$ & 0.146                           & 0                               & 0.354               \\
+            $\ket{\psi_{2}}$ & 0                               & 0.146                           & 0.354               \\
+        \end{tabular}
+        \caption{Probability matrix $p(m,i) = p_{i} \bra{\psi_{i}} \Pi_{m} \ket{\psi_{i}}$}
+        \label{tab:uqsd_ex}
+    \end{table}
+\end{frame}
+
+\subsection{Optimal POVM for UQSD}
+\begin{frame}
+    \frametitle{Optimal POVM for UQSD}
+    Even though there are no analytical solutions
+\end{frame}
+
+\subsection{Convex Optimization}
+
+\begin{frame}
+    \frametitle{}
+\end{frame}
+
+\section{Error-Tolerant QSD}
+
+\begin{frame}
+    \frametitle{Previous work - FRIO}
+    \begin{table}[ht]
+        \begin{tabular}{c | c c}
+                             & $\Pi_{1}$ & $\Pi_{2}$ \\
+            \hline
+            $\ket{\psi_{1}}$ & $p(1, 1)$ & $p(2, 1)$ \\
+            $\ket{\psi_{2}}$ & $p(1, 2)$ & $p(2, 2)$ \\
+        \end{tabular}
+        \caption{Probability matrix $p(m,i) = p_{i} \bra{\psi_{i}} \Pi_{m} \ket{\psi_{i}}$}
+        % \label{tab:}
+    \end{table}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Problem formulation 1}
+    Goal: Find a POVM such that
+\end{frame}
+
+\begin{frame}
+    \frametitle{Problem formulation 2}
+\end{frame}
+
+\section{Quantum Circuit Synthesis for QSD}
+
+\begin{frame}
+    \frametitle{Synthesis flow}
+    \centering
+    \scalebox{0.45}{
+        \input{../figures/qc_synth_flow.tikz}
+    }
+\end{frame}
+
+\begin{frame}
+    \frametitle{Start the flow}
+    How I implement Naimark's dilation theorem
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Example - three coherent states}
+    \input{../figures/three_coh_wigner.tex}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Results - three coherent states}
+
+    % I copied the whole ../figures/synth_coh_table.tex since the table
+    % requires to be scaled down a bit.
+    \begin{table}[htbp]
+        \centering
+        \caption{Comparison of quantum circuit synthesis methods for
+            discriminating three
+            coherent states. Here 2Q means the number of two-qubit gates, which is
+            also the number of CNOT gates in this case.
+            Fidelity is rounded down to the fifth digit.}
+        \label{tab:synth_comparison}
+        \scalebox{0.45}{
+            \renewcommand{\arraystretch}{1.2}
+            \begin{tabular}{|c|c||rr||rrr|rrr|rrr|rrr|}
+                \hline
+                \textbf{\# Qubits}
+                  & \multicolumn{1}{c||}{\textbf{Fidelity}}
+                  & \multicolumn{2}{c||}{\textbf{Original}}
+                  & \multicolumn{3}{c|}{\textbf{Resynthesis}}
+                  & \multicolumn{3}{c|}{\textbf{Approx\_deg = 1.00}}
+                  & \multicolumn{3}{c|}{\textbf{Approx\_deg = 0.97}}
+                  & \multicolumn{3}{c|}{\shortstack{\textbf{AQC (depth = 10)}}}                                                                                                                       \\
+                  &                                                             & Depth & 2Q    & Depth & 2Q   & Fidelity & Depth & 2Q   & Fidelity & Depth & 2Q   & Fidelity & Depth & 2Q & Fidelity \\
+                \hline
+                2 & 0.97803                                                     & 84    & 41    & 45    & 20   & 1.00000  & 29    & 14   & 0.99999  & 29    & 14   & 0.59409  & 21    & 10 & 0.35564  \\
+                3 & 0.99998                                                     & 430   & 218   & 225   & 100  & 0.99999  & 83    & 61   & 0.99992  & 83    & 61   & 0.88925  & 15    & 10 & 0.96252  \\
+                4 & 0.99999                                                     & 2034  & 1025  & 1009  & 444  & 0.99999  & 253   & 252  & 0.99989  & 253   & 252  & 0.13754  & 11    & 10 & 0.32505  \\
+                5 & 0.99999                                                     & 8916  & 4474  & 4273  & 1868 & 0.99999  & 817   & 1020 & 0.99990  & 817   & 1020 & 0.00032  & 9     & 10 & 0.25978  \\
+                6 & 0.99999                                                     & 37220 & 18634 & 17585 & 7660 & 0.99999  & 2729  & 4091 & 0.99984  & -     & -    & -        & -     & -  & -        \\
+                \hline
+            \end{tabular}
+        }
+    \end{table}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Simulation - three coherent states}
+    (TBA)
+    Since we have obtained the circuits, we can run simulations to see if the circuits
+    actually implement unambiguous quantum state discrimination. We are also curious about
+    how noise will affect the discrimination results, and we want to see if smaller circuits work
+    well enough for the states using more qubits. We expect the circuits with high process
+    fidelity to run successfully, so we will show the results together with noisy simulation.
+\end{frame}
+
+\section{Summary}
+
+\begin{frame}
+    \frametitle{}
+\end{frame}
+
+\section{Appendix}
+\begin{frame}
+    \frametitle{}
+\end{frame}
+
+\subsubsection{Coherent states}
+\begin{frame}
+    \frametitle{Canonical Coherent States}
+    The canonical coherent states have three properties that are mutually equivalent.
+    \begin{itemize}
+        \item They are eigenvectors of the annihilation operator: $\hat{a}\ket{\alpha}=\alpha\ket{\alpha}$
+        \item They are obtained from the vacuum by application of a unitary displacement operator:
+              $\ket{\alpha}=(e^{\alpha \hat{a}^{\dagger} - \alpha^{*}\hat{a}})\ket{0}=D(\alpha)\ket{0}$
+        \item They are states of minimal uncertainty: $\Delta{X} = \Delta{P} = \sqrt{\frac{\hbar}{2}}$
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Example - State Selection}
+    \begin{itemize}
+        \item Truncated coherent states and fidelity is important...
+              We chose the following three sets of coherent states to demonstrate the dynamics of
+              the different methods to search for a proper POVM for state discrimination.
+        \item First, we want the set of coherent states to show some symmetric property.
+              Since each coherent state correspond to an annihilation operator with a unique eigenvalue,
+              we set the eigenvalues to have the same magnitude but different angles and the difference of
+              each pair of angles is the same. We can visualize the states with Wigner function, as the figure below.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Influence of Truncation of Coherent States}
+    \begin{center}
+        \scalebox{0.17}{
+            \includegraphics{../figures/trun_coh.png}
+        }
+    \end{center}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Influence of Truncation of Coherent States}
+    \begin{itemize}
+        \item We also calculated the fidelity of truncated
+              coherent states by padding zeros to the same dimension.
+        \item A truncated coherent state with the largest dimension
+              is selected as the reference.
+        \item So for $\alpha = 4$, we will select $N = 64$.
+    \end{itemize}
+    \begin{table}[ht]
+        \centering
+        \scalebox{0.55}{
+            \begin{tabular}{r r}
+                \hline
+                \textbf{Fock States (N)} & \textbf{Fidelity}    \\
+                \hline
+                2                        & 1.525e-06            \\
+                4                        & 5.193e-07            \\
+                8                        & 2.606e-04            \\
+                16                       & 2.674e-01            \\
+                32                       & 0.999594             \\  % ← This is the special one
+                64                       & 1.0 (0 to 13 digits) \\
+                128                      & 1.0 (0 to 13 digits) \\
+                256                      & 1.0 (0 to 13 digits) \\
+                512                      & 1.0 (0 to 13 digits) \\
+                1024                     & 1.0 (0 to 13 digits) \\
+                \hline
+            \end{tabular}
+        }
+        \caption{Fidelity of $\ket{\alpha}$ w.r.t N = 1024 ($\alpha = 4$)}
+        \label{tab:fock-fidelity}
+    \end{table}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Selecting $\alpha$}
+    \begin{itemize}
+        \item It is also important to choose $\alpha$ (The eigenvalue of the
+              annihilation operator).
+        \item Since we know the closed form of coherent states, we can evaluate
+              the overlap before we decide the sets of states.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Theoretical overlap of canonical coherent states}
+    \begin{center}
+        \includegraphics[width=0.7\textwidth]{../figures/overlap.png}
+    \end{center}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Theoretical overlap of canonical coherent states}
+    For two different canonical coherent states $\ket{\alpha}$ and $\ket{\beta}$,
+    \begin{align}
+        \braket{\beta}{\alpha} = e^{-\frac{1}{2}(|\beta|^{2} + |\alpha|^{2} - 2\beta^{*}\alpha)}
+    \end{align}
+
+    Assume $\alpha = r_{1}e^{i\theta_{1}}$, $\beta = r_{2}e^{i\theta_{2}}$,
+    \begin{align}
+        \braket{\beta}{\alpha} = e^{-\frac{1}{2}(r_{1}^{2} + r_{2}^{2} - 2r_{1}r_{2}e^{i(\theta_{1}-\theta_{2})})}
+    \end{align}
+
+    If $r_{1} = r_{2} = r$,
+    \begin{align}
+        \braket{\beta}{\alpha} = e^{-r^{2}(1 - e^{i(\theta_{1}-\theta_{2})})}
+    \end{align}
+
+    If $\theta_{1} = \theta_{2} = \theta$,
+    \begin{align}
+        \braket{\beta}{\alpha} = e^{-\frac{1}{2}(r_{1} - r_{2})^{2}}
+    \end{align}
+\end{frame}
+
+\subsection{Derivation of MED}
+
+\begin{frame}
+    \label{frame:med_math}
+    \frametitle{Example (1/4)}
+    From Equation \ref{eq:psucc}, the maximal probability happens when $\Pi_{1}$
+    projects to the positive eigenspace of
+    $p_{1} \ket{\psi_{1}}\bra{\psi_{1}} - p_{2} \ket{\psi_{2}}\bra{\psi_{2}}$.
+
+    For our example,
+    \begin{align*}
+         & p_{1} \ket{\psi_{1}}\bra{\psi_{1}} - p_{2} \ket{\psi_{2}}\bra{\psi_{2}}
+        = 0.5 \times \begin{bmatrix}
+                         1 & 0 \\ 0 & 0
+                     \end{bmatrix}
+        - 0.5 \times \begin{bmatrix}
+                         0.5 & 0.5 \\ 0.5 & 0.5
+                     \end{bmatrix}                                         \\
+         & = 0.5 \times \begin{bmatrix}
+                            0.5 & -0.5 \\ -0.5 & -0.5
+                        \end{bmatrix}
+        \equiv 0.5 A
+    \end{align*}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Example (2/4)}
+    The eigenvectors $v_{1}, v_{2}$ and eigenvalues $\lambda_{1}, \lambda_{2}$ of $A$ are
+    \begin{align}
+         & v_{1} = \begin{bmatrix} -1 - \sqrt{2} & 1   \end{bmatrix} ^{T},
+        \lambda_{1} =\frac{\sqrt{2}}{2}                                     \\
+         & v_{2} = \begin{bmatrix}  -1 + \sqrt{2} & 1   \end{bmatrix} ^{T},
+        \lambda_{2} =\frac{-\sqrt{2}}{2}
+    \end{align}
+
+    We choose $v_{1}$ since we want the one with positive eigenvalue.
+\end{frame}
+
+\begin{frame}
+    \frametitle{Example (3/4)}
+    The resulting measurement operators are
+    \begin{align*}
+         & \Pi_{1} = \frac{v_{1}v_{1}^{T}}{(-1 - \sqrt{2})^{2} + 1^{2}}
+        = \begin{bmatrix}
+              3 + 2\sqrt{2} & -1 - \sqrt{2} \\
+              -1 - \sqrt{2} & 1
+          \end{bmatrix}
+        / (4 + 2\sqrt{2})                                               \\
+         & = (2 - \sqrt{2})\begin{bmatrix}
+                               3 + 2\sqrt{2} & -1 - \sqrt{2} \\
+                               -1 - \sqrt{2} & 1
+                           \end{bmatrix}
+        / 4                                                             \\
+         & = \begin{bmatrix}
+                 (2 + \sqrt{2})/4 & - \sqrt{2}/4     \\
+                 - \sqrt{2}/4     & (2 - \sqrt{2})/4
+             \end{bmatrix}                        \\
+         & \Pi_{2} = I - \Pi_{1} = \begin{bmatrix}
+                                       (2 - \sqrt{2})/4 & \sqrt{2}/4       \\
+                                       \sqrt{2}/4       & (2 + \sqrt{2})/4
+                                   \end{bmatrix}
+    \end{align*}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Example (4/4)}
+    The probability of success for MED is
+    \begin{align}
+         & P_{succ} = p_{1} \bra{\psi_{1}} \Pi_{1} \ket{\psi_{1}}
+        + p_{2} \bra{\psi_{2}} \Pi_{2} \ket{\psi_{2}}                  \\
+         & = 0.5 \times (2 + \sqrt{2})/4 + 0.5 \times (2 + \sqrt{2})/4 \\
+         & = (2 + \sqrt{2})/4 = 0.85355\dots > 0.75
+    \end{align}
+    (Return to Frame \ref{frame:med_return})
+\end{frame}
+
+\begin{frame}[allowframebreaks]{References}
+    \bibliography{../back/references, ../back/frio, ../back/uqsd, ../back/attacks}
+\end{frame}
+
+\end{document}
