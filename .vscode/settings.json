@@ -1,54 +1,89 @@
 {
     "cSpell.words": [
-        "asdfadsf",
-        "basicstyle",
-        "breaklines",
-        "CENG",
-        "cuda",
-        "Docsaurus",
-        "emphstyle",
-        "framesep",
-        "framexleftmargin",
-        "FRIO",
-        "Increaseing",
-        "informationally",
-        "IPFS",
-        "keywordstyle",
-        "Malloc",
-        "numbersep",
-        "numberstyle",
-        "POVM",
-        "QPSK",
-        "qubit",
-        "shadecolor",
-        "stringstyle",
-        "syncthreads",
-        "Todolist",
-        "UQSD"
+      "asdfadsf",
+      "basicstyle",
+      "breaklines",
+      "CENG",
+      "CNOTs",
+      "cuda",
+      "Docsaurus",
+      "emphstyle",
+      "framesep",
+      "framexleftmargin",
+      "FRIO",
+      "Increaseing",
+      "informationally",
+      "IPFS",
+      "keywordstyle",
+      "Knill",
+      "Malloc",
+      "Naimark",
+      "numbersep",
+      "numberstyle",
+      "POVM",
+      "QPSK",
+      "qubit",
+      "shadecolor",
+      "stringstyle",
+      "syncthreads",
+      "Todolist",
+      "UQSD"
+    ],
+    "latex-workshop.intellisense.citation.backend": "biblatex",
+    "latex-workshop.latex.tools": [
+      {
+        "name": "xelatex",
+        "command": "xelatex",
+        "args": [
+          "--shell-escape",
+          "-synctex=1",
+          "-interaction=nonstopmode",
+          "-file-line-error",
+          "%DOC%"
+        ]
+      },
+      {
+        "name": "bibtex",
+        "command": "bibtex",
+        "args": ["%DOCFILE%"]
+      },
+      {
+        "name": "pdflatex",
+        "command": "pdflatex",
+        "args": [
+            "--shell-escape",
+            "-synctex=1",
+            "-interaction=nonstopmode",
+            "-file-line-error",
+            "%DOC%"
+        ],
+        "env": {}
+      },
+      {
+        "name": "biber",
+        "command": "biber",
+        "args": ["--output-directory=%OUTDIR%", "%DOCFILE%"],
+        "env": {}
+      },
     ],
     "latex-workshop.latex.recipes": [
-    {
-      "name": "xelatex → bibtex → xelatex ×2",
-      "tools": ["xelatex", "bibtex", "xelatex", "xelatex"]
-    }
-  ],
-  "latex-workshop.latex.tools": [
-    {
-      "name": "xelatex",
-      "command": "xelatex",
-      "args": [
-        "--shell-escape",
-        "-synctex=1",
-        "-interaction=nonstopmode",
-        "-file-line-error",
-        "%DOC%"
-      ]
-    },
-    {
-      "name": "bibtex",
-      "command": "bibtex",
-      "args": ["%DOCFILE%"]
-    }
-  ],
-  "latex-workshop.latex.autoBuild.run": "onSave"
+      {
+        "name": "xelatex → bibtex → xelatex ×2",
+        "tools": ["xelatex", "bibtex", "xelatex", "xelatex"]
+      },
+      {
+        "name": "xelatex",
+        "tools": ["xelatex"]
+      },
+      {
+        "name": "pdflatex*2",
+        "tools": ["pdflatex", "pdflatex"]
+      },
+      {
+        "name": "pdflatex -> bibtex -> pdflatex*2",
+        "tools": ["pdflatex", "bibtex", "pdflatex", "pdflatex"]
+      }
+    ],
+  "latex-workshop.latex.autoBuild.run": "never",
+  "editor.lineNumbers": "interval" // onSave
 }
