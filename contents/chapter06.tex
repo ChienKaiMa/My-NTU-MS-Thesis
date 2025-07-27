@@ -1,14 +1,207 @@
 % !TeX root = ../main.tex
 
 \chapter{Quantum Circuit Synthesis for Quantum State Discrimination}
-- Brief intro to quantum circuits
-- Synthesis flow (povm -> isometry -> ...)
-- Scalability
-- Example
+\label{chap:qc_qsd}
+
+Modeling quantum state discrimination as quantum circuits aims to enable
+researchers to bypass the difficulty of experimental demonstration.
+For example, it takes a lot of effort to acquire the expertise to design and
+tune optical devices, but people without a professional optical laboratory can
+access quantum computers with cloud services such as IBM Cloud or AWS Braket.
+A previous work \cite{RN87} used Qiskit to implement collective measurements
+for quantum state discrimination on IBM's Falcon quantum processor.
+This work hopes that the quantum circuits for unambiguous state discrimination
+can serve as the benchmark for different quantum devices and the benchmark for
+researching quantum circuit design.
+
+From previous chapters, we can see how POVMs can describe the process of quantum
+state discrimination.
+In this chapter, we will go through the details to generate quantum circuits
+from POVMs for quantum state discrimination and observe the noise effects on
+such quantum circuits.
+
+\section{Synthesis flow}
+
+Figure \ref{fig:qc_workflow} shows the overall steps to generate a quantum
+circuit from a POVM with all rank-1 operators. The user input takes the number
+of qubits (nq), the number of states to discriminate (ns), the seed (seed) for
+random state generation, and a tag name (tag) for reference.
+
+% Add other flow charts
+\begin{figure}[htbp]
+    \centering
+    \scalebox{0.7}{
+        \input{figures/qc_synth_flow.tikz}
+    }
+    \caption{Quantum circuit synthesis workflow from POVM vectors}
+    \label{fig:qc_workflow}
+\end{figure}
+
+We assume the POVM has been generated from previous algorithms, and we should
+verify if it is actually a POVM before moving onto quantum circuit synthesis.
+Next, we applied Naimark's dilation theorem (See Sec \ref{sec:naimark}) to
+calculate an isometry for the POVM.
+Note that the isometry is not unique, so there may be a better transformation
+for our purpose.
+The obtained isometry will be passed to qclib \cite{qclib}, and it will use one of the three
+decomposition algorithms to generate a CNOT-rotation based circuit.
+Before we transpile the quantum circuit for a specific IBM backend, we can apply
+approximate quantum compiling (AQC) to try to yield a quantum circuit with lower
+circuit depth. We will show the simulation results of the quantum circuits with
+and without the noise models in the next sections.
 
 
-For example..
-\section{Software for quantum circuit synthesis}
-\subsection{Qclib Isometry}
-\subsection{Qiskit}
-\subsection{QuTiP}
+\section{Naimark's dilation theorem}
+In practice (::thinking)
+
+\section{Isometry decomposition}
+
+In this section, we will review the algorithms for isometry decomposition,
+that is, the process of converting an isometry to a decomposed unitary quantum
+circuit.
+
+ucg qclib
+\cite{}
+
+Building block
+
+uniformly k-controlled gate
+
+\begin{equation}
+    \vcenter{
+        \hbox{
+            \begin{quantikz}
+                & \ctrl{1}  & \gate{R_{z}} & \gate{R_{y}} & \gate{R_{z}} & \qw \\
+                & \targ{}   & \gate{R_{x}} & \gate{R_{y}} & \gate{R_{x}} & \qw
+            \end{quantikz}
+            =
+            \begin{quantikz}
+                & \gate{R_{z}} & \ctrl{1}  & \gate{R_{y}} & \gate{R_{z}} & \qw \\
+                & \gate{R_{x}} & \targ{}   & \gate{R_{y}} & \gate{R_{x}} & \qw
+            \end{quantikz}
+        }
+    }
+\end{equation}
+
+
+\subsection{Gottesman-Knill algorithm}
+Brief
+\subsection{Cosine-sine decomposition}
+\subsection{Column-by-column decomposition}
+
+% Add scalability results
+
+\section{Resynthesis and Approximation}
+\label{sec:resynth}
+
+According to Qiskit's documentation \cite{ibmSynthesizeUnitary}, sometimes it
+is beneficial to resynthesize the unitary circuit for a lower circuit depth.
+Qiskit's transpile function automatically performs this resynthesis for a
+sufficiently high optimization level.
+
+Qiskit also provides an option to approximate the circuit to some degree
+\cite{ibmCommonlyUsed}.
+
+\section{Approximate quantum compiling (AQC)}
+9 qubits
+
+The inclusion of AQC in the synthesis flow is inspired by \cite{dc_gm}
+
+We will show the scaling of the quantum circuits synthesized with the proposed
+flow. While the size of the circuit grows with both, it grows faster with the
+number of qubits than the number of states to discriminate.
+
+\section{Example - three coherent states}
+
+For truncated coherent states with the same $\alpha$, representation in a
+higher dimension means higher fidelity with respect to the state without
+truncation. However, if we want a discrimination circuit, the higher
+dimension means the increase of circuit depth and compilation time. We will
+perform the following experiment to discuss the trade-off.
+
+For the discussion, we select the coherent states with
+$\alpha = e^{i \frac{2\pi}{3} j}; i = 0, 1, 2; j = \sqrt{-1}; |\alpha| = 1$.
+We use QuTiP \cite{lambert2024qutip5quantumtoolbox} to generate and visualize
+the truncated coherent states. The Wigner functions of the three states are
+drawn together in the following figures \ref{fig:coh_comparison}. From the
+figures we can see the states are overlapped.
+
+\input{figures/three_coh_wigner.tex}
+
+\subsection{Circuit generation}
+Since the three states are linearly independent and are pure states, we can
+use the method in Section~\ref{sec:optimal_povm_for_uqsd} to quickly generate
+the optimal POVM for circuit synthesis. We will show several methods to reduce
+the circuit depth or the number of CNOT gates, by briefly going through
+Table \ref{tab:synth_comparison}. The "original circuit" of each row, which is
+generated by qclib, is the starting point for every optimization methods.
+"Resynthesis" is described as in \ref{sec:resynth}, and the next two
+multicolumns show the transpilation results with the fixed parameter
+\verb|approximation_degree|. The last multicolumn shows the results of the
+transpilation with
+\begin{verbatim}
+    unitary_synthesis_method="aqc",
+    unitary_synthesis_plugin_config={
+        "connectivity_type": "star",
+        "depth": 10,
+        "seed": 3,
+    },
+    approximation_degree=0.97,
+\end{verbatim}
+
+\input{figures/synth_coh_table.tex}
+
+The second column aims to show the state fidelity with respect to the coherent
+state without truncation. We use the coherent state truncated to 10 qubits as
+a good approximation for the coherent state without truncation.
+Then, we calculate the state fidelity (See Subsection
+\ref{subsec:state_fid}) of the truncated state, which is padded to 10 qubits,
+and the coherent state truncated to 10 qubits.
+% It may look like a tongue twister, but let's accept it for now.
+The fidelity in the latter columns show the process fidelity
+(See Subsection \ref{subsec:proc_fid}) of the optimized circuit's unitary
+matrix with respect to the original circuit's unitary matrix.
+
+
+\subsection{Simulation results}
+
+Since we have obtained the circuits, we can run simulations to see if the
+circuits actually implement unambiguous quantum state discrimination.
+We are also curious about how noise will affect the discrimination results,
+and we want to see if smaller circuits work well enough for the states using
+more qubits.
+We expect the circuits with high process fidelity to run successfully, so we
+will show the results together with noisy simulation.
+
+
+
+The noise model we apply for the quantum circuits is a depolarizing channel
+on every two-qubit gate. Since we use Qiskit for noisy simulation, we follow
+Qiskit's definition \cite{qiskitDepolarizing_errorQiskit} of the depolarizing
+channel, described as follows:
+\begin{align}
+    E(\rho) = (1 - \lambda) \rho + \lambda \text{Tr}[\rho] \frac{I}{2^n}
+\end{align}
+with $0 \le \lambda \le 4^n / (4^n - 1)$,
+where $\lambda$ is the depolarizing error param and $n$ is the number of qubits.
+
+The parameters for $\lambda$ span from \(1 \times 10^{-6}\) to \(1 \times 10^{-1}\),
+with 3 representative values per order of magnitude (\(1\times\), \(2\times\), and \(5\times\)). This pattern captures typical values within each scale.
+
+We won't simulate some circuits because their circuit depths are too large
+from the start.
+
+
+% Brief intro to quantum circuits
+% Scalability
+% Lower bound (cite)
+% table of the paper and our own numbers
+
+\section{Conclusion}
+
+% Construct the isometry circuits
+% In this section, I provide the results why we build our circuits with
+% Qiskit.circuit.library.Isometry instead of qclib.decompose.
+
+% To determine the best scheme for the isometry circuit,
+% we design

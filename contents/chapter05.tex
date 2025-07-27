@@ -1,11 +1,118 @@
 % !TeX root = ../main.tex
 
 \chapter{Error-Tolerant Quantum State Discrimination}
-- FRIO (previous work)
+\label{chap:error_uqsd}
+Quantum noise plays a huge role in quantum key distribution. For example, the
+B92 protocol under a depolarizing channel has QBER .. (cite, numbers)
+
+When noise is present in the input quantum states, the quantum states can't be
+exactly expressed by pure states anymore. While minimum error state discrimination
+is still possible, unambiguous state discrimination becomes difficult or even
+impossible. (cite)
+We will first present the common setting for this scenario, introduce previous
+attempts to this scenario, and present our perspectives on the derived problems.
+
+\section{Common setting to discriminate noisy quantum states}
+Recall that a quantum state $\Psi$ can be denoted by a state vector $\ket{\psi}$
+or a density matrix $\rho$.
+The prior probability for each input state $\Psi_{i}$
+(expressed by $\ket{\psi_{i}}$ or $\rho_{i}$) is denoted by $p_{i}$, where $i$ ranges from 1 to $k$.
+The measurement operators are defined by $\Pi_{i}$, where $i$ ranges from 0 to $k$.
+Here $\Pi_{0}$ is designed to match the inconclusive results,
+and $\Pi_{1}$ to $\Pi_{k}$ designed to measure the $1$-st to $k$-th state respectively.
+
+Even though a density matrix can express the mixed state, it may provide more
+context if it is transformed from a pure state. We assume a depolarizing channel
+is applied to the pure state
+
+\section{Fixed rate of inconclusive outcome (FRIO)}
+%\cite{origin} \cite{application} \cite{follow-ups}
+For discriminating mixed states, a semidefinite programming
+problem was proposed \cite{RN37}, and experiments have been performed 
+based on this formulation. \cite{RN48, RN221, RN29}
+
+$P_{D}$ denotes the total probability of correct discrimination,
+$P_{err}$ denotes the probability of incorrect/erroneous discrimination,
+and $P_{inc}$ denotes the probability of inconclusive outcomes.
+$\beta$ is a constant real number that is defined to be the target inconclusive probability.
+In practice, we use an inequality in place of an equality,
+and $\beta$ is the minimum rate of inconclusive outcomes.
+
+We have the following equalities:
+\begin{align}
+     & P_{D} + P_{err} + P_{inc} = 1 \\
+     & \sum_{i=1}^{k} p_{i} = 1
+\end{align}
+
+The semidefinite programming problem can be formulated as follows:
+\begin{align}
+     & \underset{\{\Pi\}}{\text{maximize}} &  & P_{D}=\sum_{i=1}^{k} p_{i} \operatorname{Tr}(\rho_{i} \Pi_{i})              \\
+     & \text{subject to}                   &  & \Pi_{i} \succeq 0, \quad i = 0, \ldots, k                                   \\
+     &                                     &  & \sum_{i=0}^{k} \Pi_i = I                                                    \\
+     &                                     &  & P_{inc}=\sum_{i=1}^{k} p_{i} \operatorname{Tr}(\rho_{i} \Pi_{0}) \geq \beta
+\end{align}
+
+One problem regarding to this formulation is that there is a
+hyperparameter $\beta$ that is equal to the probability of the
+inconclusive result $P_{inc}$. When $\beta$ is set to 0, the problem
+degenerates to minimum error discrimination.
+
+However, if we assume that the
+mixed states correspond to some pure states, it is likely that we can
+accelerate the solving process.
+
+For example...
+To view t
+
+\section{Formulation 1}
+We are inspired by the type-I error and type-II error in hypothesis testing,
+and we include a different set of constraints in the semidefinite programming
+problem such that a desired alternative POVM can be obtained. Note that there
+is an abundance of discussions about quantum hypothesis testing, which
+includes quantum state discrimination, but we will not discuss it for now.
+% Assume a set of $k$ input quantum states are expressed in density matrices,
+% denoted by $\{ \rho_{1}, \rho_{2}, \dots, \rho_{k}\}$.
+The notations are almost identical to FRIO, but our constraints further
+consider the error part of the conclusive results.
+The formulation also resembles the maximum confidence discrimination scheme
+\cite{RN519} and the scheme considering the worst-case a posteriori
+probability of detection \cite{kosut2004quantumstatedetectordesign}.
+
+The symbol $O_{i}$ denotes the event that the $i$-th outcome is measured.
+The density matrices could be treated without assuming that the states are
+related to some pure states. Later, we may assume the mixed states are related
+to some pure states or can be expressed by ensembles of pure states.
+
+The semidefinite programming formulation is as follows:
+\begin{align}
+     & \underset{\{\Pi\}}{\text{maximize}} &  & P_{D}=\sum_{i=1}^{k} p_{i} \operatorname{Tr}(\rho_{i} \Pi_{i})                                                                                                      \\
+     & \text{subject to}                   &  & \Pi_{i} \succeq 0, \quad i = 0, \ldots, k                                                                                                                           \\
+     &                                     &  & \sum_{i=0}^{k} \Pi_i = I                                                                                                                                            \\
+     &                                     &  & P(O_i \mid \rho_i) = \frac{p_i \, \operatorname{Tr}(\rho_i \Pi_i)}{\sum_{j=1}^{L} p_i \, \operatorname{Tr}(\rho_i \Pi_j)} \geq 1 - \alpha_i, \quad i = 1, \ldots, k \\
+     &                                     &  & P(\rho_i \mid O_i) = \frac{p_i \, \operatorname{Tr}(\rho_i \Pi_i)}{\sum_{j=1}^{L} p_j \, \operatorname{Tr}(\rho_j \Pi_i)} \geq 1 - \beta_i, \quad i = 1, \ldots, k
+\end{align}
+
+\section{Formulation 2}
+Since we know the optimal POVM for pure states, we ask if we can find a POVM
+such that the resulting probability distribution remains unchanged. First we
+need to define the "probability distribution" here and how to evaluate the
+distance between two probability distributions.
+
+One of our ideas was to use gradient-based searching methods. We tried to
+iterate different hyperparameters and guessed that we would 
+
+(Show gradient-based flow)
+
+\section{Flow 1}
+
+Just copy the SDP form and add the flow chart
+
+
 - New!! Unbounded/Unconstrained FRIO (E? but no pinc specified) (as a special case)
 may benefit in non-orthogonal cases (ex. two states)
 每個順便 Discussions
 - Other new formulations (many sections)
 - Final comparison/summary
 
-\section{}
+Since the pure states are known, we can first 
+

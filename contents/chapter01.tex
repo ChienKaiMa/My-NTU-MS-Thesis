@@ -34,17 +34,36 @@ Several works have discussed the condition where noise is present before or
 during the discrimination process.
 
 \section{Our motivation}
+% This paragraph is produced with the help of ChatGPT 4o.
+Quantum transduction
+\cite{benbrubakerBuildQuantum,ibmQuantumTransduction}
+has emerged as a key interface between distinct physical platforms,
+particularly superconducting processors and optical communication channels
+\cite{RN602,RN648}.
+While not the primary focus of this work, it illustrates the broader effort to
+integrate quantum computing and communication, motivating our exploration of
+how optical communication scenarios can be expressed in circuit-level terms.
+
 The first question we asked is how to construct quantum circuits for quantum state
 discrimination. It turns out that it is not trivial, but it is also not too difficult.
-By Naimark's dilation theorem, it is possible to convert POVM to projective measurements
-or a unitary operation. Then by applying the state-of-the-art quantum circuit synthesis
-tools, we can verify that the quantum circuits successfully realize the functionality of
+By Naimark's dilation theorem (See Sec \ref{sec:naimark}), it is possible to
+convert any POVM with finite elements to projective measurements or a unitary
+operation.
+Then by applying the state-of-the-art quantum circuit synthesis tools, we can
+verify that the quantum circuits successfully realize the functionality of
 input state discrimination.
 
-Since the first question was answered, we asked how noise will affect the
-discrimination results. We were curious whether there are better definitions of
-good measurements than existing methods for unambiguous state discrimination.
+After the construction of the quantum circuits, we asked how noise will affect
+the discrimination results.
+We reviewed the discussions of quantum state discrimination of mixed states.
+We were curious whether there are better definitions of good measurements than
+existing methods for unambiguous state discrimination.
 We proposed a series of constraints, and we will show our preliminary results.
+This is under the assumption that the quantum circuit implementation is
+noiseless. As for noisy quantum circuits, we will in turn assume the input
+quantum states are noiseless.
+
+A good reason why we discuss multi-qubit USD. \cite{RN485}
 
 \section{Our contributions}
 \begin{itemize}

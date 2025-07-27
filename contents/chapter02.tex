@@ -1,26 +1,259 @@
 % !TeX root = ../main.tex
 
-\chapter{中國文學}
+\chapter{Basics of Quantum Computation}
+\label{chap:basics_qc}
 
-\section{出師表}
+Quantum computation was first proposed by Richard Feynman \cite{feynman},
+which is a computing paradigm that aims to simulate large systems in physics,
+a task that a Turing machine (a classical computer) finds intractable.
+In this chapter, we will introduce the notations and backgrounds required for
+this thesis, including quantum states, measurement, and quantum circuits.
 
-臣亮言：先帝創業未半，而中道崩殂。今天下三分，益州疲弊，此誠危急存亡之秋也。然侍衛之臣，不懈於內；忠志之士，忘身於外者，蓋追先帝之殊遇，欲報之於陛下也。誠宜開張聖聽，以光先帝遺德，恢弘志士之氣；不宜妄自菲薄，引喻失義，以塞忠諫之路也。宮中府中，俱為一體，陟罰臧否，不宜異同。若有作姦犯科，及為忠善者，宜付有司，論其刑賞，以昭陛下平明之治，不宜篇私，使內外異法也。\par
+We will follow the notations of two important books about quantum information
+\cite{qcqi, 10.5555/3240076} interchangeably.
 
-侍中、侍郎郭攸之、費褘、董允等，此皆良實，志慮忠純，是以先帝簡拔以遺陛下。愚以為宮中之事，事無大小，悉以咨之，然後施行，必能裨補闕漏，有所廣益。將軍向寵，性行淑均，曉暢軍事，試用於昔日，先帝稱之曰「能」，是以眾議舉寵為督。愚以為營中之事，悉以咨之，必能使行陣和睦，優劣得所。親賢臣，遠小人，此先漢所以興隆也；親小人，遠賢臣，此後漢所以傾頹也。先帝在時，每與臣論此事，未嘗不歎息痛恨於桓、靈也。侍中、尚書、長史；參軍，此悉貞良死節之臣也，願陛下親之信之，則漢室之隆，可計日而待也。
+\section{Complex Euclidean spaces}
+In this thesis, we consider mainly quantum states built by qubits.
+Any one-qubit state can be expressed by
+$\ket{\Psi} = a\ket{0} + b\ket{1}$, where $|a|^{2} + |b|^{2} = 1$ and
+$\ket{0}$ and $\ket{1}$ are the basis states.
 
-臣本布衣，躬耕於南陽，苟全性命於亂世，不求聞達於諸侯。先帝不以臣卑鄙，猥自枉屈，三顧臣於草廬之中，諮臣以當世之事，由是感激，遂許先帝以驅馳。後值傾覆，受任於敗軍之際，奉命於危難之間，爾來二十有一年矣！先帝知臣謹慎，故臨崩寄臣以大事也。受命以來，夙夜憂勤，恐託付不效，以傷先帝之明。故五月渡瀘，深入不毛。今南方已定，兵甲已足，當獎率三軍，北定中原，庶竭駑鈍，攘除奸凶，興復漢室，還於舊都；此臣所以報先帝而忠陛下之職分也。至於斟酌損益，進盡忠言，則攸之、褘、允之任也。
 
-願陛下託臣以討賊興復之效；不效，則治臣之罪，以告先帝之靈。若無興德之言，則戮允等，以彰其慢。陛下亦宜自課，以諮諏善道，察納雅言，深追先帝遺詔，臣不勝受恩感激。
+\section{Quantum states}
 
-今當遠離，臨表涕泣，不知所云。
+Qubits
+orthogonality
+Hilbert space and
 
-\section{短歌行}
+\subsection{State vector and density matrix}
+Environment
 
-對酒當歌，人生幾何！譬如朝露，去日苦多。
-慨當以慷，憂思難忘。何以解憂？唯有杜康。
-青青子衿，悠悠我心。但為君故，沉吟至今。
-呦呦鹿鳴，食野之苹。我有嘉賓，鼓瑟吹笙。
-明明如月，何時可掇？憂從中來，不可斷絕。
-越陌度阡，枉用相存。契闊談宴，心念舊恩。
-月明星稀，烏鵲南飛。繞樹三匝，何枝可依？
-山不厭高，海不厭深。周公吐哺，天下歸心。
+The density matrix representation is important since it can describe the mixed
+states, which is not possible by the state vector representation.
+\cite{ogrodnik2025highdimensionalquantumkeydistribution}
+
+Pure state and mixed states
+
+\subsection{Trine states}
+
+Trine states are states of linear polarization separated by 60°
+\cite{toqito_trine}.
+To generate the trine states, we used `toqito` \cite{toqito}: a package for
+studying certain aspects of quantum information.
+The trine states are formally defined as:
+\begin{align}
+    u_1 = |0\rangle, \quad
+    u_1 = -\frac{1}{2}\left(|0\rangle + \sqrt{3}|1\rangle\right), \quad \text{and} \quad
+    u_2 = -\frac{1}{2}\left(|0\rangle - \sqrt{3}|1\rangle\right).
+\end{align}
+
+We are particularly interested in trine states since they are mentioned in
+(TODO)
+
+\subsection{Coherent states}
+We will give a brief introduction of coherent states. We will also go through
+some applications and theoretical results and discuss some properties that may
+affect the experimental results of quantum state discrimination.
+
+In quantum optics the coherent state refers to a state of the quantized electromagnetic field
+that describes a maximal kind of coherence and a classical kind of behavior.\\
+It is a minimum uncertainty state, with the single free parameter chosen to make the relative
+dispersion (standard deviation in natural dimensionless units) equal for position and momentum,
+each being equally small at high energy. It is also called "Glauber coherent states" or "displaced ground states".
+\begin{itemize}
+    \item Minimum uncertainty state since $\Delta{X}\Delta{P}=\frac{\hbar}{2}$
+    \item Coherent states remain coherent states as time
+          evolves, but the parameter $\alpha$ changes in time as
+          $\alpha(t) = \alpha_{0}e^{-i\omega t}$
+    \item Coherent states can be used to describe lasers...
+\end{itemize}
+
+
+\subsubsection{Second Quantization to express many-body quantum states}
+Due to indistinguishability of particles, the quantum state can be described by the number of particles
+or energy quanta.
+The creation operator $\hat{a}^\dagger$ describes that the number of quanta is increased by 1; the annihilation
+operator $\hat{a}$ describes otherwise.
+The operators acting on the basis states can be expressed as follows:
+
+\begin{align}
+    \hat{a}\ket{n} = \sqrt{n}\ket{n-1} \\
+    \hat{a}^{\dagger}\ket{n} = \sqrt{n+1}\ket{n+1}
+\end{align}
+
+\subsubsection{Annihilation operators}
+Creation and annihilation operators are used in second quantization.
+The explicit expression of the annihilation operator in $N$-dimensional Hilbert space is below.
+Here, $k$ is an integer between 3 and $N$ to show the pattern.
+
+\begin{center}
+    $\hat{a} =
+        \begin{pmatrix}
+            0      & \sqrt{1} & 0        & 0        & \dots  & \dots    & \dots      & \dots  & 0        \\
+            0      & 0        & \sqrt{2} & 0        & \dots  & \dots    & \dots      & \dots  & \vdots   \\
+            0      & 0        & 0        & \sqrt{3} & \ddots & \dots    & \dots      & \dots  & \vdots   \\
+            0      & 0        & 0        & 0        & \ddots & 0        & \dots      & \dots  & \vdots   \\
+            \vdots & \vdots   & \vdots   & \vdots   & \ddots & \sqrt{k} & 0          & \dots  & \vdots   \\
+            \vdots & \vdots   & \vdots   & \vdots   & \vdots & 0        & \sqrt{k+1} & \ddots & \vdots   \\
+            \vdots & \vdots   & \vdots   & \vdots   & \vdots & \vdots   & 0          & \ddots & 0        \\
+            \vdots & \vdots   & \vdots   & \vdots   & \vdots & \vdots   & \vdots     & \ddots & \sqrt{N} \\
+            \vdots & \vdots   & \vdots   & \vdots   & \vdots & \vdots   & \vdots     & \vdots & 0        \\
+        \end{pmatrix}$
+\end{center}
+
+\subsubsection{Other important properties}
+There are two important properties to look at before continuing the experiments.
+
+First, the overlap of canonical coherent states can be almost zero.
+Since non-orthogonality is a basic assumption for unambiguous discrimination
+of a set of quantum states, it is intuitive that we have to make sure the set
+of quantum states does not contain states that are nearly identical or nearly
+orthogonal. According to the formula of the overlap of canonical coherent
+states, we immediately found that even though the overlap of two different
+coherent states is always non-zero, it can be very close to zero. In other
+words, the two distinct coherent states are in theory non-orthogonal, but they
+are very close to orthogonal.
+
+Second, the coherent states may have good approximations at
+fairly low-dimensional Hilbert space. The canonical coherent states can be
+expanded with basis states as .... In practice, the formula is truncated to
+enable simulation on classical computers. The fidelity of the truncated
+coherent state with respect to the canonical coherent state with the same
+alpha is ...
+We will make sure the fidelity is at least 0.99, and will list it in our results.
+
+To produce meaningful results, we check the two properties before running simulations.
+
+% TODO Visualization
+We can generate truncated coherent states with QuTiP. The package provides
+convenient functions to generate truncated coherent states in the form of
+statevectors or density matrices.
+
+
+\section{Quantum measurement}
+To explain the phenomenona of the physical systems, quantum mechanics is developed.
+Quantum measurement is one of the quantum mechanics postulates.
+
+\subsection{POVM}
+
+
+\cite{qcqi}
+
+\cite{10.5555/3240076}
+
+
+
+
+\section{Naimark's dilation theorem}
+\label{sec:naimark}
+
+Naimark's dilation theorem shows that a projective measurement can be obtained from POVM.
+And there exists an optimal size of transformation. [ref]
+
+Chapter 2 of \cite{10.5555/3240076}
+
+\section{Noise model}
+
+The experimental environment is not perfect. To model the imperfections that
+appear in quantum communication or quantum circuits, different noise models
+have been proposed. Chapter 8.3 of \cite{qcqi}
+Among the We use the depolarizing channel as the noise model.
+The depolarizing channel assumes that the information of the qubits disappear over time.
+The depolarizing channel is a generalization of the bit flip, phase flip, and bit-phase flip channels.
+
+Our assumptions on the system environment will affect where we apply the noise
+models. Sometimes we add the depolarizing channel direct to our input states
+and sometimes we make an assumption that a depolarizing channel is present
+after executing certain quantum gates.
+
+\section{Quantum circuits}
+
+In this section, we will briefly introduce the keys elements of the quantum
+circuit model, in the hope to make the thesis more self-contained. Readers may
+refer to Chapter 4 in \cite{qcqi} for more details.
+
+
+The basis gate set for ibm\_blah is
+
+\section{Other properties}
+
+\subsection{State fidelity}
+\label{subsec:state_fid}
+The state fidelity $F$ \cite{ibmQuantum_infolatest}
+for density matrix input states $\rho_1, \rho_2$ is given by
+\begin{align}
+    F(\rho_1, \rho_2) = Tr[\sqrt{\sqrt{\rho_1}\rho_2\sqrt{\rho_1}}]^2.
+\end{align}
+
+If one of the states is a pure state this simplifies to
+$F(\rho_1, \rho_2) = \langle\psi_1|\rho_2|\psi_1\rangle$, where
+$\rho_1 = |\psi_1\rangle\!\langle\psi_1|$.
+
+\subsection{Process fidelity}
+\label{subsec:proc_fid}
+The process fidelity $F_{\text{pro}}(\mathcal{E}, \mathcal{F})$
+\cite{ibmQuantum_infolatest} between two quantum channels
+$\mathcal{E}, \mathcal{F}$ is given by
+\begin{align}
+    F_{\text{pro}}(\mathcal{E}, \mathcal{F})
+    = F(\rho_{\mathcal{E}}, \rho_{\mathcal{F}})
+\end{align}
+
+where $F$ is the state fidelity,
+$\rho_{\mathcal{E}} = \Lambda_{\mathcal{E}} / d$ is the
+normalized Choi matrix for the channel $\mathcal{E}$, and $d$ is the input
+dimension of $\mathcal{E}$.
+
+When the target channel is unitary this is equivalent to
+
+\begin{align}
+    F_{\text{pro}}(\mathcal{E}, U)
+    = \frac{Tr[S_U^\dagger S_{\mathcal{E}}]}{d^2}
+\end{align}
+
+where $S_{\mathcal{E}}, S_{U}$ are the SuperOp matrices for the input
+quantum channel $\mathcal{E}$ and target unitary $U$ respectively,
+and $d$ is the input dimension of the channel.
+
+\subsection{Jensen-Shannon Divergence}
+The Jensen-Shannon divergence (JSD) is a symmetrized and smoothed version of
+the Kullback-Leibler divergence $D_{KL}(P\parallel Q)$.
+For discrete probability distributions $P$ and $Q$ defined on the same sample
+space $\mathcal{X}$, the relative entropy from $Q$ to $P$ is defined to be
+\begin{align}
+  D_{KL}(P \parallel Q) = \sum_{x \in \mathcal{X}} P(x) \log {\frac{P(x)}{Q(x)}}
+\end{align}
+The Jensen-Shannon divergence is then defined by
+\begin{align}
+  JSD(P\parallel Q) = \frac{1}{2}D_{KL}(P\parallel M) + \frac{1}{2}D_{KL}(Q\parallel M)
+\end{align}
+where $M = \frac{1}{2}(P + Q)$ is a mixture distribution of
+$P$ and $Q$.
+
+Reference: Wikipedia
+
+The Jensen-Shannon distance is the square root of the Jensen-Shannon divergence.
+\begin{align}
+  \sqrt{\frac{1}{2}D_{KL}(P\parallel M) + \frac{1}{2}D_{KL}(Q\parallel M)}
+\end{align}
+Reference: SciPy
+
+\subsection{Quantum Jensen-Shannon Divergence}
+The generalization of probability distributions on density matrices allows to define
+quantum Jensen-Shannon divergence (QJSD).
+It is defined for a set of density matrices
+$(\rho_{1}, \dots, \rho_{n})$ and a probability distribution
+$\pi = (\pi_{1}, \dots, \pi_{n})$ as
+\begin{align}
+  QJSD(\rho_{1}, \dots, \rho_{n}) = S(\sum_{i=1}^{n} \pi_{i} \rho_{i})
+  - \sum_{i=1}^{n} \pi_{i} S(\rho_{i})
+\end{align}
+where $S{\rho}$ is the von Neumann entropy of $\rho$.
+This quantity is also called
+Holevo information, which gives the upper bound for the amount of
+classical information encoded by the quantum states $(\rho_{1}, \dots, \rho_{n})$
+under the prior distribution $\pi$.
+
+Reference: Wikipedia
+
+

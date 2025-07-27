@@ -1,15 +1,20 @@
 % !TeX root = ../main.tex
 
 \chapter{Convex Optimization}
+\label{chap:basics_co}
+
 In this chapter, we will introduce the basics of convex optimization problems.
 It will be useful for solving POVMs for quantum state discrimination.
 
 \section{Basic terminology}
-
+What is a convex programming problem?
 
 To solve the formulated semidefinite programming problems, we take advantage of
 the state-of-the-art framework CVXPY and solver SCS with acceleration
 techniques applied.
+
+We have also considered using other solvers like Gurobi and IBM CPlex, but due to limited
+time, we haven't implemented all the programming problems for them.
 
 \section{CVXPY}
 CVXPY is an open source Python module for modeling convex optimization problems \cite{RN473}.
@@ -46,7 +51,7 @@ of the relevant numbers are set to constants as the problem is defined.
 \begin{itemize}
     \item Under DPP, all parameters are classified as affine, just like variables.
     \item Under DPP, the product of two expressions is affine when at least one of
-    the expressions is constant, or when one of the expressions is parameter-affine and the other is parameter-free.
+          the expressions is constant, or when one of the expressions is parameter-affine and the other is parameter-free.
 \end{itemize}
 
 
@@ -58,7 +63,35 @@ The main reason we select this solver is because it, together with CVXPY, suppor
 semidefinite cones in the problem formulation by vectorization \cite{RN482}.
 (While other solvers like .. can't or tedious)
 
-We show the transformation between a complex PSD and a vector of real values.
+\subsection{Supported problem form}
+With the assistance of CVXPY, SCS will turn our problem into the following form,
+\begin{align}
+    \begin{split}\begin{array}{lcr}
+            \begin{array}{ll}
+                \mbox{minimize}   & (1/2)x^\top  P x + c^\top  x \\
+                \mbox{subject to} & Ax + s = b                   \\
+                                  & s \in \mathcal{K}
+            \end{array}
+             & \quad &
+            \begin{array}{ll}
+                \mbox{maximize}   & -(1/2)x^\top  P x - b^\top  y \\
+                \mbox{subject to} & Px + A^\top y + c = 0         \\
+                                  & y \in \mathcal{K}^*
+            \end{array}
+        \end{array}
+    \end{split}
+\end{align}
+where $x \in \mathbf{R}^{n}$ is the primal variable,
+$s \in \mathbf{R}^{m}$ is the slack variable,
+$A \in \mathbf{R}^{m \times n}$,
+$b \in \mathbf{R}^{m}$,
+$P \in \mathbf{S}^{n}_{+}$,
+$c \in \mathbf{R}^{n}$,
+$\mathcal{K} \subseteq \mathbf{R}^{m}$
+.
+
+\subsection{Vectorization}
+We show below the transformation between a complex positive semidefinite matrix and a vector of real values.
 Let $S$ be a $k \times k$ complex matrix
 \begin{align}
     S = \begin{bmatrix}
@@ -70,13 +103,13 @@ Let $S$ be a $k \times k$ complex matrix
     \in \mathbf{C}^{k \times k}
 \end{align}
 
-The vectorization $\text{vec}(S)$ is done such that 
+The vectorization $\text{vec}(S)$ is done such that
 $\text{Trace}(Y^\dagger S) = \text{vec}(Y)^\dagger \text{vec}(S)$.
 \begin{align}
     \begin{split}\text{vec}(S) = (S_{11}, \sqrt{2} \Re(S_{21}), \sqrt{2} \Im(S_{21}), \ldots, \sqrt{2} \Re(S_{k1}), \sqrt{2} \Im(S_{k1}), S_{22}, \\\sqrt{2}\Re(S_{32}), \sqrt{2}\Im(S_{32}), \dots, S_{k-1,k-1}, \sqrt{2}\Re(S_{k,k-1}), \sqrt{2}\Im(S_{k,k-1}), S_{kk}) \in \mathbf{R}^{k^2}.\end{split}
 \end{align}
 
-To recover the complex matrix from a vectorized solution $s$,
+To recover the complex positive semidefinite matrix from a vectorized solution $s$,
 \begin{align}
     \begin{split}\text{mat}(s) =  \begin{bmatrix}
             s_{1}                             & (s_{2} - i s_3) / \sqrt{2}        & \ldots & (s_{2k-2} - is_{2k-1}) / \sqrt{2} \\
@@ -87,15 +120,46 @@ To recover the complex matrix from a vectorized solution $s$,
         ,\end{split}
 \end{align}
 
-General form
+\subsection{Acceleration for linear system solve}
+At each iteration (for example, iteration $k$), SCS solves the following set of linear equations:
+\begin{align}
+    \begin{split}\begin{bmatrix}
+            R_x + P & A^\top \\
+            A       & -R_y   \\
+        \end{bmatrix}
+        \begin{bmatrix}
+            x \\
+            y
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+            z^k_x \\
+            z^k_y
+        \end{bmatrix}\end{split}
+\end{align}
+for a particular right-hand side $z^k \in \mathbf{R}^{n+m}$
+. The presence of the diagonal scaling $R \in \mathbf{R}^{(n+m) \times (n+m)}$ matrix is explained
+in Non-identity DR Scaling. The $R_y$ term is negated to make the matrix quasi-definite; we can recover
+the solution to the original problem from this modified one. Note that the matrix does not change from
+iteration to iteration, which is a major advantage of this approach. Moreover, this system can be solved approximately
+so long as the errors satisfy a summability condition, which permits the use of approximate
+solvers that can scale to very large problems.
 
+
+For most of our experiments, we took advantage of the integration of the Intel MKL Pardiso solver in
+SCS. The Intel MKL Pardiso solver is a shared-memory multiprocessing parallel direct sparse
+solver which is included Intel oneAPI MKL library (cite).
+https://www.cvxgrp.org/scs/linear\_solver/index.html
+
+It offers an alternative to the single threaded AMD (approximate minimum degree ordering) / QDLDL libraries which come bundled with SCS.
+Pardiso tends to be faster than AMD / QDLDL, especially for larger problems. Since we are running our experiments
+with Intel CPUs, it is very suitable for our needs.
+
+We have also considered using GPU acceleration in SCS. However, since the developers claimed that cuDSS
+and its integration are not well battle-tested as the other existing solvers, we leave it for future improvements.
+
+\subsection{Python interface and arguments}
 Warm start
 
-MKL acceleration
-
-Python interface and arguments
 
 
-\subsection{Semidefinite programming}
-Why do I need sdp for my work?
-What is the overall complexity?

@@ -1,11 +1,314 @@
 % !TeX root = ../main.tex
 
-\chapter{中文測試}
+\chapter{Basics of Quantum State Discrimination}
+\label{chap:basics_qsd}
 
-\section{史記}
+In this chapter, we will review some major concepts about
+quantum state discrimination.
 
-\zhlipsum[name=xiangyu]
+We follow the convention of quantum communication discussions, which involves
+the hypothetical individuals: the message sender Alice, the message receiver
+Bob, and the eavesdropper Eve. For the scenarios discussed in this thesis, we
+assume there are no eavesdroppers. If needed, readers can go to Section 2.2.4
+and Section 12.1 of \cite{qcqi} or Chapter 3 of \cite{10.5555/3240076} for
+more details.
 
-\section{山海經}
+In short, Alice prepares one of the quantum states from a fixed set of quantum
+states which is known to Alice and Bob, and Bob will perform measurement to
+determine which one of the quantum states is sent by Alice \cite{qcqi}.
+Non orthogonal states can't be reliably discriminated; in other
+words, there does not exist a measurement such that every state in the set
+of non-orthogonal states known by Alice and Bob, can be correctly identified
+with probability 1 \cite{qcqi}.
 
-\zhlipsum[name=nanshanjing]
+\section{The quantum state discrimination problem}
+Let $S_{\ket{\psi}} \equiv \{\ket{\psi_{1}}, \ket{\psi_{2}}, \dots, \ket{\psi_{l}}\}$
+be a set of quantum states, known to Alice and Bob before communication.
+In the discussions of state discrimination, the states are usually
+non-orthogonal, that is,
+\begin{align}
+    \braket{\psi_{i}}{\psi_{j}} \neq 0, \forall \; i \neq j, 1 \leq i, j \leq l.
+\end{align}
+Let $S_{prior} \equiv \{p_{1}, p_{2}, \dots, p_{l}\}$ be the set of prior
+probabilities corresponding to each state in $S_{\ket{\psi}}$.
+The prior probability $p_{i}$ can be understood as the assumed ratio of Alice
+preparing and sending the state $\ket{\psi_{i}}$ to Bob.
+
+Given the predefined set of states $S_{\ket{\psi}}$ and the prior probabilities
+$S_{prior}$, the quantum state discrimination problem stimulates discussions
+about the pros and cons of different ways to measure and identify the quantum
+state prepared by Alice.
+There are an abundance of figures of merit proposed (cite).
+The most common figure of merit is minimizing the measurement error or
+maximizing the probability of success discrimination.
+
+Let us introduce different methods with an example.
+\vspace*{0.2cm}
+
+Let $l = 2$, $\ket{\psi_{1}} = \ket{0}$,
+$\ket{\psi_{2}} = \dfrac{\ket{0}+\ket{1}}{\sqrt{2}}$, and
+$S_{prior} = \{p_{1}, p_{2}\} = \{0.5, 0.5\}$.
+We can verify that the two states are non-orthogonal since
+$\braket{\psi_{1}}{\psi_{2}} = \dfrac{1}{\sqrt{2}} \neq 0$.
+
+\section{Projective measurement}
+
+The projective measurement is a set of $M$ measurement operators, denoted by
+$S_{\Pi_{proj}} \equiv \{\Pi_{1}, \Pi_{2}, \dots, \Pi_{M}\}$
+such that $\Sigma_{i = 1}^{M}\Pi_{i} = I, \Pi_{i}\Pi_{j} = \delta_{ij}, \forall \; 1 \leq i, j \leq M,$
+where $\delta_{ij}$ is the Kronecker delta function.
+
+A trivial projective measurement for the example states is
+\begin{align}
+     & \Pi_{1} = \ket{0}\bra{0}
+    = \begin{bmatrix} 1 \\ 0 \end{bmatrix}
+    \begin{bmatrix} 1 & 0 \end{bmatrix}
+    = \begin{bmatrix}
+          1 & 0 \\
+          0 & 0
+      \end{bmatrix}            \\
+     & \Pi_{2} = \ket{1}\bra{1}
+    = \begin{bmatrix} 0 \\ 1 \end{bmatrix}
+    \begin{bmatrix} 0 & 1 \end{bmatrix}
+    = \begin{bmatrix}
+          0 & 0 \\
+          0 & 1
+      \end{bmatrix}
+\end{align}
+
+We can evaluate the probability of success $P_{succ}$ as follows:
+\begin{align}
+     & \bra{\psi_{1}} \Pi_{1} \ket{\psi_{1}} = 1,
+    \bra{\psi_{1}} \Pi_{2} \ket{\psi_{1}} = 0                   \\
+     & \bra{\psi_{2}} \Pi_{1} \ket{\psi_{2}} = 0.5,
+    \bra{\psi_{2}} \Pi_{2} \ket{\psi_{2}} = 0.5                 \\
+     & P_{succ} = p_{1} \bra{\psi_{1}} \Pi_{1} \ket{\psi_{1}} +
+    p_{2} \bra{\psi_{2}} \Pi_{2} \ket{\psi_{2}}
+    = 0.5 \times 1 + 0.5 \times 0.5 = 0.75
+\end{align}
+
+Since Bob sometimes thinks he measures $\ket{\psi_{1}}$ when he actually
+receives $\ket{\psi_{2}}$, we call this unwanted behavior "measurement error".
+With this projective measurement, the measurement error only attributes to
+the measurement error of $\ket{\psi_{2}}$.
+
+\section{Minimum Error State Discrimination}
+Instead of measuring with a trivial projective measurement,
+the first proposed method is minimum error state discrimination (MESD),
+also known as minimum error discrimination (MED).
+The principle of MED is to find a POVM of $l$ elements that minimizes the
+overall measurement error
+\begin{align}
+     & P_{err} = \Sigma_{i = 1, i \neq j}^{l} p_{i} \bra{\psi_{i}} \Pi_{j} \ket{\psi_{i}} \\
+     & = 1 - \Sigma_{i = 1}^{l} p_{i} \bra{\psi_{i}} \Pi_{i} \ket{\psi_{i}}               \\
+     & = 1 - P_{succ}
+\end{align}
+$l$ here is exactly the number of states in $S_{\ket{\psi}}$.
+The POVM is denoted by $S_{\Pi} \equiv \{\Pi_{1}, \Pi_{2}, \dots, \Pi_{l}\}$.
+
+For $l = 2$, the optimal probability of success $P_{succ}$ can be analytically
+solved, which is also named the Helstrom measurement \cite{Barnett:09}.
+\begin{align}
+     & \Sigma_{i=1}^{l} \Pi_{i} = \Pi_{1} + \Pi_{2} = I                          \\
+     & P_{succ} = \Sigma_{i = 1}^{l} p_{i} \bra{\psi_{i}} \Pi_{i} \ket{\psi_{i}} \\
+     & = p_{1} \bra{\psi_{1}} \Pi_{1} \ket{\psi_{1}}
+    + p_{2} \bra{\psi_{2}} \Pi_{2} \ket{\psi_{2}}                                \\
+     & = p_{1} \bra{\psi_{1}} \Pi_{1} \ket{\psi_{1}}
+    + p_{2} \bra{\psi_{2}} (I - \Pi_{1}) \ket{\psi_{2}}                          \\
+     & = p_{2} + \operatorname{Tr} \left[
+        \left( p_{1} \ket{\psi_{1}}\bra{\psi_{1}}
+        - p_{2} \ket{\psi_{2}}\bra{\psi_{2}} \right) \Pi_{1}
+        \right] \label{eq:psucc}
+\end{align}
+
+From Equation \ref{eq:psucc}, the maximal probability happens when $\Pi_{1}$
+projects to the positive eigenspace of
+$p_{1} \ket{\psi_{1}}\bra{\psi_{1}} - p_{2} \ket{\psi_{2}}\bra{\psi_{2}}$.
+
+For our example,
+\begin{align}
+     & p_{1} \ket{\psi_{1}}\bra{\psi_{1}} - p_{2} \ket{\psi_{2}}\bra{\psi_{2}}
+    = 0.5 \times \begin{bmatrix}
+                     1 & 0 \\ 0 & 0
+                 \end{bmatrix}
+    - 0.5 \times \begin{bmatrix}
+                     0.5 & 0.5 \\ 0.5 & 0.5
+                 \end{bmatrix}                                         \\
+     & = 0.5 \times \begin{bmatrix}
+                        0.5 & -0.5 \\ -0.5 & -0.5
+                    \end{bmatrix}
+    \equiv 0.5 A
+\end{align}
+
+The eigenvectors $v_{1}, v_{2}$ and eigenvalues $\lambda_{1}, \lambda_{2}$ of $A$ are
+\begin{align}
+     & v_{1} = \begin{bmatrix} -1 - \sqrt{2} & 1   \end{bmatrix} ^{T},
+    \lambda_{1} =\frac{\sqrt{2}}{2}                                     \\
+     & v_{2} = \begin{bmatrix}  -1 + \sqrt{2} & 1   \end{bmatrix} ^{T},
+    \lambda_{2} =\frac{-\sqrt{2}}{2}
+\end{align}
+
+We choose $v_{1}$ since we want the one with positive eigenvalue.
+The resulting measurement operators are
+\begin{align}
+     & \Pi_{1} = \frac{v_{1}v_{1}^{T}}{(-1 - \sqrt{2})^{2} + 1^{2}}
+    = \begin{bmatrix}
+          3 + 2\sqrt{2} & -1 - \sqrt{2} \\
+          -1 - \sqrt{2} & 1
+      \end{bmatrix}
+    / (4 + 2\sqrt{2})                                               \\
+     & = (2 - \sqrt{2})\begin{bmatrix}
+                           3 + 2\sqrt{2} & -1 - \sqrt{2} \\
+                           -1 - \sqrt{2} & 1
+                       \end{bmatrix}
+    / 4                                                             \\
+     & = \begin{bmatrix}
+             (2 + \sqrt{2})/4 & - \sqrt{2}/4     \\
+             - \sqrt{2}/4     & (2 - \sqrt{2})/4
+         \end{bmatrix}                        \\
+     & \Pi_{2} = I - \Pi_{1} = \begin{bmatrix}
+                                   (2 - \sqrt{2})/4 & \sqrt{2}/4       \\
+                                   \sqrt{2}/4       & (2 + \sqrt{2})/4
+                               \end{bmatrix}
+\end{align}
+
+The probability of success for MED is
+\begin{align}
+     & P_{succ} = p_{1} \bra{\psi_{1}} \Pi_{1} \ket{\psi_{1}}
+    + p_{2} \bra{\psi_{2}} \Pi_{2} \ket{\psi_{2}}                  \\
+     & = 0.5 \times (2 + \sqrt{2})/4 + 0.5 \times (2 + \sqrt{2})/4 \\
+     & = (2 + \sqrt{2})/4 = 0.85355\dots > 0.75
+\end{align}
+
+\section{Unambiguous Quantum State Discrimination}
+
+Unambiguous quantum state discrimination (UQSD, USD) \cite{RN493, RN494, RN495}
+provided a different view, where the goal is to find a POVM of $l+1$
+elements, such that the measurement may obtain inconclusive results,
+while the conclusive results will not be erroreous at all.
+
+For example,
+
+
+The B92 protocol used USD and is one of the simplest quantum key distribution
+protocols. In the protocol, Bob uses USD to identify Alice's messages.
+Since it is easy to implement, B92 is often used in experiments instead of
+BB84.
+However, since Eve can also perform USD, she can resend Bob some states
+without being detected, which is also called the zero-error attack. Even
+though there are some countermeasures for USD attacks \cite{RN226}, BB84 with
+decoy states is still the mainstream.
+
+previous works
+Theoretical bounds
+Physics experiments
+
+\section{Optimal POVM for UQSD}
+\label{sec:optimal_povm_for_uqsd}
+
+\cite{RN23}
+In this section, we will review the work that defined the optimal
+POVM for UQSD.
+The work is limited to linearly independent pure states and
+
+Its problem is that some probabilities can be zero or near-zero, causing the
+discrimination scheme to throw away some states.
+
+We mention this work because it is fast when everything just works.
+
+\subsection{Entangled Quantum States with Orthogonal Components}
+(Over-simplified example)
+We define a trio of two-qubit entangled states, each expressed as
+a linear combination of basis states in the computational basis.
+The states are given by:
+\begin{align}
+    \ket{\psi_1} & = \frac{1}{\sqrt{1 + a_{1}^{2}}} \left( \ket{00} + a_{1} \ket{11} \right) , \\
+    \ket{\psi_2} & = \frac{1}{\sqrt{1 + a_{2}^{2}}} \left( \ket{01} + a_{2} \ket{11} \right) , \\
+    \ket{\psi_3} & = \frac{1}{\sqrt{1 + a_{3}^{2}}} \left( \ket{10} + a_{3} \ket{11} \right)
+\end{align}
+where $a_{i} \in \mathbb{R}, 0 < a_{i} < 1$ for $i \in \{1, 2, 3\}$.
+This construction ensures that each state is a valid pure quantum state,
+and the orthogonal components ($\ket{00}, \ket{01}, \ket{10}$) weigh more in the linear combination.
+It is lucid that the state vectors are non-orthogonal, which makes perfect discrimination impossible,
+and they are also linearly independent, which is a necessary assumption for UQSD to exist.
+
+For example, given $a_{1} = 0.2, a_{2} = 0.5$, and $a_{3} = 0.7$.
+We can express the states in state vectors, where the floating point numbers are rounded to 4 digits.
+\begin{align*}
+    \ket{\psi_1} & = \begin{pmatrix}
+                         0.9806+0.j &  & 0.    +0.j &  & 0.    +0.j &  & 0.1961+0.j
+                     \end{pmatrix}^{T} \\
+    \ket{\psi_2} & = \begin{pmatrix}
+                         0.    +0.j &  & 0.8944+0.j &  & 0.    +0.j &  & 0.4472+0.j
+                     \end{pmatrix}^{T} \\
+    \ket{\psi_3} & = \begin{pmatrix}
+                         0.    +0.j &  & 0.    +0.j &  & 0.8192+0.j &  & 0.5735+0.j
+                     \end{pmatrix}^{T}
+\end{align*}
+
+In the following we will show the process of deriving the semidefinite
+programming problem for the optimal POVM for pure quantum states.
+
+% Morning stops here
+The pseudo-inverse is
+\begin{align*}
+    Q_{1}
+\end{align*}
+
+The POVM is
+\begin{align*}
+    \Pi_{1} = \begin{bmatrix}
+                  1
+              \end{bmatrix} \\
+    \Pi_{2} = \begin{bmatrix}
+                  1
+              \end{bmatrix} \\
+    \Pi_{3} = \begin{bmatrix}
+                  1
+              \end{bmatrix} \\
+    \Pi_{?} =
+\end{align*}
+
+% Noise model
+
+\begin{itemize}
+    \item POVM results with annotation
+    \item solve time?
+    \item
+\end{itemize}
+
+% \subsubsection{$a=b=c$}
+% \subsubsection{$a>b>c$}
+\subsubsection{Parameter search}
+According to our SDP formulation, we can trade off
+error by adjusting the parameters. In this subsection we
+will discuss the results of different parameter search schemes.
+
+
+
+
+My research framework
+Experiment setup
+1. Qiskit
+
+2. Discriminate two-to-four-qubit state
+
+3. circuit
+
+According to previous publications, it is possible to find the optimal probability
+of the unambiguous quantum state discrimination by a semidefinite programming approach [].
+
+We apply a similar approach and convert it into a quantum circuit.
+A convex optimization problem is formed by the target states,
+which is a set of linearly independent pure quantum states.
+
+By optimal, it means the measurement gives the smallest possible
+probability of obtaining an inclusive result for unambiguous discrimination
+\cite{RN23}
+
+
+
+\section{Scalability/Complexity}
+
+
+state exclusion, hypothesis
