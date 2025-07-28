@@ -80,7 +80,7 @@
 % 變數: 版面設定
 % Variables: Layouts
 \newcommand{\ntu@geometry@main}{top=3cm, bottom=2cm, left=3cm, right=3cm}
-\newcommand{\ntu@geometry@cover}{top=3cm, bottom=3cm, left=3cm, right=3cm}
+\newcommand{\ntu@geometry@cover}{top=4cm, bottom=4cm, left=4cm, right=4cm}
 
 \newcommand{\ntu@tocvspace}{1em}
 \newcommand{\ntu@tocchaptersize@zh}{4.5em}
