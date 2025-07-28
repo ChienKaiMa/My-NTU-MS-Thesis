@@ -1,14 +1,14 @@
 \begin{quantikz}[column sep=0.5cm, row sep=0.4cm]
-    & \lstick[3]{$\ket{\psi_1}$} & \qw & \gate[3]{\textsf{POVM}} & \qw \\
+    & \lstick[3]{$\rho_{1}$} & \qw & \gate[3]{\textsf{POVM}} & \qw \\
     & & \qw & \qw  & \qw                     \\
     & & \qw & \qw  & \qw                     \\
 \end{quantikz}
 \hspace{0.5cm}
 $\equiv$
 \begin{quantikz}[column sep=0.7cm, row sep=0.4cm]
-    & \lstick[5]{$\rho_{1 + anc}$} & \lstick[3]{$\rho_{1}$} & \qw & \gate[5]{\textsf{PVM}} & \qw \\
-    & & & \qw & & \qw \\
-    & & & \qw & & \qw \\
-    & & & \qw & \qw   & \qw   \\
-    & & & \qw & \qw   & \qw   \\
+    & \lstick[5]{$\rho_{1 + anc}$} & \lstick[3]{$\rho_{1}$} & \qw & \gate[5]{\textsf{U}} & \gate[5]{\textsf{PVM}} & \qw \\
+    & & & \qw & & \qw & \qw \\
+    & & & \qw & & \qw & \qw \\
+    & & & \qw & \qw   & \qw & \qw  \\
+    & & & \qw & \qw   & \qw & \qw  \\
 \end{quantikz}
