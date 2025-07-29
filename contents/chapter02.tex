@@ -131,18 +131,51 @@ statevectors or density matrices.
 
 
 \section{Quantum measurement}
-To explain the phenomenona of the physical systems, quantum mechanics is developed.
-Quantum measurement is one of the quantum mechanics postulates.
+To explain the phenomenona of the physical systems more accurately, quantum
+mechanics is developed.
+The third postulate of quantum mechanics \cite{qcqi} describes quantum
+measurements as follows:
+\begin{quote}
+    Quantum measurements are described by a collection ${M_{m}}$ of
+    measurement operators. These are operators acting on the state space of the
+    system being measured. The index $m$ refers to the measurement outcomes that
+    may occur in the experiment. If the state of the quantum system is $\ket{\psi}$
+    immediately before the measurement then the probability that result $m$ occurs is
+    given by
+    \begin{align}
+        p(m) = \bra{\psi} M_{m}^{\dagger} M_{m}\ket{\psi}.
+    \end{align}
+    where $\Sigma_{m} M_{m}^{\dagger} M_{m} = I$.
+\end{quote}
 
-\subsection{POVM}
+\subsection{Positive Operator-Valued Measure (POVM)}
+\label{subsec:povm}
 
+We define a POVM element $\Pi_{m} \equiv M_{m}^{\dagger} M_{m}$.
+A POVM is the complete set of POVM elements $\{\Pi_{m}\}$ such that
+\begin{itemize}
+    \item $\Pi_{m}$ is a positive operator
+    \item $\Sigma_{m} \Pi_{m} = I$
+    \item $p(m) = \bra{\psi} \Pi_{m} \ket{\psi}$
+\end{itemize}
 
-\cite{qcqi}
+POVMs are necessary to describe the effect on a subsystem of a
+projective measurement performed on a larger system.
+Fig \ref{fig:povm_pvm} shows the relation between positive operator-valued
+measure (POVM) and projection-valued measure (PVM).
+$\rho_{1 + anc}$ is a larger system that includes $\rho_{1}$ and $U$ is
+some unitary gate.
 
-\cite{10.5555/3240076}
+\begin{figure}[htbp]
+    \centering
+    \scalebox{0.8}{
+        \input{figures/povm_pvm.tikz}
+    }
+    \caption{The relation between POVM and PVM.}
+    \label{fig:povm_pvm}
+\end{figure}
 
-
-
+% \cite{10.5555/3240076}
 
 \section{Naimark's dilation theorem}
 \label{sec:naimark}
