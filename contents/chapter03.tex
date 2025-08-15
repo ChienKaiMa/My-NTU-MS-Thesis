@@ -3,23 +3,22 @@
 \chapter{Basics of Quantum State Discrimination}
 \label{chap:basics_qsd}
 
-In this chapter, we will review some major concepts about
-quantum state discrimination.
+% Revised by Gemini 2.5 Flash
+This chapter reviews fundamental concepts in quantum state discrimination.
 
-We follow the convention of quantum communication discussions, which involves
-the hypothetical individuals: the message sender Alice, the message receiver
-Bob, and the eavesdropper Eve. For the scenarios discussed in this thesis, we
-assume there are no eavesdroppers. If needed, readers can go to Section 2.2.4
-and Section 12.1 of \cite{qcqi} or Chapter 3 of \cite{10.5555/3240076} for
-more details.
+Throughout this thesis, we adopt the standard convention in quantum
+communication of an information sender (Alice) and a receiver (Bob).
+For a foundational understanding of these concepts, including scenarios
+involving eavesdroppers, readers are referred to Sections 2.2.4 and 12.1 of
+\cite{qcqi} or Chapter 3 of \cite{10.5555/3240076}.
 
-In short, Alice prepares one of the quantum states from a fixed set of quantum
-states which is known to Alice and Bob, and Bob will perform measurement to
-determine which one of the quantum states is sent by Alice \cite{qcqi}.
-Non orthogonal states can't be reliably discriminated; in other
-words, there does not exist a measurement such that every state in the set
-of non-orthogonal states known by Alice and Bob, can be correctly identified
-with probability 1 \cite{qcqi}.
+The core problem of quantum state discrimination involves Alice preparing a
+quantum state from a predefined set of states known to both herself and Bob.
+Bob's objective is then to perform a measurement to identify which specific
+state Alice transmitted \cite{qcqi}. A critical challenge arises with
+non-orthogonal states: these states cannot be perfectly discriminated.
+This means no measurement exists that can reliably identify each state in a
+non-orthogonal set with unit probability \cite{qcqi}.
 
 \section{The quantum state discrimination problem}
 Let $S_{\ket{\psi}} \equiv \{\ket{\psi_{1}}, \ket{\psi_{2}}, \dots, \ket{\psi_{l}}\}$
