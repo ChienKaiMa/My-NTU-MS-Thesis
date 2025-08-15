@@ -51,45 +51,33 @@ These two states are non-orthogonal, as demonstrated by their inner product:
 $\braket{\psi_{1}}{\psi_{2}} = \dfrac{1}{\sqrt{2}} \neq 0$.
 
 \section{Projective measurement}
+% Revised by Gemini 2.5 Flash
+A projective measurement is defined by a set of $k$ measurement operators, $S_{\Pi_{proj}} \equiv \{\Pi_{1}, \Pi_{2}, \dots, \Pi_{k}\}$, which satisfy the following properties:
+\begin{enumerate}
+    \item \textbf{Completeness Relation:} $\sum_{i = 1}^{k}\Pi_{i} = I$ (the identity operator).
+    \item \textbf{Orthogonality:} $\Pi_{i}\Pi_{j} = \delta_{ij}\Pi_i$, where $\delta_{ij}$ is the Kronecker delta.
+    \item \textbf{Hermiticity and Projectors:} Each $\Pi_i$ is a Hermitian operator ($\Pi_i^\dagger = \Pi_i$) and satisfies $\Pi_i^2 = \Pi_i$, meaning they are projectors onto orthogonal subspaces.
+\end{enumerate}
 
-The projective measurement is a set of $M$ measurement operators, denoted by
-$S_{\Pi_{proj}} \equiv \{\Pi_{1}, \Pi_{2}, \dots, \Pi_{M}\}$
-such that $\Sigma_{i = 1}^{M}\Pi_{i} = I, \Pi_{i}\Pi_{j} = \delta_{ij}, \forall \; 1 \leq i, j \leq M,$
-where $\delta_{ij}$ is the Kronecker delta function.
-
-A trivial projective measurement for the example states is
+For the example states introduced previously, a standard projective measurement in the computational basis is given by:
 \begin{align}
-     & \Pi_{1} = \ket{0}\bra{0}
-    = \begin{bmatrix} 1 \\ 0 \end{bmatrix}
-    \begin{bmatrix} 1 & 0 \end{bmatrix}
-    = \begin{bmatrix}
-          1 & 0 \\
-          0 & 0
-      \end{bmatrix}            \\
-     & \Pi_{2} = \ket{1}\bra{1}
-    = \begin{bmatrix} 0 \\ 1 \end{bmatrix}
-    \begin{bmatrix} 0 & 1 \end{bmatrix}
-    = \begin{bmatrix}
-          0 & 0 \\
-          0 & 1
-      \end{bmatrix}
+    &\Pi_{1} = \ket{0}\bra{0} = \begin{bmatrix} 1 \\ 0 \end{bmatrix} \begin{bmatrix} 1 & 0 \end{bmatrix} = \begin{bmatrix} 1 & 0 \\ 0 & 0 \end{bmatrix} \\
+    &\Pi_{2} = \ket{1}\bra{1} = \begin{bmatrix} 0 \\ 1 \end{bmatrix} \begin{bmatrix} 0 & 1 \end{bmatrix} = \begin{bmatrix} 0 & 0 \\ 0 & 1 \end{bmatrix}
 \end{align}
 
-We can evaluate the probability of success $P_{succ}$ as follows:
+The probability of success ($P_{succ}$) for this measurement can be calculated as follows:
 \begin{align}
-     & \bra{\psi_{1}} \Pi_{1} \ket{\psi_{1}} = 1,
-    \bra{\psi_{1}} \Pi_{2} \ket{\psi_{1}} = 0                   \\
-     & \bra{\psi_{2}} \Pi_{1} \ket{\psi_{2}} = 0.5,
-    \bra{\psi_{2}} \Pi_{2} \ket{\psi_{2}} = 0.5                 \\
-     & P_{succ} = p_{1} \bra{\psi_{1}} \Pi_{1} \ket{\psi_{1}} +
-    p_{2} \bra{\psi_{2}} \Pi_{2} \ket{\psi_{2}}
-    = 0.5 \times 1 + 0.5 \times 0.5 = 0.75
+    &\bra{\psi_{1}} \Pi_{1} \ket{\psi_{1}} = 1, \quad \bra{\psi_{1}} \Pi_{2} \ket{\psi_{1}} = 0 \\
+    &\bra{\psi_{2}} \Pi_{1} \ket{\psi_{2}} = 0.5, \quad \bra{\psi_{2}} \Pi_{2} \ket{\psi_{2}} = 0.5 \\
+    &P_{succ} = p_{1} \bra{\psi_{1}} \Pi_{1} \ket{\psi_{1}} + p_{2} \bra{\psi_{2}} \Pi_{2} \ket{\psi_{2}} \\
+    &= 0.5 \times 1 + 0.5 \times 0.5 = 0.75
 \end{align}
 
-Since Bob sometimes thinks he measures $\ket{\psi_{1}}$ when he actually
-receives $\ket{\psi_{2}}$, we call this unwanted behavior "measurement error".
-With this projective measurement, the measurement error only attributes to
-the measurement error of $\ket{\psi_{2}}$.
+A measurement error occurs when Bob's measurement outcome does not correspond to the state Alice actually sent.
+In this example, an error arises when Alice sends $\ket{\psi_{2}}$ but Bob's measurement yields outcome $\Pi_{1}$ (i.e., $\ket{0}$).
+This specific projective measurement strategy thus only incurs error when
+discriminating $\ket{\psi_{2}}$, as $\bra{\psi_{2}} \Pi_{1} \ket{\psi_{2}} = 0.5$,
+meaning there's a 50\% chance of incorrectly inferring $\ket{\psi_1}$ when $\ket{\psi_2}$ was sent.
 
 \section{Minimum Error State Discrimination}
 Instead of measuring with a trivial projective measurement,
