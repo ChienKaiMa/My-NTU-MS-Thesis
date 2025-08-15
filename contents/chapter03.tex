@@ -21,33 +21,33 @@ This means no measurement exists that can reliably identify each state in a
 non-orthogonal set with unit probability \cite{qcqi}.
 
 \section{The quantum state discrimination problem}
-Let $S_{\ket{\psi}} \equiv \{\ket{\psi_{1}}, \ket{\psi_{2}}, \dots, \ket{\psi_{l}}\}$
-be a set of quantum states, known to Alice and Bob before communication.
-In the discussions of state discrimination, the states are usually
-non-orthogonal, that is,
+% Revised by Gemini 2.5 Flash
+Let $S_{\ket{\psi}} \equiv \{\ket{\psi_{1}}, \ket{\psi_{2}}, \dots, \ket{\psi_{k}}\}$
+denote the predefined set of quantum states shared between Alice and Bob.
+For quantum state discrimination, the states in $S_{\ket{\psi}}$ are typically 
+non-orthogonal, meaning their inner product is non-zero for distinct states:
 \begin{align}
-    \braket{\psi_{i}}{\psi_{j}} \neq 0, \forall \; i \neq j, 1 \leq i, j \leq l.
+    \braket{\psi_{i}}{\psi_{j}} \neq 0, \forall \; i \neq j, 1 \leq i, j \leq k.
 \end{align}
-Let $S_{prior} \equiv \{p_{1}, p_{2}, \dots, p_{l}\}$ be the set of prior
-probabilities corresponding to each state in $S_{\ket{\psi}}$.
-The prior probability $p_{i}$ can be understood as the assumed ratio of Alice
-preparing and sending the state $\ket{\psi_{i}}$ to Bob.
+Let $S_{prior} \equiv \{p_{1}, p_{2}, \dots, p_{k}\}$ be the set of prior 
+probabilities associated with each state in $S_{\ket{\psi}}$. The prior 
+probability $p_{i}$ represents the likelihood that Alice prepares and 
+transmits the state $\ket{\psi_{i}}$ to Bob.
 
-Given the predefined set of states $S_{\ket{\psi}}$ and the prior probabilities
-$S_{prior}$, the quantum state discrimination problem stimulates discussions
-about the pros and cons of different ways to measure and identify the quantum
-state prepared by Alice.
-There are an abundance of figures of merit proposed (cite).
-The most common figure of merit is minimizing the measurement error or
-maximizing the probability of success discrimination.
+Given the predefined set of states $S_{\ket{\psi}}$ and their prior 
+probabilities $S_{prior}$, the quantum state discrimination problem focuses on 
+determining the optimal measurement strategy for Bob to identify the quantum 
+state prepared by Alice. Numerous figures of merit have been proposed to 
+quantify performance in quantum state discrimination \cite{RN65}.
+The most common figure of merit is the minimization of measurement error, 
+which is equivalent to the maximization of the success probability of 
+discrimination.
 
-Let us introduce different methods with an example.
-\vspace*{0.2cm}
+To illustrate these concepts and different discrimination methods, consider the following example:
 
-Let $l = 2$, $\ket{\psi_{1}} = \ket{0}$,
-$\ket{\psi_{2}} = \dfrac{\ket{0}+\ket{1}}{\sqrt{2}}$, and
-$S_{prior} = \{p_{1}, p_{2}\} = \{0.5, 0.5\}$.
-We can verify that the two states are non-orthogonal since
+Let $k = 2$ with states $\ket{\psi_{1}} = \ket{0}$ and $\ket{\psi_{2}} = \dfrac{\ket{0}+\ket{1}}{\sqrt{2}}$,
+and prior probabilities $S_{prior} = \{p_{1}, p_{2}\} = \{0.5, 0.5\}$.
+These two states are non-orthogonal, as demonstrated by their inner product:
 $\braket{\psi_{1}}{\psi_{2}} = \dfrac{1}{\sqrt{2}} \neq 0$.
 
 \section{Projective measurement}
