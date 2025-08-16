@@ -3,27 +3,32 @@
 \chapter{Basics of Quantum Computation}
 \label{chap:basics_qc}
 
-Quantum computation was first proposed by Richard Feynman \cite{feynman},
-which is a computing paradigm that aims to simulate large systems in physics,
-a task that a Turing machine (a classical computer) finds intractable.
-In this chapter, we will introduce the notations and backgrounds required for
-this thesis, including quantum states, measurement, and quantum circuits.
+% Revised by Gemini 2.5 Flash
+Quantum computing, a paradigm first proposed by Richard Feynman \cite{feynman},
+offers a powerful approach to simulate complex physical systems that are
+intractable for classical computers (Turing machines).
+This chapter introduces the fundamental notations and background concepts
+essential for this thesis, including quantum states, quantum measurements,
+and quantum circuits.
+Unless otherwise specified, the notation adopted throughout this thesis aligns
+with the conventions established in standard quantum information texts \cite{qcqi, 10.5555/3240076}.
 
-We will follow the notations of two important books about quantum information
-\cite{qcqi, 10.5555/3240076} interchangeably.
+\section{Quantum States}
 
-\section{Complex Euclidean spaces}
-In this thesis, we consider mainly quantum states built by qubits.
-Any one-qubit state can be expressed by
-$\ket{\Psi} = a\ket{0} + b\ket{1}$, where $|a|^{2} + |b|^{2} = 1$ and
-$\ket{0}$ and $\ket{1}$ are the basis states.
-
-
-\section{Quantum states}
-
-Qubits
-orthogonality
-Hilbert space and
+% Revised first by Gemini, then by Grok 3
+In quantum mechanics, information is encoded in quantum states, such as those
+of qubits, and processed through quantum operations that manipulate properties
+like superposition and entanglement.
+A pure quantum state is represented as a normalized vector in a complex
+Hilbert space, $\mathcal{H}$, satisfying $\braket{\psi}{\psi} = 1$ for a state
+vector $\ket{\psi} \in \mathcal{H}$.
+The qubit, the fundamental unit of quantum information, is analogous to a
+classical bit but can exist in a superposition of its basis states, typically
+denoted $\ket{0}$ and $\ket{1}$.
+A general pure qubit state is written as $\ket{\psi} = \alpha\ket{0} + \beta\ket{1}$,
+where $\alpha, \beta \in \mathbb{C}$ and $|\alpha|^2 + |\beta|^2 = 1$.
+For instance, the state $\ket{+} = \frac{1}{\sqrt{2}}(\ket{0} + \ket{1})$
+represents an equal superposition of $\ket{0}$ and $\ket{1}$.
 
 \subsection{State vector and density matrix}
 Environment
