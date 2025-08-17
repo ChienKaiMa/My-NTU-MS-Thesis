@@ -30,14 +30,50 @@ where $\alpha, \beta \in \mathbb{C}$ and $|\alpha|^2 + |\beta|^2 = 1$.
 For instance, the state $\ket{+} = \frac{1}{\sqrt{2}}(\ket{0} + \ket{1})$
 represents an equal superposition of $\ket{0}$ and $\ket{1}$.
 
-\subsection{State vector and density matrix}
-Environment
+\subsection{Density Matrices}
 
-The density matrix representation is important since it can describe the mixed
-states, which is not possible by the state vector representation.
-\cite{ogrodnik2025highdimensionalquantumkeydistribution}
+While pure states provide a complete description of an isolated quantum system,
+the concept of a density matrix (or density operator) becomes indispensable
+for describing systems that are not fully known or are entangled with other systems.
 
-Pure state and mixed states
+For a pure quantum state $\ket{\psi}$, its density matrix is simply defined as
+the outer product $\rho = \ket{\psi}\bra{\psi}$.
+This representation can be seen as a projector onto the state $\ket{\psi}$.
+
+The density matrix formalism extends to mixed states,
+which describe a statistical ensemble of pure states.
+If a system is in state $\ket{\psi_i}$ with classical probability $p_i$,
+then the mixed state is described by the density matrix:
+\begin{equation*}
+    \rho = \sum_i p_i \ket{\psi_i}\bra{\psi_i}
+\end{equation*}
+where $\sum p_i = 1$ and $p_i \geq 0$.
+Mixed states arise in various scenarios, such as when the preparation of a
+system is uncertain, or when a subsystem is entangled with another part of a
+larger quantum system, leading to classical ignorance about its exact pure state.
+
+Density matrices possess several key properties:
+\begin{enumerate}
+    \item \textbf{Hermiticity:} $\rho = \rho^\dagger$.
+    \item \textbf{Positive Semidefinite:} All eigenvalues of $\rho$ are non-negative.
+    \item \textbf{Trace One:} $\operatorname{Tr}(\rho) = 1$. This ensures that the sum of probabilities for all possible outcomes is unity.
+    \item \textbf{Purity:} $\operatorname{Tr}(\rho^2) = 1$ for pure states, and $\operatorname{Tr}(\rho^2) < 1$ for mixed states. This property provides a quantifiable measure of how ``mixed'' a state is.
+\end{enumerate}
+For example, a completely depolarized qubit, where the state is either
+$\ket{0}$ or $\ket{1}$ with equal classical probability, is described by the
+density matrix $\rho = \frac{1}{2}\ket{0}\bra{0} + \frac{1}{2}\ket{1}\bra{1} = \frac{I}{2}$.
+Its purity $\operatorname{Tr}(\rho^2) = \operatorname{Tr}((\frac{I}{2})^2) = \operatorname{Tr}(\frac{I}{4}) = \frac{1}{4} < 1$,
+indicating a mixed state.
+In contrast, for the pure state $\ket{+} = \frac{1}{\sqrt{2}}(\ket{0} + \ket{1})$,
+its density matrix is $\rho = \ket{+}\bra{+} = \frac{1}{2}(\ket{0}\bra{0} + \ket{0}\bra{1} + \ket{1}\bra{0} + \ket{1}\bra{1})$,
+and its purity is $\operatorname{Tr}(\rho^2) = 1$.
+
+The density matrix formalism provides a robust mathematical framework to
+describe quantum systems in realistic scenarios, particularly when dealing
+with noisy channels or subsystems.
+This generality is fundamental to the study of quantum state discrimination,
+as discussed in the following chapters, where optimal measurement strategies
+must account for all possible system preparations.
 
 \subsection{Trine states}
 
