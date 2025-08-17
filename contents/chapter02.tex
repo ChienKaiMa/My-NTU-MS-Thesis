@@ -171,11 +171,12 @@ convenient functions to generate truncated coherent states in the form of
 statevectors or density matrices.
 
 
-\section{Quantum measurement}
-To explain the phenomenona of the physical systems more accurately, quantum
-mechanics is developed.
-The third postulate of quantum mechanics \cite{qcqi} describes quantum
-measurements as follows:
+\section{Quantum Measurement}
+% Revised by Gemini 2.5 Flash
+Quantum mechanics provides the fundamental framework for accurately describing
+and predicting phenomena within physical systems.
+Central to this framework is the concept of quantum measurement.
+The third postulate of quantum mechanics \cite{qcqi} describes quantum measurements as follows:
 \begin{quote}
     Quantum measurements are described by a collection ${M_{m}}$ of
     measurement operators. These are operators acting on the state space of the
@@ -192,20 +193,24 @@ measurements as follows:
 \subsection{Positive Operator-Valued Measure (POVM)}
 \label{subsec:povm}
 
-We define a POVM element $\Pi_{m} \equiv M_{m}^{\dagger} M_{m}$.
-A POVM is the complete set of POVM elements $\{\Pi_{m}\}$ such that
+% Revised by Gemini 2.5 Flash
+A POVM element $\Pi_{m}$ is defined as $\Pi_{m} \equiv M_{m}^{\dagger} M_{m}$.
+A POVM is a complete set of positive-operator valued elements $\{\Pi_{m}\}$ that satisfies the following conditions:
 \begin{itemize}
-    \item $\Pi_{m}$ is a positive operator
-    \item $\Sigma_{m} \Pi_{m} = I$
-    \item $p(m) = \bra{\psi} \Pi_{m} \ket{\psi}$
+    \item Each $\Pi_{m}$ is a positive operator, i.e., $\bra{\psi}\Pi_m\ket{\psi} \ge 0$ for all $\ket{\psi}$.
+    \item The elements satisfy the completeness relation: $\sum_{m} \Pi_{m} = I$.
+    \item The probability of obtaining outcome $m$ when the system is in state $\ket{\psi}$ is given by $p(m) = \bra{\psi} \Pi_{m} \ket{\psi}$.
 \end{itemize}
+POVMs are essential for a complete description of quantum measurements,
+particularly when considering the effect of a projective measurement performed
+on a larger system that includes a subsystem of interest.
+They are especially useful for characterizing measurements on subsystems of
+entangled states or when the measurement device is itself part of a larger quantum system.
 
-POVMs are necessary to describe the effect on a subsystem of a
-projective measurement performed on a larger system.
-Fig \ref{fig:povm_pvm} shows the relation between positive operator-valued
-measure (POVM) and projection-valued measure (PVM).
-$\rho_{1 + anc}$ is a larger system that includes $\rho_{1}$ and $U$ is
-some unitary gate.
+Figure \ref{fig:povm_pvm} illustrates the relationship between a Positive
+Operator-Valued Measure (POVM) and a Projection-Valued Measure (PVM).
+In this representation, $\rho_{1 + \text{anc}}$ denotes an extended system
+comprising subsystem $\rho_1$ and one or more ancilla qubits, and $U$ represents a unitary operation.
 
 \begin{figure}[htbp]
     \centering
