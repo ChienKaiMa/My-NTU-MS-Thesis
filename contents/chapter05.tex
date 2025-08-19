@@ -21,9 +21,125 @@ The measurement operators are defined by $\Pi_{i}$, where $i$ ranges from 0 to $
 Here $\Pi_{0}$ is designed to match the inconclusive results,
 and $\Pi_{1}$ to $\Pi_{k}$ designed to measure the $1$-st to $k$-th state respectively.
 
-Even though a density matrix can express the mixed state, it may provide more
-context if it is transformed from a pure state. We assume a depolarizing channel
-is applied to the pure state
+
+\subsection{Modified Minimum Error Discrimination (MED+)}
+
+We investigate a modified discrimination scheme, hereafter referred to as MED+.
+This scheme extends standard Minimum Error Discrimination by explicitly
+incorporating an operator for inconclusive outcomes, akin to Unambiguous
+Quantum State Discrimination.
+We are curious whether it would yield better $P_{succ}$ than MED.
+In MED+, the measurement outcomes are categorized differently from a purely
+error-minimizing approach. Specifically, we distinguish between:
+\begin{itemize}
+    \item \textbf{Conclusive Outcomes:} These are outcomes that uniquely identify a specific input state with a high probability.
+          For example, if the measurement yields outcome $m$, it implies that state $\rho_m$ was sent, with minimal ambiguity.
+    \item \textbf{Inconclusive Outcomes:} These are outcomes that do not provide sufficient information to reliably identify a specific input state.
+          Such outcomes could potentially arise from any of the input states.
+\end{itemize}
+
+The semidefinite programming problem is formulated as follows:
+\begin{align}
+     & \underset{\{\Pi\}}{\text{maximize}} &  & P_{succ}=\sum_{i=1}^{k} p_{i} \operatorname{Tr}(\rho_{i} \Pi_{i}) \\
+     & \text{subject to}                   &  & \Pi_{i} \succeq 0, \quad i = 0, \ldots, k                         \\
+     &                                     &  & \sum_{i=0}^{k} \Pi_i = I
+\end{align}
+
+
+\begin{theorem} \label{thm:med_medplus}
+    In the quantum state discrimination problem, given the same set of
+    mixed quantum states $\{ \rho_{1}, \rho_{2}, \dots, \rho_{k} \}$
+    and the same prior probabilities $\{p_{1}, p_{2}, \dots, p_{k}\}$, the\\
+    probability of correctly identifying the given state in the optimal MED
+    scenario is identical to that in the optimal MED+ scenario; i.e.,
+    $(\psucc)\supmed = (\psucc)\supmedplus$.
+    Furthermore, $\Pi_{k+1} = 0$ when the MED+ scenario becomes optimal.
+\end{theorem}
+
+\begin{proof}
+    % Line break
+    \noindent
+
+    Let $\povm{k}$ be the collection of POVMs that each POVM has $k$ POVM
+    elements, and here we allow a POVM element to be zero.
+    Let $(\psucc)^{P}$ denote the probability of successful discrimination of
+    some POVM $P$ or the POVM derived from some method $P$.
+    We know that $(\psucc)\supmed >= (\psucc)^{P}, \; \forall \; P \in \povm{k}$.
+    \begin{enumerate}
+        \item $(\psucc)\supmed \leq (\psucc)\supmedplus$\\
+              Assume $\povm{MED}$ is an optimal solution for MED, and
+              \begin{align*}
+                  \povm{MED} \equiv \PiSet{k} \in \povm{k}.
+              \end{align*}
+              We can construct
+              \begin{align*}
+                  P \equiv \PiSetPrime{k+1} \in \povm{k+1}
+              \end{align*}
+              by
+              \begin{align*}
+                  \Pi_{1}' = \Pi_{1}, \; \Pi_{2}' = \Pi_{2}, \; \dots,
+                  \; \Pi_{k}' = \Pi_{k}, \; \Pi_{k+1}' = 0
+              \end{align*}
+              Then,
+              \begin{align}
+                  (\psucc)\supmedplus & \geq (\psucc)^{P}
+                  = \sum_{i=1}^{k} p_{i} \operatorname{tr}(\rho_{i} \Pi_{i}')                      \\
+                                      & = \sum_{i=1}^{k} p_{i} \operatorname{tr}(\rho_{i} \Pi_{i}) \\
+                                      & = (\psucc)\supmed
+              \end{align}
+        \item $(\psucc)\supmed \geq (\psucc)\supmedplus$\\
+              Assume $\povm{MED+}$ is an optimal solution for MED+, and
+              \begin{align*}
+                  \povm{MED+} \equiv \PiSet{k+1} \in \povm{k+1}.
+              \end{align*}
+              We can construct
+              \begin{align*}
+                  P \equiv \PiSetPrime{k} \in \povm{k}
+              \end{align*}
+              by
+              \begin{align*}
+                  \Pi_{1}' = \Pi_{1}, \; \Pi_{2}' = \Pi_{2}, \; \dots,
+                  \; \Pi_{k}' = \Pi_{k} + \Pi_{k+1}
+              \end{align*}
+              Then,
+              \begin{align}
+                  (\psucc)\supmed & \geq (\psucc)^{P}
+                  = \sum_{i=1}^{k} p_{i} \operatorname{tr}(\rho_{i} \Pi_{i}')                           \\
+                                  & = \sum_{i=1}^{k} p_{i} \operatorname{tr}(\rho_{i} \Pi_{i})
+                  + p_{k} \operatorname{tr}(\rho_{i} \Pi_{k+1})                                         \\
+                                  & = (\psucc)\supmedplus + p_{k} \operatorname{tr}(\rho_{i} \Pi_{k+1}) \\
+                                  & \geq (\psucc)\supmedplus \label{eq:geq}
+              \end{align}
+        \item By 1. and 2., we can see that $(\psucc)\supmed = (\psucc)\supmedplus$.
+        \item To make the equal sign in Eq (\ref{eq:geq}) hold, $\Pi_{k+1} = 0$.
+    \end{enumerate}
+\end{proof}
+
+From Theorem \ref{thm:med_medplus}, we can easily prove the
+following corollary.
+\begin{corollary}
+    In the quantum state discrimination problem, given the same set of
+    mixed quantum states $\{ \rho_{1}, \rho_{2}, \dots, \rho_{k} \}$
+    and the same prior probabilities $\{p_{1}, p_{2}, \dots, p_{k}\}$, the \\
+    probability of correctly identifying the given state in the optimal
+    MED scenario is always equal to or larger than that in the Optimal UQSD
+    scenario; i.e.,
+    $(\psucc)\supmed \geq (\psucc)\supuqsd$.
+\end{corollary}
+
+\begin{proof}
+    If we see the MED+ problem and the Optimal UQSD problem as an convex
+    optimization problem, then they have the same variables and the same
+    objective function ($\psucc$), with the Optimal UQSD problem posing extra
+    constraints on the error terms ($\perr = 0$).
+    This means that the optimal solution of OptUQSD is always a feasible point
+    of MED+, so $(\psucc)\supmedplus \geq (\psucc)\supuqsd$.
+    Then $(\psucc)\supmed = (\psucc)\supmedplus \geq (\psucc)\supuqsd$.
+\end{proof}
+
+Even though the proof shows that MED+ won't provide any benefit over
+MED, it helps as a bridge to build a more intuitive proof for the corollary.
+
 
 \section{Fixed rate of inconclusive outcome (FRIO)}
 %\cite{origin} \cite{application} \cite{follow-ups}
