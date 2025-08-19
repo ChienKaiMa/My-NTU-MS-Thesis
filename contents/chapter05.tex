@@ -144,25 +144,17 @@ MED, it helps as a bridge to build a more intuitive proof for the corollary.
 \section{Fixed rate of inconclusive outcome (FRIO)}
 %\cite{origin} \cite{application} \cite{follow-ups}
 For discriminating mixed states, a semidefinite programming
-problem was proposed \cite{RN37}, and experiments have been performed 
-based on this formulation. \cite{RN48, RN221, RN29}
+problem was proposed \cite{RN37}, and optical experiments have been performed
+based on this formulation \cite{RN48, RN221, RN29}.
 
-$P_{D}$ denotes the total probability of correct discrimination,
-$P_{err}$ denotes the probability of incorrect/erroneous discrimination,
-and $P_{inc}$ denotes the probability of inconclusive outcomes.
 $\beta$ is a constant real number that is defined to be the target inconclusive probability.
 In practice, we use an inequality in place of an equality,
 and $\beta$ is the minimum rate of inconclusive outcomes.
 
-We have the following equalities:
-\begin{align}
-     & P_{D} + P_{err} + P_{inc} = 1 \\
-     & \sum_{i=1}^{k} p_{i} = 1
-\end{align}
 
 The semidefinite programming problem can be formulated as follows:
 \begin{align}
-     & \underset{\{\Pi\}}{\text{maximize}} &  & P_{D}=\sum_{i=1}^{k} p_{i} \operatorname{Tr}(\rho_{i} \Pi_{i})              \\
+     & \underset{\{\Pi\}}{\text{maximize}} &  & P_{succ}=\sum_{i=1}^{k} p_{i} \operatorname{Tr}(\rho_{i} \Pi_{i})           \\
      & \text{subject to}                   &  & \Pi_{i} \succeq 0, \quad i = 0, \ldots, k                                   \\
      &                                     &  & \sum_{i=0}^{k} \Pi_i = I                                                    \\
      &                                     &  & P_{inc}=\sum_{i=1}^{k} p_{i} \operatorname{Tr}(\rho_{i} \Pi_{0}) \geq \beta
