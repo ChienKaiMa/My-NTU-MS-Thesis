@@ -155,8 +155,38 @@ It offers an alternative to the single threaded AMD (approximate minimum degree 
 Pardiso tends to be faster than AMD / QDLDL, especially for larger problems. Since we are running our experiments
 with Intel CPUs, it is very suitable for our needs.
 
-We have also considered using GPU acceleration in SCS. However, since the developers claimed that cuDSS
-and its integration are not well battle-tested as the other existing solvers, we leave it for future improvements.
-
 % \subsection{Python interface and arguments}
 % Warm start
+
+\section{MOSEK}
+MOSEK \cite{mosek} is a high-performance commercial optimization solver designed for convex
+optimization problems, including semidefinite programs (SDPs).
+It leverages interior-point methods (IPMs), which solve a sequence of barrier
+problems to deliver high-precision solutions with robust numerical stability.
+This makes MOSEK particularly suitable for applications requiring accurate
+primal and dual solutions, such as constraint sensitivity analysis in control theory.
+
+\section{Trade-Off Between SCS and MOSEK}
+For solving semidefinite programs (SDPs) in our work, which typically involves
+small-scale problems, the trade-off between MOSEK and the Splitting Conic Solver
+(SCS) centers on precision, scalability, accessibility, and computational advancements.
+MOSEK, utilizing IPMs, achieves high precision with residuals often on the order
+of $10^{-8}$ or better, making it ideal for our needs where accurate dual
+variables are critical for analyzing constraint importance.
+The MOSEK Personal Academic License, freely available to academic users, is
+sufficient for our research, providing full access to its capabilities without
+additional cost \cite{mosek_academic}.
+
+In contrast, SCS, an open-source solver based on first-order methods like the
+Alternating Direction Method of Multipliers (ADMM), offers moderate precision
+(residuals of $10^{-4}$ to $10^{-6}$) but requires no license, enhancing its
+accessibility.
+SCS is designed for scalability, particularly for large-scale problems, and
+recent advancements in CVXPY 1.7, released on July 19, 2025, introduced support
+for GPU-accelerated solvers, including a GPU-accelerated backend for SCS when
+built from source with \texttt{cudss=True} \cite{cvxpy_1_7}.
+However, our current work uses CVXPY 1.6, which yet lacks this GPU support.
+We will leave the GPU support for future improvements.
+For our small-scale SDPs, MOSEK's precision and the sufficiency of its
+Personal Academic License outweigh SCS's scalability and license-free benefits,
+making MOSEK the preferred choice.
