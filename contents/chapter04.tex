@@ -121,7 +121,8 @@ To recover the complex positive semidefinite matrix from a vectorized solution $
 \end{align}
 
 \subsection{Acceleration for linear system solve}
-At each iteration (for example, iteration $k$), SCS solves the following set of linear equations:
+At each iteration (for example, iteration $k$), SCS solves the following set
+of linear equations \cite{linSolve}:
 \begin{align}
     \begin{split}\begin{bmatrix}
             R_x + P & A^\top \\
@@ -138,8 +139,8 @@ At each iteration (for example, iteration $k$), SCS solves the following set of 
         \end{bmatrix}\end{split}
 \end{align}
 for a particular right-hand side $z^k \in \mathbf{R}^{n+m}$
-. The presence of the diagonal scaling $R \in \mathbf{R}^{(n+m) \times (n+m)}$ matrix is explained
-in Non-identity DR Scaling. The $R_y$ term is negated to make the matrix quasi-definite; we can recover
+. $R \in \mathbf{R}^{(n+m) \times (n+m)}$ is the diagonal scaling matrix.
+The $R_y$ term is negated to make the matrix quasi-definite; we can recover
 the solution to the original problem from this modified one. Note that the matrix does not change from
 iteration to iteration, which is a major advantage of this approach. Moreover, this system can be solved approximately
 so long as the errors satisfy a summability condition, which permits the use of approximate
@@ -148,11 +149,11 @@ solvers that can scale to very large problems.
 
 For most of our experiments, we took advantage of the integration of the Intel MKL Pardiso solver in
 SCS. The Intel MKL Pardiso solver is a shared-memory multiprocessing parallel direct sparse
-solver which is included Intel oneAPI MKL library (cite).
-https://www.cvxgrp.org/scs/linear\_solver/index.html
+solver which is included Intel oneAPI MKL library \cite{linSolve}.
 
 It offers an alternative to the single threaded AMD (approximate minimum degree ordering) / QDLDL libraries which come bundled with SCS.
-Pardiso tends to be faster than AMD / QDLDL, especially for larger problems. Since we are running our experiments
+Pardiso tends to be faster than AMD / QDLDL, especially for larger problems \cite{linSolve}.
+Since we are running our experiments
 with Intel CPUs, it is very suitable for our needs.
 
 % \subsection{Python interface and arguments}
