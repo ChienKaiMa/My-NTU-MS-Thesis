@@ -207,13 +207,60 @@ comprising subsystem $\rho_1$ and one or more ancilla qubits, and $U$ represents
 
 % \cite{10.5555/3240076}
 
-\section{Naimark's dilation theorem}
+\section{Quantum Isometry}
+A fundamental concept in quantum mechanics that generalizes unitary evolution
+is that of a quantum isometry.
+While unitary operators describe the evolution of a closed quantum system where
+the dimension of the input and output Hilbert spaces are the same, an isometry
+provides a broader description for mappings where the output space can be larger than the input space.
+
+Formally, a linear operator $V: \mathcal{H}_A \to \mathcal{H}_B$ from a Hilbert
+space $\mathcal{H}_A$ to a Hilbert space $\mathcal{H}_B$ is an isometry if it
+preserves the inner product, meaning $\braket{V\psi}{V\phi} = \braket{\psi}{\phi}$
+for all states $\ket{\psi}, \ket{\phi} \in \mathcal{H}_A$.
+This condition implies that $V^\dagger V = I_{\mathcal{H}_A}$, where
+$I_{\mathcal{H}_A}$ is the identity operator on $\mathcal{H}_A$.
+If $\mathcal{H}_A$ and $\mathcal{H}_B$ have the same dimension and the isometry
+is surjective (i.e., $VV^\dagger = I_{\mathcal{H}_B}$), then the isometry is also a unitary operator.
+
+Physically, isometries are crucial for describing the evolution of open quantum systems,
+where a system of interest interacts with an external environment or auxiliary
+system (often called an ancilla).
+While the total system (system + ancilla) evolves unitarily, the evolution of
+the system of interest alone, when viewed as a map from its initial state to
+its final state, can be described by an isometry mapping its state space into
+the larger combined space.
+This concept lays the groundwork for understanding how generalized measurements
+can arise from unitary dynamics and projective measurements on an expanded system.
+
+
+\section{Naimark's Dilation Theorem}
 \label{sec:naimark}
+Naimark's dilation theorem is a cornerstone result in quantum information
+theory that links generalized measurements (POVMs) to unitary evolution and projective measurements.
+In essence, the theorem states that **any POVM measurement can be realized as a projective measurement on a larger quantum system**.
+This larger system is constructed by augmenting the original system with an
+additional, auxiliary quantum system, commonly referred to as an ancilla.
 
-Naimark's dilation theorem shows that a projective measurement can be obtained from POVM.
-And there exists an optimal size of transformation. [ref]
+The core idea can be understood through a three-step process:
+\begin{enumerate}
+    \item \textbf{Introduce an Ancilla:} An auxiliary quantum system (ancilla), typically prepared in a known initial state (e.g., $\ket{0}_{\text{ancilla}}$), is coupled to the quantum system of interest.
+    \item \textbf{Unitary Interaction:} The combined system (original system + ancilla) then undergoes a global unitary evolution. This interaction entangles the original system with the ancilla.
+    \item \textbf{Projective Measurement:} A standard projective measurement is subsequently performed on the combined system, or often, just on the ancilla component.
+\end{enumerate}
+Remarkably, the probabilities of obtaining different outcomes for the original system, and its post-measurement state, are precisely identical to those that would be obtained by directly performing the initial POVM.
 
-Chapter 2 of \cite{10.5555/3240076}
+This theorem has profound implications for both the theory and practice of quantum mechanics.
+It demonstrates the universality of projective measurements, showing that even
+the most general and complex measurements (POVMs), which may describe noisy or
+incomplete measurements on a subsystem, can always be simulated by a sequence
+of elementary unitary operations and projective measurements on a larger, closed system.
+This theoretical equivalence is vital for understanding the physical
+implementation of quantum measurements and for developing general theories of
+quantum operations.
+
+% Chapter 2 of \cite{10.5555/3240076}
+% \cite{RN12}.
 
 \section{Noise model}
 
