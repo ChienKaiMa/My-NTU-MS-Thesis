@@ -3,13 +3,59 @@
 \chapter{Quantum Circuit Synthesis for Quantum State Discrimination}
 \label{chap:qc_qsd}
 
+% Revised by Google Gemini 2.5 Flash
 Modeling quantum state discrimination as quantum circuits aims to enable
 researchers to bypass the difficulty of experimental demonstration.
-For example, it takes a lot of effort to acquire the expertise to design and
-tune optical devices, but people without a professional optical laboratory can
-access quantum computers with cloud services such as IBM Cloud or AWS Braket.
-A previous work \cite{RN87} used Qiskit to implement collective measurements
-for quantum state discrimination on IBM's Falcon quantum processor.
+For example, while acquiring the expertise to design and tune optical devices
+demands significant effort, researchers without a dedicated optical laboratory
+can readily access quantum computers via cloud services such as IBM Cloud or AWS Braket.
+
+The work by Ref.~\cite{RN87} provides a relevant example, exploring the
+discrimination of multiple copies of quantum states using both local operations
+and classical communication (LOCC) and collective measurements, without the
+explicit introduction of an ancilla qubit.
+Their findings indicated a performance advantage of collective measurements
+over LOCC for certain states with a limited number of copies (around 4 qubits).
+While noise simulations in their work performed well, experiments on real
+quantum hardware (IBM's Falcon processor) showed significant deviations,
+particularly for the 3-qubit collective measurement case.
+Illustrative examples of the quantum circuits they employed for LOCC and
+collective measurements are presented in Figure \ref{fig:collective_meas_circuit}.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \scalebox{0.7}{
+            \begin{quantikz}
+                \lstick{ $\rho_{\pm}$ } & \gate{U(\phi_{1})}    & \meter{} \vcw{1} \\
+                \lstick{ $\rho_{\pm}$ } & \qw                   & \gate{U(\phi_{2})} & \meter{}
+            \end{quantikz}
+        }
+        \caption{LOCC measurement circuit.}
+        \label{subfig:locc_circuit}
+    \end{subfigure}
+    \hfill % Add some horizontal space between subfigures
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \scalebox{0.7}{
+            \begin{quantikz}
+                \lstick{ $\rho_{\pm}$ } & \gate{U_{1}}
+                \gategroup[2,steps=7,style={dashed,rounded corners,
+                            fill=blue!20, inner xsep=2pt}
+                    ,background,label style={label
+                            position=below,anchor=north,yshift=-0.2cm}]{{$U_{ent}$}}
+                & \targ{}  & \qw & \ctrl{1} & \gate{R_{z}} & \targ{} & \gate{U_{3}} & \meter{} \\
+                \lstick{ $\rho_{\pm}$ } & \gate{U_{2}} & \ctrl{-1} & \gate{R_{y}} & \targ{} & \gate{R_{y}} & \ctrl{-1} & \gate{U_{4}} & \meter{}
+            \end{quantikz}
+        }
+        \caption{Collective measurement circuit.}
+        \label{subfig:collective_circuit}
+    \end{subfigure}
+    \caption{Quantum circuit examples for state discrimination, adapted from Ref.~\cite{RN87}.}
+    \label{fig:collective_meas_circuit}
+\end{figure}
+
 This work hopes that the quantum circuits for unambiguous state discrimination
 can serve as the benchmark for different quantum devices and the benchmark for
 researching quantum circuit design.
