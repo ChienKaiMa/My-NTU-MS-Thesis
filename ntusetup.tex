@@ -51,3 +51,22 @@
 % --------------------------------------------------
 \setCJKmonofont{Noto Sans Mono CJK TC}  % for Traditional Chinese
 \setCJKsansfont{Noto Sans CJK TC}
+\usetikzlibrary{external}
+\newtheorem{theorem}{Theorem}     % Define theorem environment
+\newtheorem{corollary}{Corollary} % Define Corollary environment
+
+% Success probability
+\newcommand{\psucc}{P_{\textnormal{succ}}}
+\newcommand{\perr}{P_{\textnormal{err}}}
+
+% POVMs
+\newcommand{\povm}[1]{\textnormal{POVM}_{\textnormal{#1}}}
+\newcommand{\PiSet}[1]{\left\{ \Pi_1, \Pi_2, \dots, \Pi_{#1} \right\}}
+\newcommand{\PiSetPrime}[1]{\left\{ \Pi_1', \Pi_2', \dots, \Pi_{#1}' \right\}}
+
+% Superscripts
+\newcommand{\supmed}{^{\textnormal{MED}}}
+\newcommand{\supmedplus}{^{\textnormal{MED+}}}
+\newcommand{\supuqsd}{^{\textnormal{OptUQSD}}}
+
+\PassOptionsToPackage{table}{xcolor}  % Must place it before document class
