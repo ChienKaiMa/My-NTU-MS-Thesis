@@ -2,24 +2,80 @@
 
 \chapter{Error-Tolerant Quantum State Discrimination}
 \label{chap:error_uqsd}
-Quantum noise plays a huge role in quantum key distribution. For example, the
-B92 protocol under a depolarizing channel has QBER .. (cite, numbers)
 
-When noise is present in the input quantum states, the quantum states can't be
-exactly expressed by pure states anymore. While minimum error state discrimination
-is still possible, unambiguous state discrimination becomes difficult or even
-impossible. (cite)
-We will first present the common setting for this scenario, introduce previous
-attempts to this scenario, and present our perspectives on the derived problems.
+% Revised by Google Gemini 2.5 Flash
+In practical quantum systems, noise is an unavoidable factor that perturbs quantum states, causing them to deviate from ideal pure states.
+This presence of noise is described by a mixed state, represented by a density matrix.
+While Minimum Error Discrimination (MED) remains a viable strategy in the
+presence of such noise, its performance can degrade.
+Furthermore, the strict conditions required for Unambiguous State
+Discrimination (UQSD) make it particularly susceptible to noise, rendering it
+difficult or even impossible to achieve with certainty.
 
-\section{Common setting to discriminate noisy quantum states}
-Recall that a quantum state $\Psi$ can be denoted by a state vector $\ket{\psi}$
-or a density matrix $\rho$.
-The prior probability for each input state $\Psi_{i}$
-(expressed by $\ket{\psi_{i}}$ or $\rho_{i}$) is denoted by $p_{i}$, where $i$ ranges from 1 to $k$.
-The measurement operators are defined by $\Pi_{i}$, where $i$ ranges from 0 to $k$.
-Here $\Pi_{0}$ is designed to match the inconclusive results,
-and $\Pi_{1}$ to $\Pi_{k}$ designed to measure the $1$-st to $k$-th state respectively.
+This chapter is dedicated to the problem of error-tolerant quantum state discrimination.
+We will first establish a common theoretical framework for this scenario.
+We will then review previous attempts to address this problem, and finally,
+present our own perspectives and proposed solutions.
+The chapter will conclude with a series of experiments and results from
+different formulations, demonstrating their effectiveness under noisy conditions.
+
+\section{Formal Setting for Noisy State Discrimination}
+\label{sec:noisy_qsd_setting}
+Assume we are given a predefined set of $k$ quantum states for discrimination,
+represented by their respective density matrices $\{\rho_{1}, \rho_{2}, \dots, \rho_{k} \}$.
+The prior probability for each input state $\rho_{i}$ is denoted by $p_{i}$,
+where $i$ ranges from 1 to $k$. The sum of these prior probabilities is
+normalized, such that $\sum_{i=1}^{k} p_{i} = 1$.
+
+The measurement is described by a POVM, defined by a set of measurement
+operators $\{\Pi_{1}, \Pi_{2}, \dots, \Pi_{M}\}$.
+The number of POVM elements, $M$, depends on the specific discrimination scheme.
+For Minimum Error Discrimination, $M=k$, with each $\Pi_{i}$ corresponding to
+the outcome that identifies state $\rho_{i}$.
+For other schemes, such as Unambiguous State Discrimination or variants that
+allow for inconclusive results, the measurement operators are typically
+defined as $\{\Pi_{1}, \dots, \Pi_{k}, \Pi_{k + 1}\}$, where
+$\Pi_{i}$ ($i=1,\dots,k$) corresponds to the outcome identifying state $\rho_{i}$,
+and $\Pi_{k+1}$ is designed to represent an inconclusive result.
+
+The discrimination process can be evaluated by calculating the joint
+probabilities of a state being prepared and a specific outcome being obtained.
+This can be organized into a "probability matrix" where each entry $p(m,i)$
+represents the joint probability of obtaining outcome $m$ given that
+state $\rho_{i}$ was prepared.
+For a two-state scenario with a possible inconclusive outcome, the probability
+matrix would be:
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{c | c c c}
+                   & $\Pi_{1}$ & $\Pi_{2}$ & $\Pi_{3}$ \\
+        \hline
+        $\rho_{1}$ & $p(1, 1)$ & $p(2, 1)$ & $p(3, 1)$ \\
+        $\rho_{2}$ & $p(1, 2)$ & $p(2, 2)$ & $p(3, 2)$ \\
+    \end{tabular}
+    \caption{Probability matrix for the discrimination of two states with a possible inconclusive outcome. The general entry is given by $p(m,i) = p_{i} \operatorname{Tr}(\rho_{i} \Pi_{m})$.}
+    \label{tab:prob_mat}
+\end{table}
+
+From this probability matrix, we can derive several key performance metrics for
+state discrimination.
+The probability of successful discrimination is $P_{succ}$, the probability of
+an erroneous outcome is $P_{err}$, and the probability of an inconclusive
+outcome is $P_{inc}$.
+These probabilities satisfy the following fundamental relations:
+\begin{align}
+     & P_{succ} + P_{err} + P_{inc} = 1 \\
+     & \sum_{i=1}^{k} p_{i} = 1
+\end{align}
+
+% Revised by Google Gemini 2.5 Flash
+The utility of the density matrix formalism extends beyond merely representing
+mixed states; it also offers a valuable framework for understanding how such
+states can arise from pure states through noisy quantum processes.
+In this context, we consider a scenario where the input states for
+discrimination are subjected to a depolarizing channel with a noise factor $\lambda$,
+transforming an initial pure state into a mixed state described by a density matrix.
 
 
 \subsection{Modified Minimum Error Discrimination (MED+)}
