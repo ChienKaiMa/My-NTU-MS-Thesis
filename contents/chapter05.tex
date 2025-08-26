@@ -197,23 +197,52 @@ Even though the proof shows that MED+ won't provide any benefit over
 MED, it helps as a bridge to build a more intuitive proof for the corollary.
 
 
-\section{Fixed rate of inconclusive outcome (FRIO)}
-%\cite{origin} \cite{application} \cite{follow-ups}
-For discriminating mixed states, a semidefinite programming
-problem was proposed \cite{RN37}, and optical experiments have been performed
-based on this formulation \cite{RN48, RN221, RN29}.
+\section{Fixed Rate of Inconclusive Outcome (FRIO)}
+% Revised by Google Gemini 2.5 Flash
+For the discrimination of mixed quantum states, a semidefinite programming
+(SDP) approach was proposed by \cite{RN37}.
+This formulation has been influential, serving as the theoretical basis for a
+number of subsequent optical experiments \cite{RN48, RN221, RN29}.
 
-$\beta$ is a constant real number that is defined to be the target inconclusive probability.
-In practice, we use an inequality in place of an equality,
-and $\beta$ is the minimum rate of inconclusive outcomes.
+A key feature of this formulation is the introduction of a constant real number,
+$c_{lb}$, that directly controls the probability of an inconclusive outcome.
+By imposing a constraint on the inconclusive POVM element $\Pi_{k+1}$, the
+probability of an inconclusive outcome is lower bounded by some value $c_{lb}$.
+In the numerical implementation using semidefinite programming, an inequality
+constraint is employed to ensure that the rate of inconclusive outcomes is at least $c_{lb}$.
+A value of $c_{lb} = 0$ corresponds to the minimum error discrimination problem,
+where no inconclusive outcome is permitted.
 
+This formulation, however, assumes a general mixed-state scenario.
+If we assume that the mixed states arise from a well-defined channel acting on
+pure states, it may be possible to reformulate the optimization problem to
+exploit this structure, potentially accelerating the solving process.
+
+As illustrated in Table \ref{tab:frio_prob_mat}, the joint probability for the
+inconclusive outcome (indicated in yellow) is directly influenced by this
+lower bound.
+
+% Depends on {table}{xcolor}
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{c | c c c c}
+                   & $\Pi_{1}$            & $\Pi_{2}$            & $\Pi_{3}$            & $\Pi_{?}$                       \\
+        \hline
+        $\rho_{1}$ & \cellcolor{green!20} & \cellcolor{red!20}   & \cellcolor{red!20}   & \cellcolor{yellow!30}           \\
+        $\rho_{2}$ & \cellcolor{red!20}   & \cellcolor{green!20} & \cellcolor{red!20}   & \cellcolor{yellow!30}  $c_{lb}$ \\
+        $\rho_{3}$ & \cellcolor{red!20}   & \cellcolor{red!20}   & \cellcolor{green!20} & \cellcolor{yellow!30}           \\
+    \end{tabular}
+    \caption{Probability matrix $p(m,i) = p_{i} \bra{\psi_{i}} \Pi_{m} \ket{\psi_{i}}$}
+    % \caption{Semidefinite programming for FRIO}
+    \label{tab:frio_prob_mat}
+\end{table}
 
 The semidefinite programming problem can be formulated as follows:
 \begin{align}
-     & \underset{\{\Pi\}}{\text{maximize}} &  & P_{succ}=\sum_{i=1}^{k} p_{i} \operatorname{Tr}(\rho_{i} \Pi_{i})           \\
-     & \text{subject to}                   &  & \Pi_{i} \succeq 0, \quad i = 0, \ldots, k                                   \\
-     &                                     &  & \sum_{i=0}^{k} \Pi_i = I                                                    \\
-     &                                     &  & P_{inc}=\sum_{i=1}^{k} p_{i} \operatorname{Tr}(\rho_{i} \Pi_{0}) \geq \beta
+     & \underset{\{\Pi\}}{\text{maximize}} &  & \raisebox{-0.3em}{\textcolor{green}{\rule{1em}{1em}}} \; P_{succ}=\sum_{i=1}^{k} p_{i} \operatorname{Tr}(\rho_{i} \Pi_{i})                 \\
+     & \text{subject to}                   &  & \Pi_{i} \succeq 0, \quad i = 1, \ldots, k + 1                                                                                              \\
+     &                                     &  & \sum_{i=1}^{k + 1} \Pi_i = I                                                                                                               \\
+     &                                     &  & \raisebox{-0.3em}{\textcolor{yellow}{\rule{1em}{1em}}} \; P_{inc}=\sum_{i=1}^{k} p_{i} \operatorname{Tr}(\rho_{i} \Pi_{k + 1}) \geq c_{lb}
 \end{align}
 
 One problem regarding to this formulation is that there is a
