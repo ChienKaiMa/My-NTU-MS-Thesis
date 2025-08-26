@@ -97,8 +97,8 @@ error-minimizing approach. Specifically, we distinguish between:
 The semidefinite programming problem is formulated as follows:
 \begin{align}
      & \underset{\{\Pi\}}{\text{maximize}} &  & P_{succ}=\sum_{i=1}^{k} p_{i} \operatorname{Tr}(\rho_{i} \Pi_{i}) \\
-     & \text{subject to}                   &  & \Pi_{i} \succeq 0, \quad i = 0, \ldots, k                         \\
-     &                                     &  & \sum_{i=0}^{k} \Pi_i = I
+     & \text{subject to}                   &  & \Pi_{i} \succeq 0, \quad i = 1, \ldots, k+1                       \\
+     &                                     &  & \sum_{i=1}^{k+1+1} \Pi_i = I
 \end{align}
 
 
