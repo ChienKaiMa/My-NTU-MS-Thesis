@@ -1,0 +1,124 @@
+\begin{frame}
+    \frametitle{Mutual Information: The Classical Case}
+
+    Mutual information (MI) quantifies the amount of information obtained about one random variable by observing another. It measures the reduction in uncertainty.
+
+    \vspace{0.2cm}
+
+    \begin{itemize}
+        \item The \textbf{Shannon entropy} $H(X)$ measures the uncertainty of a random variable $X$:
+              \begin{equation*}
+                  H(X) = - \sum_x p(x) \log_2 p(x)
+              \end{equation*}
+
+        \item For two random variables $X$ and $Y$, the mutual information $I(X; Y)$ is defined as:
+              \begin{equation*}
+                  I(X; Y) = H(X) + H(Y) - H(X, Y) = H(X) - H(X|Y)
+              \end{equation*}
+              Where $H(X|Y)$ is the conditional entropy.
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Quantum Mutual Information}
+
+    Quantum mutual information is the generalization of classical mutual information to quantum systems. It measures the total correlations (classical and quantum) between two subsystems of a composite system.
+
+    \vspace{0.2cm}
+
+    \begin{itemize}
+        \item The \textbf{von Neumann entropy} $S(\rho)$ measures the uncertainty of a quantum state $\rho$:
+              \begin{equation*}
+                  S(\rho) = - \text{Tr}(\rho \log_2 \rho)
+              \end{equation*}
+
+        \item For a bipartite state $\rho_{AB}$, the quantum mutual information $I(A; B)$ is defined as:
+              \begin{equation*}
+                  I(A; B) = S(\rho_A) + S(\rho_B) - S(\rho_{AB})
+              \end{equation*}
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{The Holevo Bound}
+
+    The Holevo bound, or Holevo's theorem, sets a limit on the amount of classical information that can be obtained by measuring an ensemble of quantum states. It provides an upper bound on the accessible information.
+
+    \vspace{0.2cm}
+
+    \begin{itemize}
+        \item The classical mutual information $I(X; Y)$ between the preparation of quantum states ($X$) and the measurement outcomes ($Y$) is bounded by the Holevo information $\chi(\mathcal{E})$:
+              \begin{equation*}
+                  I(X; Y) \le \chi(\mathcal{E})
+              \end{equation*}
+
+        \item The Holevo information is defined as:
+              \begin{equation*}
+                  \chi(\mathcal{E}) = S(\bar{\rho}) - \sum_x p_x S(\rho_x)
+              \end{equation*}
+              Where $\bar{\rho} = \sum_x p_x \rho_x$ is the average state of the ensemble, and $\rho_x$ is the state prepared with probability $p_x$.
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Example: Ensemble of 3 States}
+
+    Consider a simple ensemble of three pure states, $\{p_1, \rho_1\}, \{p_2, \rho_2\}, \{p_3, \rho_3\}$, with equal probabilities $p_x = 1/3$. The states are arranged symmetrically on the equator of the Bloch sphere.
+
+    \vspace{0.2cm}
+
+    The three states are:
+    \begin{align*}
+        \rho_1 & = \ket{0}\bra{0} = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}                                             \\
+        \rho_2 & = \frac{1}{2}(\ket{0}+\ket{1})(\bra{0}+\bra{1}) = \frac{1}{2}\begin{pmatrix} 1 & 1 \\ 1 & 1 \end{pmatrix}   \\
+        \rho_3 & = \frac{1}{2}(\ket{0}-\ket{1})(\bra{0}-\bra{1}) = \frac{1}{2}\begin{pmatrix} 1 & -1 \\ -1 & 1 \end{pmatrix}
+    \end{align*}
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Example: Calculating Holevo Bound (1/2)}
+
+    The Holevo information is $\chi(\mathcal{E}) = S(\bar{\rho}) - \sum_x p_x S(\rho_x)$.
+
+    \vspace{0.2cm}
+
+    \begin{itemize}
+        \item Each state is pure, so its von Neumann entropy is zero:
+              \begin{equation*}
+                  S(\rho_x) = - \text{Tr}(\rho_x \log_2 \rho_x) = 0
+              \end{equation*}
+
+        \item Thus, the second term of the Holevo information is zero:
+              \begin{equation*}
+                  \sum_x p_x S(\rho_x) = \frac{1}{3} S(\rho_1) + \frac{1}{3} S(\rho_2) + \frac{1}{3} S(\rho_3) = 0
+              \end{equation*}
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Example: Calculating Holevo Bound (2/2)}
+
+    \begin{itemize}
+        \item We calculate the average state $\bar{\rho} = \sum_x p_x \rho_x$:
+              \begin{align*}
+                  \bar{\rho} & = \frac{1}{3} \left( \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix} + \frac{1}{2}\begin{pmatrix} 1 & 1 \\ 1 & 1 \end{pmatrix} + \frac{1}{2}\begin{pmatrix} 1 & -1 \\ -1 & 1 \end{pmatrix} \right) \\
+                             & = \begin{pmatrix} \frac{1}{2} & 0 \\ 0 & \frac{1}{2} \end{pmatrix} = \frac{1}{2} \mathbb{I}
+              \end{align*}
+
+        \item The von Neumann entropy of the maximally mixed state $\bar{\rho}$ is:
+              \begin{equation*}
+                  S(\bar{\rho}) = - \text{Tr}\left(\frac{1}{2}\mathbb{I} \log_2 \frac{1}{2}\mathbb{I}\right) = - \text{Tr}\left(-\frac{1}{2}\mathbb{I}\right) = 1 \text{ bit}
+              \end{equation*}
+
+        \item Therefore, the Holevo bound is:
+              \begin{equation*}
+                  I(X; Y) \leq \chi(\mathcal{E}) = S(\bar{\rho}) - 0 = 1 \text{ bit}
+              \end{equation*}
+    \end{itemize}
+
+\end{frame}
