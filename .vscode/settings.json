@@ -72,8 +72,8 @@
         "tools": ["xelatex", "bibtex", "xelatex", "xelatex"]
       },
       {
-        "name": "xelatex",
-        "tools": ["xelatex"]
+        "name": "xelatex*2",
+        "tools": ["xelatex", "xelatex"]
       },
       {
         "name": "pdflatex*2",
