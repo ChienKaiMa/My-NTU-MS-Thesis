@@ -1,0 +1,235 @@
+\PassOptionsToPackage{table}{xcolor} % Must place it before document class
+
+\documentclass{beamer}
+% \documentclass[draft]{beamer}
+% \includeonlyframes{frame3}
+\graphicspath{ {../} {../figures/}}
+
+% Quick access
+% \tikzexternaldisable
+% \tikzexternalenable
+
+\usetheme{Berlin}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+\makeatletter
+    \def\beamer@writeslidentry{\clearpage\beamer@notesactions}
+\makeatother
+
+
+
+% Title slide information
+\title{Quantum Subgroup Meeting}
+\subtitle{}
+\author{Chien-Kai Ma}
+\institute{NTU GIEE}
+\date{\today}
+
+% Insert section/subsection title slide at start of each section/subsection
+\AtBeginSection[]
+{
+    \begin{frame}[plain]
+        \centering
+        \vfill
+        \usebeamerfont{section title}
+        \insertsection
+        \vfill
+    \end{frame}
+}
+
+\AtBeginSubsection[]
+{
+    \begin{frame}<beamer>[plain]
+        \smallskip
+        \begin{center}
+        {\usebeamerfont{subsection title}\insertsection\\[0.3em]
+        \Large\insertsubsection}
+        \end{center}
+    \end{frame}
+}
+
+\usepackage{quantikz}
+\usepackage[edges]{forest}
+\usepackage{nccmath}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{pgfplots}
+\usepackage{amsmath}
+\usepackage{lmodern}                            % Latin Modern fonts
+\usepackage{tgpagella}                          % Text font
+\usepackage{mathpazo}                           % Math font
+\usepackage{optidef}                            % Optimization problems
+\usepackage{booktabs}      % for \toprule, \midrule, \bottomrule
+\usepackage{makecell}      % for line breaks inside table cells
+
+
+\usepackage[authoryear, sort&compress]{natbib}  % 參考文獻
+\bibliographystyle{apalike}
+
+\pgfplotsset{compat=1.18}
+
+% Success probability
+\newcommand{\psucc}{P_{\textnormal{succ}}}
+\newcommand{\perr}{P_{\textnormal{err}}}
+
+% POVMs
+\newcommand{\povm}[1]{\textnormal{POVM}_{\textnormal{#1}}}
+\newcommand{\PiSet}[1]{\left\{ \Pi_1, \Pi_2, \dots, \Pi_{#1} \right\}}
+\newcommand{\PiSetPrime}[1]{\left\{ \Pi_1', \Pi_2', \dots, \Pi_{#1}' \right\}}
+
+% Superscripts
+\newcommand{\supmed}{^{\textnormal{MED}}}
+\newcommand{\supmedplus}{^{\textnormal{MED+}}}
+\newcommand{\supuqsd}{^{\textnormal{OptUQSD}}}
+
+\newcommand{\alice}{\raisebox{-0.7em}{\includegraphics[height=2em]{../figures/emojis/1F467_color.png}} }    % 🧑
+\newcommand{\bob}{\raisebox{-0.7em}{\includegraphics[height=2em]{../figures/emojis/1F466_color.png}}   }    % 👦
+\newcommand{\mail}{\raisebox{-0.7em}{\includegraphics[height=2em]{../figures/emojis/1F4E8_color.png}}  }    % 📩
+\newcommand{\search}{\raisebox{-0.7em}{\includegraphics[height=2em]{../figures/emojis/1F50D_color.png}}}    % 🔍
+
+\newcommand{\tikzmark}[1]{\tikz[overlay, remember picture] \node (#1) {};}
+\newcommand{\highlightbox}[3]{%
+    \begin{tikzpicture}[overlay, remember picture]
+        \node[draw=red, ultra thick, fit={(#1) (#2) (#3)}] {};
+    \end{tikzpicture}
+}
+
+\forestset{
+    direction switch/.style={
+        for tree={edge+=thick, font=\sffamily},
+        where level>=1{folder, grow'=0}{for children=forked edge},
+        where level=3{}{draw},
+    },
+}
+
+% Tikz settings
+
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{shapes.geometric, arrows, shadows, fit, quantikz}
+% \usetikzlibrary{shapes.geometric, arrows, shadows, fit, quantikz2}
+\usetikzlibrary{external}
+\tikzexternalize[prefix=tikz_figs/]  % Compiled TikZ goes to tikz_figs/
+
+\tikzstyle{startstop} = [rectangle, rounded corners, 
+    minimum width=3cm, 
+    minimum height=1cm,
+    text centered, 
+    text width=3cm,
+    draw=black, 
+    fill=red!30
+]
+
+\tikzstyle{io} = [trapezium, 
+    trapezium stretches=true, % A later addition
+    trapezium left angle=70,
+    trapezium right angle=110,
+    minimum width=3cm,
+    minimum height=1cm,
+    align=center,
+    text width=5cm,
+    text centered,
+    draw=black, fill=blue!30
+]
+
+\tikzstyle{process} = [rectangle, 
+    minimum width=3cm, 
+    minimum height=1cm, 
+    text centered, 
+    text width=4cm,
+    draw=black, 
+    fill=orange!30
+]
+
+\tikzstyle{decision} = [diamond, 
+    minimum width=3cm, 
+    minimum height=1cm, 
+    text width=4cm,
+    aspect=2,
+    inner sep=-1ex,
+    text centered, 
+    draw=black, 
+    fill=green!30
+]
+
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+
+\begin{document}
+
+% Title slide
+\begin{frame}
+    \titlepage
+    \centering
+    \small{Instructor: Jie-Hong Roland Jiang}
+\end{frame}
+
+% Table of Contents slide
+\begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents
+\end{frame}
+
+
+\section{Discussion this week}
+\subsection{The Holevo Bound}
+\include{holevo_bound}
+
+
+\subsection{My Conclusion}
+
+\begin{frame}
+    \frametitle{Summary of our work}
+    \begin{itemize}
+        \item $(\psucc)\supmed = (\psucc)\supmedplus$.
+              See the proof in Chapter 5.
+        \item $(\psucc)\supmed \geq (\psucc)\supuqsd$.
+              See the proof in Chapter 5.
+        \item Trade-off MED and UQSD
+        \item The quantum circuit complexity is on par with circuits for isometries.
+    \end{itemize}
+
+\end{frame}
+
+
+
+\begin{frame}
+    \frametitle{Trade-off MED and UQSD}
+    \begin{itemize}
+        \item Here, $P$ is the probability matrix for the POVM defined by the set of
+              operators $\{\Pi_i\}$, and $Q$ is the target UQSD probability matrix.
+        \item $\|P-Q\|_{1}$ is the $L_{1}$ distance between $P$ and $Q$.
+        \item $1/w \leq a$ is OptUQSD, where $a$ is usually 2.
+        \item $1/w \geq b$ is MED, where the value $b$ varies case by case.
+    \end{itemize}
+    \begin{align}
+        \label{eq:roland_obj}
+         & \underset{\{\Pi\}}{\text{maximize}} &  & P_{\text{succ}} - w \|P-Q\|_{1}             \\
+         & \text{subject to}                   &  & \Pi_{i} \succeq 0, \quad i = 1, \ldots, k+1 \\
+         &                                     &  & \sum_{i=1}^{k+1} \Pi_i = I
+    \end{align}
+\end{frame}
+
+\begin{frame}
+    \frametitle{The relations of the parameters and the solutions}
+
+    \centering
+    \begin{figure}
+        \input{../figures/frio_number_line.tikz}
+        \caption{Fixed rate of inconclusive outcome (FRIO)}
+    \end{figure}
+
+    \begin{figure}
+        \input{../figures/med_uqsd_tradeoff.tikz}
+        \caption{Our proposal to trade off MED and UQSD.}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Meeting notes}
+    \begin{itemize}
+        \item The definition of mutual information seems to be off or inappropriate.
+        \item Add circuit examples to my thesis.
+    \end{itemize}
+\end{frame}
+
+\end{document}
