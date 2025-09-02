@@ -1,0 +1,22 @@
+\usetikzlibrary{decorations.pathreplacing}
+
+\begin{tikzpicture}
+    % Draw the number line
+    \draw[thick] (0, 0) -- (5.5, 0);
+    % Mark the left endpoint (param = 0)
+    \draw[fill=black] (0, 0) circle (0.1);
+    % Mark the right endpoint (param = 1)
+    \draw[fill=black] (5.5, 0) circle (0.1);
+    \node[below] at (0, -0.2) {0}; % Label for 0
+    \node[below] at (5.5, -0.2) {1}; % Label for 1
+    % Downward arrow and Special Solution label
+    \node[above] at (0, 0.4) {MED}; % Label above point
+    \draw[->, line width=1pt] (0, 0.45) -- (0, 0.1); % Arrow pointing downward
+    \draw[->, line width=1pt] (5.5, 0.45) -- (5.5, 0.1); % Arrow pointing downward
+    % Mark the specific range on the right (e.g., param > 3)
+    \draw[thick, decorate, decoration={brace, amplitude=5pt}] (0.2, 0.3) -- (5.3, 0.3); % Brace for range
+    \node[above] at (2.75, 0.5) {Trade-offs?}; % Label for solution set
+    \node[above] at (5.5, 0.4) {$p_{\text{inc}} = 1$}; % Label above point
+    % Parameter name
+    \node[below] at (6.1, 0) {$c_{lb}$}; % Parameter label under arrowhead
+\end{tikzpicture}
