@@ -33,34 +33,30 @@ their implementation on quantum hardware, particularly through quantum
 circuits, to bridge theoretical protocols with practical quantum technologies.
 
 \section{Our motivation}
-% This paragraph is produced with the help of ChatGPT 4o.
-Quantum transduction
-\cite{benbrubakerBuildQuantum,ibmQuantumTransduction}
-has emerged as a key interface between distinct physical platforms,
-particularly superconducting processors and optical communication channels
-\cite{RN602,RN648}.
-While not the primary focus of this work, it illustrates the broader effort to
-integrate quantum computing and communication, motivating our exploration of
-how optical communication scenarios can be expressed in circuit-level terms.
+Quantum state discrimination is pivotal for advancing quantum information
+processing, enabling efficient quantum communication and computation in noisy environments.
+A key challenge is implementing optimal discrimination strategies, such as
+minimum error discrimination (MED) and unambiguous quantum state discrimination
+(UQSD), on quantum hardware.
+We were motivated to explore how these strategies can be realized as quantum
+circuits, a critical step toward practical quantum technologies.
 
-The first question we asked is how to construct quantum circuits for quantum state
-discrimination. It turns out that it is not trivial, but it is also not too difficult.
-By Naimark's dilation theorem (See Sec \ref{sec:naimark}), it is possible to
-convert any POVM with finite elements to projective measurements or a unitary
-operation.
-Then by applying the state-of-the-art quantum circuit synthesis tools, we can
-verify that the quantum circuits successfully realize the functionality of
-input state discrimination.
+Our first question was how to construct quantum circuits for general quantum
+state discrimination.
+By leveraging Naimark's dilation theorem (see Section \ref{sec:naimark}), we
+can transform positive operator-valued measures (POVMs) into projective
+measurements or unitary operations, enabling circuit-based implementations.
+Using state-of-the-art quantum circuit synthesis tools, we verified the
+feasibility of these circuits for distinguishing non-orthogonal states.
 
-After the construction of the quantum circuits, we asked how noise will affect
-the discrimination results.
-We reviewed the discussions of quantum state discrimination of mixed states.
-We were curious whether there are better definitions of good measurements than
-existing methods for unambiguous state discrimination.
-We proposed a series of constraints, and we will show our preliminary results.
-This is under the assumption that the quantum circuit implementation is
-noiseless. As for noisy quantum circuits, we will in turn assume the input
-quantum states are noiseless.
+We also investigated the impact of noise on discrimination performance.
+Existing literature on mixed-state discrimination inspired us to explore
+whether alternative measurement definitions could outperform standard USD
+approaches, particularly for multi-qubit systems.
+To isolate specific noise effects, we initially assume noiseless circuit
+implementations while analyzing noisy input states, and vice versa.
+These questions led us to define novel discrimination problems, addressed in
+the following section.
 
 \section{Our contributions}
 In this thesis, we introduce two quantum state discrimination problems for noisy environments:
