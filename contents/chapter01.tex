@@ -3,35 +3,34 @@
 \chapter{Introduction}
 \label{chap:intro}
 
-Distinguishing non-orthgonal quantum states is a very important topic in quantum
-information since it is the foundation of the first quantum cryptography protocols,
-such as BB84 \cite{bb84} and SARG04 \cite{RN492}.
+Quantum state discrimination is a cornerstone of quantum information science,
+enabling critical applications such as quantum cryptography, quantum
+communication, and quantum computing \cite{bb84,RN492}.
+The task of distinguishing non-orthogonal quantum states is particularly
+challenging due to the fundamental limits imposed by quantum mechanics, which
+prevent perfect discrimination of non-orthogonal states.
+This challenge underpins protocols like BB84 \cite{bb84} and SARG04
+\cite{RN492}, where non-orthogonal states, such as polarized single photons,
+ensure secure communication by making eavesdropping detectable.
 
-\begin{quote}
-    When information is encoded in non-orthogonal quantum
-    states, such as single photons with polarization directions
-    0, 45, 90, and 135 degrees, one obtains a communications channel whose
-    transmissions in principle cannot be read or copied reliably by an
-    eavesdropper ignorant of certain key information used in forming the transmission.
-\end{quote}
+In practical quantum information protocols, quantum states are often prepared
+in specific configurations, such as orthogonal states with basis changes or
+symmetric states like trine states, to simplify measurement design.
+However, in more general scenarios, discriminating arbitrary non-orthogonal
+and linearly independent quantum states requires sophisticated measurement strategies.
+Two prominent approaches are minimum error discrimination (MED), which
+minimizes the probability of incorrect identification, and unambiguous quantum
+state discrimination (UQSD), which prioritizes error-free identification at
+the cost of inconclusive outcomes.
+UQSD, for instance, plays a key role in protocols like B92 \cite{RN485}, where
+it enables reliable state identification.
 
-Most of the quantum states involved in these protocols
-have easier structures, such as orthogonal states with basis change
-or trine states, since the measurement for these sets of states
-are readily available or easier to design than other states.
-Quantum state discrimination in those protocols are more like
-an attempt to crack the eavesdropped messages and a proof that
-such protocols are safe.
-
-In a more general scenario, people try to discriminate a set of
-quantum states that are non-orthogonal and linearly independent.
-Defining and finding a "good" measurement for these states became
-non-trivial. Two important discrimination schemes were proposed,
-minimum error state discrimination and unambiguous state discrimination.
-In the protocol B92, USD plays an important role as a step for Bob.
-
-Several works have discussed the condition where noise is present before or
-during the discrimination process.
+The presence of noise, whether in state preparation or measurement processes,
+further complicates quantum state discrimination, necessitating robust
+strategies to maintain performance in realistic settings.
+These challenges motivate the development of efficient measurement designs and
+their implementation on quantum hardware, particularly through quantum
+circuits, to bridge theoretical protocols with practical quantum technologies.
 
 \section{Our motivation}
 % This paragraph is produced with the help of ChatGPT 4o.
