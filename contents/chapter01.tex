@@ -62,13 +62,28 @@ This is under the assumption that the quantum circuit implementation is
 noiseless. As for noisy quantum circuits, we will in turn assume the input
 quantum states are noiseless.
 
-% A good reason why we discuss multi-qubit USD. \cite{RN485}
-
 \section{Our contributions}
-\begin{itemize}
-    \item New definitions for error-tolerant quantum state discrimination
-    \item A quantum circuit synthesis flow for quantum state discrimination
-\end{itemize}
+In this thesis, we introduce two quantum state discrimination problems for noisy environments:
+CrossQSD, which extends unambiguous state discrimination by incorporating
+confidence bounds inspired by type-I and type-II errors in hypothesis testing,
+and FitQSD, which optimizes POVMs to minimize changes to the output
+probability distribution under noisy conditions.
+We propose optimization strategies to design POVMs for these problems,
+enhancing robustness in practical settings.
+Additionally, we provide a concise proof that the probability of correctly
+identifying the given state in the optimal MED scenario is always equal to or
+larger than that in the Optimal UQSD scenario.
+
+While quantum circuit synthesis for POVMs has been studied, a general synthesis
+flow for arbitrary quantum state discrimination problems was previously lacking.
+We develop a flow based on Naimark's theorem and isometry constructions
+\cite{RN12}, enabling efficient circuit implementations.
+For specific cases, such as coherent states relevant to optical quantum systems,
+we demonstrate that encoding states with fewer qubits can significantly reduce
+gate counts and circuit depth, albeit with a slight trade-off in discrimination
+success probability.
+These contributions pave the way for practical quantum state discrimination on
+near-term quantum hardware.
 
 \section{Thesis organization}
 This thesis is structured as follows.
