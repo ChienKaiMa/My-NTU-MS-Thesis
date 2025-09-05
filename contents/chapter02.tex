@@ -75,6 +75,43 @@ This generality is fundamental to the study of quantum state discrimination,
 as discussed in the following chapters, where optimal measurement strategies
 must account for all possible system preparations.
 
+\subsection{Two-Qubit Entangled States for Discrimination}
+\label{subsec:entangled_states}
+To illustrate quantum state discrimination in later chapters, we define a set
+of three two-qubit entangled pure states, each expressed as a linear
+combination of computational basis states.
+These states are designed to be non-orthogonal and linearly independent,
+properties essential for exploring unambiguous quantum state discrimination
+(UQSD) and our proposed CrossQSD and FitQSD problems.
+The states are given by:
+\begin{align}
+    \ket{\psi_1} &= \frac{1}{\sqrt{1 + a_1^2}} \left( \ket{00} + a_1 \ket{11} \right), \\
+    \ket{\psi_2} &= \frac{1}{\sqrt{1 + a_2^2}} \left( \ket{01} + a_2 \ket{11} \right), \\
+    \ket{\psi_3} &= \frac{1}{\sqrt{1 + a_3^2}} \left( \ket{10} + a_3 \ket{11} \right),
+\end{align}
+where \( a_i \in \mathbb{R}, 0 < a_i < 1 \) for \( i = 1, 2, 3 \).
+The normalization factor \( \sqrt{1 + a_i^2} \) ensures each state is a valid
+pure quantum state, with the orthogonal components (\(\ket{00}\), \(\ket{01}\), \(\ket{10}\))
+dominating the superposition relative to \(\ket{11}\).
+The non-orthogonality, due to the shared \(\ket{11}\) component, precludes
+perfect discrimination, while linear independence satisfies a necessary
+condition for UQSD to be feasible.
+
+As an example, we select \( a_1 = 0.2 \), \( a_2 = 0.5 \), and \( a_3 = 0.7 \)
+to ensure the states exhibit distinct degrees of entanglement and non-orthogonality,
+avoiding symmetric configurations.
+The corresponding state vectors, with coefficients rounded to four decimal
+places in the computational basis \(\{ \ket{00}, \ket{01}, \ket{10}, \ket{11} \}\), are:
+\begin{align}
+    \ket{\psi_1} &= \begin{pmatrix} 0.9806 & 0 & 0 & 0.1961 \end{pmatrix}^T, \\
+    \ket{\psi_2} &= \begin{pmatrix} 0 & 0.8944 & 0 & 0.4472 \end{pmatrix}^T, \\
+    \ket{\psi_3} &= \begin{pmatrix} 0 & 0 & 0.8192 & 0.5735 \end{pmatrix}^T. \label{eq:entangled_state_set}
+\end{align}
+These states serve as a representative example for analyzing discrimination
+performance in Chapters \ref{chap:error_uqsd} and \ref{chap:qc_qsd},
+particularly for evaluating state fidelity (Subsection \ref{subsec:state_fid})
+and circuit synthesis under noisy conditions.
+
 \subsection{Coherent states}
 We will give a brief introduction of coherent states. We will also go through
 some applications and theoretical results and discuss some properties that may
