@@ -112,85 +112,65 @@ performance in Chapters \ref{chap:error_uqsd} and \ref{chap:qc_qsd},
 particularly for evaluating state fidelity (Subsection \ref{subsec:state_fid})
 and circuit synthesis under noisy conditions.
 
-\subsection{Coherent states}
-We will give a brief introduction of coherent states. We will also go through
-some applications and theoretical results and discuss some properties that may
-affect the experimental results of quantum state discrimination.
+\subsection{Coherent States for Discrimination}
+\label{subsec:coherent_states}
+To complement the entangled states in Subsection \ref{subsec:entangled_states},
+we introduce coherent states as additional examples for quantum state
+discrimination in Chapters \ref{chap:error_uqsd} and \ref{chap:qc_qsd}.
+Coherent states, widely used in quantum optics, are eigenstates of the
+annihilation operator and exhibit non-orthogonality, making them suitable for
+studying unambiguous quantum state discrimination (UQSD), CrossQSD, and FitQSD
+in noisy environments.
 
-In quantum optics the coherent state refers to a state of the quantized electromagnetic field
-that describes a maximal kind of coherence and a classical kind of behavior.\\
-It is a minimum uncertainty state, with the single free parameter chosen to make the relative
-dispersion (standard deviation in natural dimensionless units) equal for position and momentum,
-each being equally small at high energy. It is also called "Glauber coherent states" or "displaced ground states".
+A coherent state \(\ket{\alpha}\) in the Fock basis \(\{\ket{n}\}_{n=0}^\infty\)
+is defined as an eigenstate of the annihilation operator \(\hat{a}\), with
+\(\hat{a} \ket{\alpha} = \alpha \ket{\alpha}\), where \(\alpha \in \mathbb{C}\)
+is the complex amplitude.
+The state vector is derived as follows:
+\begin{align}
+    \ket{\alpha} & = e^{-|\alpha|^2/2} \sum_{n=0}^\infty \frac{\alpha^n}{\sqrt{n!}} \ket{n}, \label{eq:coherent_state_vector}
+\end{align}
+where the factor \(e^{-|\alpha|^2/2}\) ensures normalization, as
+\begin{align}
+    \langle \alpha | \alpha \rangle = e^{-|\alpha|^2} \sum_{n=0}^\infty \frac{|\alpha|^{2n}}{n!} = e^{-|\alpha|^2} e^{|\alpha|^2} = 1.
+\end{align}
+In practice, we truncate the sum to a 10-qubit Hilbert space
+(\(2^{10} = 1024\) Fock states) for simulation, ensuring the state fidelity
+(Subsection \ref{subsec:state_fid}) with the ideal coherent state exceeds 0.99,
+as verified in Chapter \ref{chap:qc_qsd}.
+
+We consider two sets of coherent states to explore discrimination performance:
 \begin{itemize}
-    \item Minimum uncertainty state since $\Delta{X}\Delta{P}=\frac{\hbar}{2}$
-    \item Coherent states remain coherent states as time
-          evolves, but the parameter $\alpha$ changes in time as
-          $\alpha(t) = \alpha_{0}e^{-i\omega t}$
-    \item Coherent states can be used to describe lasers...
+    \item \textbf{Symmetric set}: Three coherent states with amplitudes
+          \(\alpha_j = |\alpha| e^{i 2\pi (j-1)/3}\) for \(j = 1, 2, 3\),
+          and \(|\alpha| = 1\). This symmetry ensures equal pairwise overlaps,
+          \(|\langle \alpha_i | \alpha_j \rangle| = e^{-|\alpha_i - \alpha_j|^2/2} = e^{-2|\alpha|^2 (1 - \cos(2\pi/3))} \approx 0.135\),
+          facilitating analysis of symmetric discrimination scenarios.
+    \item \textbf{Non-symmetric set}: Three coherent states with the same
+          amplitude but distinct phases, e.g., \(\alpha_1 = e^{i \pi/4}\),
+          \(\alpha_2 = e^{i \pi/2}\), \(\alpha_3 = e^{i 3\pi/4}\),
+          and \(|\alpha| = 1\).
+          These yield varying pairwise overlaps, e.g.,
+          \(|\langle \alpha_1 | \alpha_2 \rangle| = e^{-|e^{i \pi/4} - e^{i \pi/2}|^2/2} \approx 0.243\),
+          suitable for testing CrossQSD’s confidence bounds and FitQSD’s robustness to asymmetric configurations.
 \end{itemize}
 
+Selecting coherent states requires careful verification to ensure their overlaps
+are neither too large (near-identical states) nor too small (near-orthogonal states),
+as both extremes hinder effective discrimination.
+Figure \ref{fig:coherent_overlap} illustrates the relationship between the
+phase difference of two coherent states with the same \(|\alpha|\) and their
+overlap \(|\langle \alpha_i | \alpha_j \rangle|\), highlighting the need to
+choose parameters that balance non-orthogonality for QSD.
 
-\subsubsection{Second Quantization to express many-body quantum states}
-Due to indistinguishability of particles, the quantum state can be described by the number of particles
-or energy quanta.
-The creation operator $\hat{a}^\dagger$ describes that the number of quanta is increased by 1; the annihilation
-operator $\hat{a}$ describes otherwise.
-The operators acting on the basis states can be expressed as follows:
-
-\begin{align}
-    \hat{a}\ket{n} = \sqrt{n}\ket{n-1} \\
-    \hat{a}^{\dagger}\ket{n} = \sqrt{n+1}\ket{n+1}
-\end{align}
-
-\subsubsection{Annihilation operators}
-Creation and annihilation operators are used in second quantization.
-The explicit expression of the annihilation operator in $N$-dimensional Hilbert space is below.
-Here, $k$ is an integer between 3 and $N$ to show the pattern.
-
-\begin{center}
-    $\hat{a} =
-        \begin{pmatrix}
-            0      & \sqrt{1} & 0        & 0        & \dots  & \dots    & \dots      & \dots  & 0        \\
-            0      & 0        & \sqrt{2} & 0        & \dots  & \dots    & \dots      & \dots  & \vdots   \\
-            0      & 0        & 0        & \sqrt{3} & \ddots & \dots    & \dots      & \dots  & \vdots   \\
-            0      & 0        & 0        & 0        & \ddots & 0        & \dots      & \dots  & \vdots   \\
-            \vdots & \vdots   & \vdots   & \vdots   & \ddots & \sqrt{k} & 0          & \dots  & \vdots   \\
-            \vdots & \vdots   & \vdots   & \vdots   & \vdots & 0        & \sqrt{k+1} & \ddots & \vdots   \\
-            \vdots & \vdots   & \vdots   & \vdots   & \vdots & \vdots   & 0          & \ddots & 0        \\
-            \vdots & \vdots   & \vdots   & \vdots   & \vdots & \vdots   & \vdots     & \ddots & \sqrt{N} \\
-            \vdots & \vdots   & \vdots   & \vdots   & \vdots & \vdots   & \vdots     & \vdots & 0        \\
-        \end{pmatrix}$
-\end{center}
-
-\subsubsection{Other important properties}
-There are two important properties to look at before continuing the experiments.
-
-First, the overlap of canonical coherent states can be almost zero.
-Since non-orthogonality is a basic assumption for unambiguous discrimination
-of a set of quantum states, it is intuitive that we have to make sure the set
-of quantum states does not contain states that are nearly identical or nearly
-orthogonal. According to the formula of the overlap of canonical coherent
-states, we immediately found that even though the overlap of two different
-coherent states is always non-zero, it can be very close to zero. In other
-words, the two distinct coherent states are in theory non-orthogonal, but they
-are very close to orthogonal.
-
-Second, the coherent states may have good approximations at
-fairly low-dimensional Hilbert space. The canonical coherent states can be
-expanded with basis states as .... In practice, the formula is truncated to
-enable simulation on classical computers. The fidelity of the truncated
-coherent state with respect to the canonical coherent state with the same
-alpha is ...
-We will make sure the fidelity is at least 0.99, and will list it in our results.
-
-To produce meaningful results, we check the two properties before running simulations.
-
-% TODO Visualization
-We can generate truncated coherent states with QuTiP. The package provides
-convenient functions to generate truncated coherent states in the form of
-statevectors or density matrices.
-
+\begin{figure}[h]
+    \centering
+    \scalebox{0.6}{
+        \includegraphics{figures/overlap.png}
+    }
+    \caption{Relationship between phase difference and state overlap for two coherent states with the same \(|\alpha|\).}
+    \label{fig:coherent_overlap}
+\end{figure}
 
 \section{Quantum Measurement}
 % Revised by Gemini 2.5 Flash
