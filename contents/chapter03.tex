@@ -3,52 +3,52 @@
 \chapter{Basics of Quantum State Discrimination}
 \label{chap:basics_qsd}
 
-% Revised by Gemini 2.5 Flash
-This chapter reviews fundamental concepts in quantum state discrimination.
+This chapter introduces the fundamental concepts of quantum state
+discrimination (QSD), providing the foundation for our contributions in
+Chapters \ref{chap:error_uqsd} and \ref{chap:qc_qsd}.
 
-Throughout this thesis, we adopt the standard convention in quantum
-communication of an information sender (Alice) and a receiver (Bob).
-For a foundational understanding of these concepts, including scenarios
-involving eavesdroppers, readers are referred to Sections 2.2.4 and 12.1 of
-\cite{qcqi} or Chapter 3 of \cite{10.5555/3240076}.
+In quantum communication, we adopt the standard scenario involving an
+information sender (Alice) and a receiver (Bob).
+Alice prepares a quantum state from a known set and transmits it to Bob, who
+performs a measurement to identify the state \cite{qcqi}.
+A key challenge arises with non-orthogonal states, which cannot be perfectly
+distinguished due to the principles of quantum mechanics \cite{qcqi}.
+This limitation underpins protocols like BB84 and motivates our study of
+unambiguous quantum state discrimination (UQSD), minimum error discrimination (MED),
+and our proposed CrossQSD and FitQSD problems.
 
-The core problem of quantum state discrimination involves Alice preparing a
-quantum state from a predefined set of states known to both herself and Bob.
-Bob's objective is then to perform a measurement to identify which specific
-state Alice transmitted \cite{qcqi}. A critical challenge arises with
-non-orthogonal states: these states cannot be perfectly discriminated.
-This means no measurement exists that can reliably identify each state in a
-non-orthogonal set with unit probability \cite{qcqi}.
-
-\section{The quantum state discrimination problem}
-% Revised by Gemini 2.5 Flash
-Let $S_{\ket{\psi}} \equiv \{\ket{\psi_{1}}, \ket{\psi_{2}}, \dots, \ket{\psi_{k}}\}$
-denote the predefined set of quantum states shared between Alice and Bob.
-For quantum state discrimination, the states in $S_{\ket{\psi}}$ are typically 
-non-orthogonal, meaning their inner product is non-zero for distinct states:
+\section{The Quantum State Discrimination Problem}
+\label{sec:qsd_problem}
+The QSD problem involves a set of \(k\) quantum states \(\{ \ket{\psi_i} \}_{i=1}^k\),
+typically pure and non-orthogonal, shared between Alice and Bob, with
+associated prior probabilities \(\{ p_i \}_{i=1}^k\), where \(p_i\) is the
+likelihood that Alice prepares \(\ket{\psi_i}\).
+Non-orthogonality is characterized by:
 \begin{align}
-    \braket{\psi_{i}}{\psi_{j}} \neq 0, \forall \; i \neq j, 1 \leq i, j \leq k.
+    \langle \psi_i | \psi_j \rangle \neq 0, \quad \forall i \neq j, \quad 1 \leq i, j \leq k. \label{eq:non_orthogonal}
 \end{align}
-Let $S_{prior} \equiv \{p_{1}, p_{2}, \dots, p_{k}\}$ be the set of prior 
-probabilities associated with each state in $S_{\ket{\psi}}$. The prior 
-probability $p_{i}$ represents the likelihood that Alice prepares and 
-transmits the state $\ket{\psi_{i}}$ to Bob.
+Bob’s task is to design a positive operator-valued measure (POVM)
+\(\{ \Pi_i \}_{i \in \mathcal{I}}\) to identify the transmitted state, subject to:
+\begin{align}
+    \Pi_i \succeq 0, \quad i \in \mathcal{I}, \quad \sum_{i \in \mathcal{I}} \Pi_i = I. \label{eq:povm_constraints}
+\end{align}
+Various figures of merit quantify discrimination performance \cite{RN65}.
+For MED, the goal is to minimize the error probability, as discussed in Section \ref{sec:med}.
+For UQSD, the objective is to achieve zero error probability with possible
+inconclusive outcomes, as detailed in Section \ref{sec:uqsd}.
+These approaches inform our development of CrossQSD and FitQSD in Chapter \ref{chap:error_uqsd}.
 
-Given the predefined set of states $S_{\ket{\psi}}$ and their prior 
-probabilities $S_{prior}$, the quantum state discrimination problem focuses on 
-determining the optimal measurement strategy for Bob to identify the quantum 
-state prepared by Alice. Numerous figures of merit have been proposed to 
-quantify performance in quantum state discrimination \cite{RN65}.
-The most common figure of merit is the minimization of measurement error, 
-which is equivalent to the maximization of the success probability of 
-discrimination.
-
-To illustrate these concepts and different discrimination methods, consider the following example:
-
-Let $k = 2$ with states $\ket{\psi_{1}} = \ket{0}$ and $\ket{\psi_{2}} = \dfrac{\ket{0}+\ket{1}}{\sqrt{2}}$,
-and prior probabilities $S_{prior} = \{p_{1}, p_{2}\} = \{0.5, 0.5\}$.
-These two states are non-orthogonal, as demonstrated by their inner product:
-$\braket{\psi_{1}}{\psi_{2}} = \dfrac{1}{\sqrt{2}} \neq 0$.
+As an example, consider two non-orthogonal qubit states commonly used in QSD:
+\begin{align}
+    \ket{\psi_1} & = \ket{0}, \quad \ket{\psi_2} = \frac{1}{\sqrt{2}} \left( \ket{0} + \ket{1} \right), \label{eq:qsd_example_states}
+\end{align}
+with equal prior probabilities \(p_1 = p_2 = 0.5\).
+Their inner product, \(\langle \psi_1 | \psi_2 \rangle = 1/\sqrt{2} \neq 0\),
+confirms non-orthogonality, making perfect discrimination impossible.
+This elementary example, used in Section \ref{sec:proj_meas}, \ref{sec:med}, and \ref{sec:uqsd},
+facilitates verification and understanding of QSD concepts, while more complex
+challenges are addressed with the entangled and coherent states in
+Subsections \ref{subsec:entangled_states} and \ref{subsec:coherent_states}.
 
 \section{Projective measurement}
 % Revised by Gemini 2.5 Flash
