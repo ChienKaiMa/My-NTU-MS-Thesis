@@ -45,39 +45,31 @@ As an example, consider two non-orthogonal qubit states commonly used in QSD:
 with equal prior probabilities \(p_1 = p_2 = 0.5\).
 Their inner product, \(\langle \psi_1 | \psi_2 \rangle = 1/\sqrt{2} \neq 0\),
 confirms non-orthogonality, making perfect discrimination impossible.
-This elementary example, used in Section \ref{sec:proj_meas}, \ref{sec:med}, and \ref{sec:uqsd},
+This elementary example, used in Subsection \ref{subsec:proj_meas}, Section
+\ref{sec:med}, and Section \ref{sec:uqsd},
 facilitates verification and understanding of QSD concepts, while more complex
 challenges are addressed with the entangled and coherent states in
 Subsections \ref{subsec:entangled_states} and \ref{subsec:coherent_states}.
 
-\section{Projective measurement}
-% Revised by Gemini 2.5 Flash
-A projective measurement is defined by a set of $k$ measurement operators, $S_{\Pi_{proj}} \equiv \{\Pi_{1}, \Pi_{2}, \dots, \Pi_{k}\}$, which satisfy the following properties:
-\begin{enumerate}
-    \item \textbf{Completeness Relation:} $\sum_{i = 1}^{k}\Pi_{i} = I$ (the identity operator).
-    \item \textbf{Orthogonality:} $\Pi_{i}\Pi_{j} = \delta_{ij}\Pi_i$, where $\delta_{ij}$ is the Kronecker delta.
-    \item \textbf{Hermiticity and Projectors:} Each $\Pi_i$ is a Hermitian operator ($\Pi_i^\dagger = \Pi_i$) and satisfies $\Pi_i^2 = \Pi_i$, meaning they are projectors onto orthogonal subspaces.
-\end{enumerate}
-
-For the example states introduced previously, a standard projective measurement in the computational basis is given by:
+\subsection{Projective Measurement Baseline}
+\label{subsec:proj_meas}
+A projective measurement is a POVM \(\{ \Pi_i \}_{i=1}^k\) where each operator
+is Hermitian (\(\Pi_i^\dagger = \Pi_i\)), idempotent (\(\Pi_i^2 = \Pi_i\)),
+and orthogonal (\(\Pi_i \Pi_j = \delta_{ij} \Pi_i\)), satisfying \(\sum_{i=1}^k \Pi_i = I\).
+For the example states in Equation \ref{eq:qsd_example_states}, consider a
+standard projective measurement in the computational basis:
 \begin{align}
-    &\Pi_{1} = \ket{0}\bra{0} = \begin{bmatrix} 1 \\ 0 \end{bmatrix} \begin{bmatrix} 1 & 0 \end{bmatrix} = \begin{bmatrix} 1 & 0 \\ 0 & 0 \end{bmatrix} \\
-    &\Pi_{2} = \ket{1}\bra{1} = \begin{bmatrix} 0 \\ 1 \end{bmatrix} \begin{bmatrix} 0 & 1 \end{bmatrix} = \begin{bmatrix} 0 & 0 \\ 0 & 1 \end{bmatrix}
+    \Pi_1 & = \ket{0}\bra{0} = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}, \quad \Pi_2 = \ket{1}\bra{1} = \begin{pmatrix} 0 & 0 \\ 0 & 1 \end{pmatrix}. \label{eq:proj_operators}
 \end{align}
-
-The probability of success ($P_{succ}$) for this measurement can be calculated as follows:
+The success probability is:
 \begin{align}
-    &\bra{\psi_{1}} \Pi_{1} \ket{\psi_{1}} = 1, \quad \bra{\psi_{1}} \Pi_{2} \ket{\psi_{1}} = 0 \\
-    &\bra{\psi_{2}} \Pi_{1} \ket{\psi_{2}} = 0.5, \quad \bra{\psi_{2}} \Pi_{2} \ket{\psi_{2}} = 0.5 \\
-    &P_{succ} = p_{1} \bra{\psi_{1}} \Pi_{1} \ket{\psi_{1}} + p_{2} \bra{\psi_{2}} \Pi_{2} \ket{\psi_{2}} \\
-    &= 0.5 \times 1 + 0.5 \times 0.5 = 0.75
+    P_{\text{succ}} & = p_1 \langle \psi_1 | \Pi_1 | \psi_1 \rangle + p_2 \langle \psi_2 | \Pi_2 | \psi_2 \rangle \notag \\
+                    & = 0.5 \cdot 1 + 0.5 \cdot 0.5 = 0.75, \label{eq:proj_psucc}
 \end{align}
-
-A measurement error occurs when Bob's measurement outcome does not correspond to the state Alice actually sent.
-In this example, an error arises when Alice sends $\ket{\psi_{2}}$ but Bob's measurement yields outcome $\Pi_{1}$ (i.e., $\ket{0}$).
-This specific projective measurement strategy thus only incurs error when
-discriminating $\ket{\psi_{2}}$, as $\bra{\psi_{2}} \Pi_{1} \ket{\psi_{2}} = 0.5$,
-meaning there's a 50\% chance of incorrectly inferring $\ket{\psi_1}$ when $\ket{\psi_2}$ was sent.
+since \(\langle \psi_1 | \Pi_1 | \psi_1 \rangle = 1\), \(\langle \psi_1 | \Pi_2 | \psi_1 \rangle = 0\), \(\langle \psi_2 | \Pi_1 | \psi_2 \rangle = 0.5\), and \(\langle \psi_2 | \Pi_2 | \psi_2 \rangle = 0.5\).
+Errors occur when Alice sends \(\ket{\psi_2}\) but Bob measures \(\Pi_1\) (50\% chance),
+highlighting the limitations of projective measurements for non-orthogonal states.
+This baseline result, compared to MED in Section \ref{sec:med}, motivates advanced QSD strategies.
 
 \section{Minimum Error State Discrimination}
 Instead of measuring with a trivial projective measurement,
