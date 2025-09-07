@@ -118,27 +118,31 @@ This improvement over the projective measurement (\(P_{\text{succ}} = 0.75\))
 demonstrates the advantage of optimized POVMs for non-orthogonal states.
 
 \section{Unambiguous Quantum State Discrimination}
+\label{sec:uqsd}
+Unambiguous quantum state discrimination (UQSD) \cite{RN493, RN494, RN495}
+aims to identify a quantum state from a set \(\{ \ket{\psi_i} \}_{i=1}^k\)
+with zero error probability by using a POVM \(\{ \Pi_i \}_{i=0}^k\), where
+\(\Pi_0\) corresponds to an inconclusive outcome.
+Unlike minimum error discrimination (MED), UQSD allows inconclusive results to
+ensure no misidentification.
 
-Unambiguous quantum state discrimination (UQSD, USD) \cite{RN493, RN494, RN495}
-provided a different view, where the goal is to find a POVM of $l+1$
-elements, such that the measurement may obtain inconclusive results,
-while the conclusive results will not be erroreous at all.
-
-For example,
-
-
-The B92 protocol used USD and is one of the simplest quantum key distribution
-protocols. In the protocol, Bob uses USD to identify Alice's messages.
-Since it is easy to implement, B92 is often used in experiments instead of
-BB84.
-However, since Eve can also perform USD, she can resend Bob some states
-without being detected, which is also called the zero-error attack. Even
-though there are some countermeasures for USD attacks \cite{RN226}, BB84 with
-decoy states is still the mainstream.
-
-previous works
-Theoretical bounds
-Physics experiments
+For the example states in Equation \ref{eq:qsd_example_states},
+\(\ket{\psi_1} = \ket{0}\), \(\ket{\psi_2} = \frac{1}{\sqrt{2}} (\ket{0} + \ket{1})\),
+with prior probabilities \(p_1 = p_2 = 0.5\), an optimal UQSD POVM is:
+\begin{align}
+    \Pi_1 &= \frac{\sqrt{2}}{1 + \sqrt{2}} \frac{(\ket{0} - \ket{1})(\bra{0} - \bra{1})}{2} = \frac{1}{2 + \sqrt{2}} \begin{pmatrix} 1 & -1 \\ -1 & 1 \end{pmatrix}, \label{eq:uqsd_pi1} \\
+    \Pi_2 &= \frac{\sqrt{2}}{1 + \sqrt{2}} \ket{1}\bra{1} = \frac{\sqrt{2}}{1 + \sqrt{2}} \begin{pmatrix} 0 & 0 \\ 0 & 1 \end{pmatrix}, \label{eq:uqsd_pi2} \\
+    \Pi_0 &= I - \Pi_1 - \Pi_2. \label{eq:uqsd_pi0}
+\end{align}
+The outcome probabilities, \( p(m|i) = \langle \psi_i | \Pi_m | \psi_i \rangle \), are:
+\begin{align}
+    p(1|1) &= 1 - \frac{1}{\sqrt{2}} \approx 0.2929, \quad p(2|1) = 0, \quad p(0|1) \approx 0.7071, \notag \\
+    p(1|2) &= 0, \quad p(2|2) = \frac{1}{\sqrt{2}} (1 - \frac{1}{\sqrt{2}}) \approx 0.2929, \quad p(0|2) \approx 0.7071. \notag
+\end{align}
+The average success probability is \( P_{\text{succ}} = \sum_{i=1}^2 p_i p(i|i) \approx 0.2929 \).
+This POVM is optimal for \( k = 2 \), as it can be derived analytically \cite{RN493}.
+For \( k > 2 \), numerical methods like semidefinite programming are required,
+as discussed in Section \ref{sec:optimal_povm_for_uqsd}.
 
 \section{Optimal POVM for UQSD}
 \label{sec:optimal_povm_for_uqsd}
