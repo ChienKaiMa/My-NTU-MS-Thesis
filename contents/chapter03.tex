@@ -71,93 +71,51 @@ Errors occur when Alice sends \(\ket{\psi_2}\) but Bob measures \(\Pi_1\) (50\% 
 highlighting the limitations of projective measurements for non-orthogonal states.
 This baseline result, compared to MED in Section \ref{sec:med}, motivates advanced QSD strategies.
 
-\section{Minimum Error State Discrimination}
-Instead of measuring with a trivial projective measurement,
-the first proposed method is minimum error state discrimination (MESD),
-also known as minimum error discrimination (MED).
-The principle of MED is to find a POVM of $l$ elements that minimizes the
-overall measurement error
+\section{Minimum Error Discrimination}
+\label{sec:med}
+MED aims to distinguish a set of quantum states \(\{ \ket{\psi_i} \}_{i=1}^k\)
+with prior probabilities \(\{ p_i \}_{i=1}^k\) by finding a POVM
+\(\{ \Pi_i \}_{i=1}^k\) that minimizes the error probability, without allowing
+inconclusive outcomes.
+The error probability is:
 \begin{align}
-     & P_{err} = \Sigma_{i = 1, i \neq j}^{l} p_{i} \bra{\psi_{i}} \Pi_{j} \ket{\psi_{i}} \\
-     & = 1 - \Sigma_{i = 1}^{l} p_{i} \bra{\psi_{i}} \Pi_{i} \ket{\psi_{i}}               \\
-     & = 1 - P_{succ}
+    P_{\text{err}} & = \sum_{i=1}^k \sum_{\substack{j=1                                                                           \\ j \neq i}}^k p_i \langle \psi_i | \Pi_j | \psi_i \rangle, \label{eq:med_error} \\
+                   & = 1 - P_{\text{succ}} = 1 - \sum_{i=1}^k p_i \langle \psi_i | \Pi_i | \psi_i \rangle, \label{eq:med_success}
 \end{align}
-$l$ here is exactly the number of states in $S_{\ket{\psi}}$.
-The POVM is denoted by $S_{\Pi} \equiv \{\Pi_{1}, \Pi_{2}, \dots, \Pi_{l}\}$.
-
-For $l = 2$, the optimal probability of success $P_{succ}$ can be analytically
-solved, which is also named the Helstrom measurement \cite{Barnett:09}.
+subject to:
 \begin{align}
-     & \Sigma_{i=1}^{l} \Pi_{i} = \Pi_{1} + \Pi_{2} = I                          \\
-     & P_{succ} = \Sigma_{i = 1}^{l} p_{i} \bra{\psi_{i}} \Pi_{i} \ket{\psi_{i}} \\
-     & = p_{1} \bra{\psi_{1}} \Pi_{1} \ket{\psi_{1}}
-    + p_{2} \bra{\psi_{2}} \Pi_{2} \ket{\psi_{2}}                                \\
-     & = p_{1} \bra{\psi_{1}} \Pi_{1} \ket{\psi_{1}}
-    + p_{2} \bra{\psi_{2}} (I - \Pi_{1}) \ket{\psi_{2}}                          \\
-     & = p_{2} + \operatorname{Tr} \left[
-        \left( p_{1} \ket{\psi_{1}}\bra{\psi_{1}}
-        - p_{2} \ket{\psi_{2}}\bra{\psi_{2}} \right) \Pi_{1}
-        \right] \label{eq:psucc}
+    \Pi_i \succeq 0, \quad i = 1, \ldots, k, \quad \sum_{i=1}^k \Pi_i = I. \label{eq:med_povm_constraints}
 \end{align}
-
-From Equation \ref{eq:psucc}, the maximal probability happens when $\Pi_{1}$
-projects to the positive eigenspace of
-$p_{1} \ket{\psi_{1}}\bra{\psi_{1}} - p_{2} \ket{\psi_{2}}\bra{\psi_{2}}$.
-
-For our example,
+For \(k = 2\), the optimal POVM, known as the Helstrom measurement \cite{Barnett:09},
+is analytically solvable to maximize:
 \begin{align}
-     & p_{1} \ket{\psi_{1}}\bra{\psi_{1}} - p_{2} \ket{\psi_{2}}\bra{\psi_{2}}
-    = 0.5 \times \begin{bmatrix}
-                     1 & 0 \\ 0 & 0
-                 \end{bmatrix}
-    - 0.5 \times \begin{bmatrix}
-                     0.5 & 0.5 \\ 0.5 & 0.5
-                 \end{bmatrix}                                         \\
-     & = 0.5 \times \begin{bmatrix}
-                        0.5 & -0.5 \\ -0.5 & -0.5
-                    \end{bmatrix}
-    \equiv 0.5 A
+    P_{\text{succ}} & = p_1 \langle \psi_1 | \Pi_1 | \psi_1 \rangle + p_2 \langle \psi_2 | \Pi_2 | \psi_2 \rangle, \notag                                             \\
+                    & = p_2 + \operatorname{Tr} \left[ \left( p_1 \ket{\psi_1}\bra{\psi_1} - p_2 \ket{\psi_2}\bra{\psi_2} \right) \Pi_1 \right], \label{eq:med_psucc}
 \end{align}
+where \(\Pi_2 = I - \Pi_1\).
+For \(k > 2\), numerical methods like semidefinite programming are typically required.
+The maximum \(P_{\text{succ}}\) occurs when \(\Pi_1\) projects onto the positive
+eigenspace of \(p_1 \ket{\psi_1}\bra{\psi_1} - p_2 \ket{\psi_2}\bra{\psi_2}\).
 
-The eigenvectors $v_{1}, v_{2}$ and eigenvalues $\lambda_{1}, \lambda_{2}$ of $A$ are
+For the example states in Equation \ref{eq:qsd_example_states}, with \(p_1 = p_2 = 0.5\):
 \begin{align}
-     & v_{1} = \begin{bmatrix} -1 - \sqrt{2} & 1   \end{bmatrix} ^{T},
-    \lambda_{1} =\frac{\sqrt{2}}{2}                                     \\
-     & v_{2} = \begin{bmatrix}  -1 + \sqrt{2} & 1   \end{bmatrix} ^{T},
-    \lambda_{2} =\frac{-\sqrt{2}}{2}
+    p_1 \ket{\psi_1}\bra{\psi_1} - p_2 \ket{\psi_2}\bra{\psi_2} & = 0.5 \left( \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix} - \begin{pmatrix} 0.5 & 0.5 \\ 0.5 & 0.5 \end{pmatrix} \right) = 0.5 \begin{pmatrix} 0.5 & -0.5 \\ -0.5 & -0.5 \end{pmatrix}. \label{eq:med_operator}
 \end{align}
-
-We choose $v_{1}$ since we want the one with positive eigenvalue.
-The resulting measurement operators are
+The eigenvalues are \(\lambda_1 = \sqrt{2}/4\), \(\lambda_2 = -\sqrt{2}/4\), with eigenvectors:
 \begin{align}
-     & \Pi_{1} = \frac{v_{1}v_{1}^{T}}{(-1 - \sqrt{2})^{2} + 1^{2}}
-    = \begin{bmatrix}
-          3 + 2\sqrt{2} & -1 - \sqrt{2} \\
-          -1 - \sqrt{2} & 1
-      \end{bmatrix}
-    / (4 + 2\sqrt{2})                                               \\
-     & = (2 - \sqrt{2})\begin{bmatrix}
-                           3 + 2\sqrt{2} & -1 - \sqrt{2} \\
-                           -1 - \sqrt{2} & 1
-                       \end{bmatrix}
-    / 4                                                             \\
-     & = \begin{bmatrix}
-             (2 + \sqrt{2})/4 & - \sqrt{2}/4     \\
-             - \sqrt{2}/4     & (2 - \sqrt{2})/4
-         \end{bmatrix}                        \\
-     & \Pi_{2} = I - \Pi_{1} = \begin{bmatrix}
-                                   (2 - \sqrt{2})/4 & \sqrt{2}/4       \\
-                                   \sqrt{2}/4       & (2 + \sqrt{2})/4
-                               \end{bmatrix}
+    v_1 & = \begin{pmatrix} -1 - \sqrt{2} & 1 \end{pmatrix}^T, \quad v_2 = \begin{pmatrix} -1 + \sqrt{2} & 1 \end{pmatrix}^T. \notag
 \end{align}
-
-The probability of success for MED is
+The POVM operator \(\Pi_1 = v_1 v_1^T / (v_1^T v_1)\) is:
 \begin{align}
-     & P_{succ} = p_{1} \bra{\psi_{1}} \Pi_{1} \ket{\psi_{1}}
-    + p_{2} \bra{\psi_{2}} \Pi_{2} \ket{\psi_{2}}                  \\
-     & = 0.5 \times (2 + \sqrt{2})/4 + 0.5 \times (2 + \sqrt{2})/4 \\
-     & = (2 + \sqrt{2})/4 = 0.85355\dots > 0.75
+    \Pi_1 & = \frac{1}{4 + 2\sqrt{2}} \begin{pmatrix} 3 + 2\sqrt{2} & -1 - \sqrt{2} \\ -1 - \sqrt{2} & 1 \end{pmatrix} \approx \begin{pmatrix} 0.8536 & -0.3536 \\ -0.3536 & 0.1464 \end{pmatrix}, \quad \Pi_2 = I - \Pi_1. \label{eq:med_povm}
 \end{align}
+The success probability is:
+\begin{align}
+    P_{\text{succ}} & = 0.5 \langle \psi_1 | \Pi_1 | \psi_1 \rangle + 0.5 \langle \psi_2 | \Pi_2 | \psi_2 \rangle = \frac{2 + \sqrt{2}}{4} \approx 0.8536, \label{eq:med_psucc_result}
+\end{align}
+which matches the Helstrom bound \(P_{\text{succ}} = \frac{1 + \sqrt{1 - |\langle \psi_1 | \psi_2 \rangle|^2}}{2} = \frac{1 + 1/\sqrt{2}}{2}\).
+This improvement over the projective measurement (\(P_{\text{succ}} = 0.75\))
+demonstrates the advantage of optimized POVMs for non-orthogonal states.
 
 \section{Unambiguous Quantum State Discrimination}
 
