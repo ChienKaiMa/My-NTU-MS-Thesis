@@ -3,42 +3,44 @@
 \chapter{Convex Optimization}
 \label{chap:basics_co}
 
-In this chapter, we will introduce the basics of convex optimization problems.
-It will be useful for solving POVMs for quantum state discrimination.
+This chapter introduces convex optimization concepts and solvers used to
+address semidefinite programming (SDP) problems for quantum state discrimination (QSD).
+We focus on the CVXPY framework with the Splitting Conic Solver (SCS) and MOSEK,
+which solve SDPs for the OptUQSD approach with pure states
+\(\{ \ket{\psi_i} \}_{i=1}^k\) (Section \ref{sec:optimal_povm_for_uqsd}) and
+for FRIO, CrossQSD, and FitQSD methods with density matrices
+\(\{ \rho_i \}_{i=1}^k\) (Chapter \ref{chap:error_uqsd}).
 
-\section{Basic terminology}
-What is a convex programming problem?
-
-To solve the formulated semidefinite programming problems, we take advantage of
-the state-of-the-art framework CVXPY and solver SCS with acceleration
-techniques applied.
-
-We have also considered using other solvers like Gurobi and IBM CPlex, but due to limited
-time, we haven't implemented all the programming problems for them.
+\section{Introduction to Convex Optimization}
+A convex optimization problem minimizes a convex objective function over a
+convex set, defined by convex constraints \cite{RN33}.
+Convexity ensures that any local minimum is global, making such problems
+computationally tractable.
+Semidefinite programming (SDP), a subset of convex optimization, optimizes a
+linear objective over positive semidefinite matrix variables, subject to
+linear equality and inequality constraints.
+In quantum state discrimination (QSD), SDPs design optimal POVMs for the
+OptUQSD approach with pure states \(\{ \ket{\psi_i} \}_{i=1}^k\)
+(Section \ref{sec:optimal_povm_for_uqsd}) and for prior work FRIO and our
+proposed CrossQSD and FitQSD methods with density matrices
+\(\{ \rho_i \}_{i=1}^k\) (Chapters \ref{chap:error_uqsd} and
+\ref{chap:qc_qsd}), using solvers like CVXPY with SCS and MOSEK.
 
 \section{CVXPY}
-CVXPY is an open source Python module for modeling convex optimization problems \cite{RN473}.
+CVXPY \cite{RN473} is an open-source Python module for modeling convex
+optimization problems, used in our work to formulate SDPs for OptUQSD, FRIO, CrossQSD, and FitQSD.
+Paired with solvers like SCS and MOSEK, CVXPY ensures efficient computation of
+optimal POVMs, leveraging techniques like disciplined parametrized programming
+to handle varying problem parameters.
 
-
-
-\subsection{Disciplined convex programming (DCP)}
-Disciplined convex programming (DCP) is a system for constructing mathematical
-expressions with known curvature from a given library of base functions \cite{RN476}.
-DCP is used by the convex optimization modeling languages CVX, CVXPY, Convex.jl, and
-CVXR to ensure that the specified optimization problems are convex \cite{RN476}.
-
-In CVXPY, the building blocks such as variables, parameters, numerical constants,
-standard arithmetic operators and atomic functions form expressions \cite{RN481}.
-DCP analysis will decompose the expression and figure out if the whole expression
-is constant, affine, convex or concave. A problem consists of an objective and a list of
-constraints. A problem that follows the DCP rules is guaranteed to be solvable by CVXPY.
-
-In fact, the objective functions and constraints functions we use are mostly affine, which is both
-convex and concave. It implies that there is extra freedom to change the signs of the
-expressions to fit our needs.
-
-There is another rule called disciplined geometric programming (DGP) that we might mention,
-but it is much less relevant to our discussions.
+\subsection{Disciplined Convex Programming (DCP)}
+Disciplined convex programming (DCP) constructs expressions with known
+curvature using a library of base functions \cite{RN476}.
+CVXPY uses DCP to verify convexity, decomposing expressions into constant,
+affine, convex, or concave forms.
+For OptUQSD, FRIO, CrossQSD, and FitQSD, our objectives
+(e.g., maximizing success probability) and constraints (e.g., \(\Pi_0 \succeq 0\))
+are typically affine, allowing flexible reformulation to suit each method’s requirements.
 
 \subsection{Disciplined parametrized programming (DPP)}
 In CVXPY, Parameters are symbolic representations of constants \cite{RN480}. Disciplined parametrized
