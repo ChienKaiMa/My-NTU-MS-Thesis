@@ -144,109 +144,59 @@ This POVM is optimal for \( k = 2 \), as it can be derived analytically \cite{RN
 For \( k > 2 \), numerical methods like semidefinite programming are required,
 as discussed in Section \ref{sec:optimal_povm_for_uqsd}.
 
-\section{Optimal POVM for UQSD}
+\section{Optimal POVM for Unambiguous Quantum State Discrimination}
 \label{sec:optimal_povm_for_uqsd}
 
-\cite{RN23}
-In this section, we will review the work that defined the optimal
-POVM for UQSD.
-The work is limited to linearly independent pure states and
+Unambiguous quantum state discrimination (UQSD) for multiple quantum states,
+though less studied than the two-state case, is critical for quantum
+information processing tasks \cite{RN23}.
+This section reviews a seminal approach using semidefinite programming (SDP)
+to design an optimal POVM for UQSD, which we denote as OptUQSD, applicable to
+a finite set of linearly independent, non-orthogonal pure states
+\(\{ \ket{\psi_i} \}_{i=1}^k\) with
+prior probabilities \(\{ p_i \}_{i=1}^k\). The POVM \(\{ \Pi_i \}_{i=0}^k\),
+where \(\Pi_0\) denotes the inconclusive outcome, ensures zero error
+probability by satisfying \(\langle \psi_i | \Pi_j | \psi_i \rangle = 0\) for
+\(i \neq j\), \(i, j = 1, \ldots, k\).
 
-Its problem is that some probabilities can be zero or near-zero, causing the
-discrimination scheme to throw away some states.
-
-We mention this work because it is fast when everything just works.
-
-\subsection{Entangled Quantum States with Orthogonal Components}
-(Over-simplified example)
-We define a trio of two-qubit entangled states, each expressed as
-a linear combination of basis states in the computational basis.
-The states are given by:
+\subsection{Reciprocal States}
+The SDP formulation relies on reciprocal states \(\{ \ket{\tilde{\phi}_i} \}_{i=1}^k\),
+defined by the biorthogonality condition:
 \begin{align}
-    \ket{\psi_1} & = \frac{1}{\sqrt{1 + a_{1}^{2}}} \left( \ket{00} + a_{1} \ket{11} \right) , \\
-    \ket{\psi_2} & = \frac{1}{\sqrt{1 + a_{2}^{2}}} \left( \ket{01} + a_{2} \ket{11} \right) , \\
-    \ket{\psi_3} & = \frac{1}{\sqrt{1 + a_{3}^{2}}} \left( \ket{10} + a_{3} \ket{11} \right)
+    \langle \tilde{\phi}_i | \psi_j \rangle = \delta_{ij}, \quad \forall i, j = 1, \ldots, k. \label{eq:biorthogonal}
 \end{align}
-where $a_{i} \in \mathbb{R}, 0 < a_{i} < 1$ for $i \in \{1, 2, 3\}$.
-This construction ensures that each state is a valid pure quantum state,
-and the orthogonal components ($\ket{00}, \ket{01}, \ket{10}$) weigh more in the linear combination.
-It is lucid that the state vectors are non-orthogonal, which makes perfect discrimination impossible,
-and they are also linearly independent, which is a necessary assumption for UQSD to exist.
+Given the state matrix \(\Psi = [\ket{\psi_1}, \ldots, \ket{\psi_k}]^T\),
+where each row is a state vector in a \(2^n\)-dimensional Hilbert space,
+the reciprocal states are columns of \(\Phi = \Psi (\Psi^* \Psi)^{-1}\).
+For the example entangled states from Subsection \ref{subsec:entangled_states}, defined as:
+\begin{align}
+    \ket{\psi_1} &= \frac{1}{\sqrt{1 + 0.2^2}} (\ket{00} + 0.2 \ket{11}), \notag \\
+    \ket{\psi_2} &= \frac{1}{\sqrt{1 + 0.5^2}} (\ket{01} + 0.5 \ket{11}), \notag \\
+    \ket{\psi_3} &= \frac{1}{\sqrt{1 + 0.7^2}} (\ket{10} + 0.7 \ket{11}), \label{eq:uqsd_example_states}
+\end{align}
+with prior probabilities \(p_1 = p_2 = p_3 = 1/3\), the state matrix
+\(\Psi = [\ket{\psi_1}, \ket{\psi_2}, \ket{\psi_3}]^T\) is constructed with
+each row as a state vector in the \(\{ \ket{00}, \ket{01}, \ket{10}, \ket{11} \}\) basis.
+Computing \(\Phi = \Psi (\Psi^* \Psi)^{-1}\) yields reciprocal states
+(columns of \(\Phi^T\), rounded to four decimals):
+\begin{align}
+    \Phi^T &\approx \begin{pmatrix} 0.9969 & -0.0628 & -0.0960 & 0.1146 \\ -0.0573 & 0.9610 & -0.2400 & 0.3141 \\ -0.0802 & -0.2198 & 0.8846 & 0.4800 \end{pmatrix}. \label{eq:phi_matrix}
+\end{align}
 
-For example, given $a_{1} = 0.2, a_{2} = 0.5$, and $a_{3} = 0.7$.
-We can express the states in state vectors, where the floating point numbers are rounded to 4 digits.
-\begin{align*}
-    \ket{\psi_1} & = \begin{pmatrix}
-                         0.9806+0.j &  & 0.    +0.j &  & 0.    +0.j &  & 0.1961+0.j
-                     \end{pmatrix}^{T} \\
-    \ket{\psi_2} & = \begin{pmatrix}
-                         0.    +0.j &  & 0.8944+0.j &  & 0.    +0.j &  & 0.4472+0.j
-                     \end{pmatrix}^{T} \\
-    \ket{\psi_3} & = \begin{pmatrix}
-                         0.    +0.j &  & 0.    +0.j &  & 0.8192+0.j &  & 0.5735+0.j
-                     \end{pmatrix}^{T}
-\end{align*}
-
-In the following we will show the process of deriving the semidefinite
-programming problem for the optimal POVM for pure quantum states.
-
-% Morning stops here
-The pseudo-inverse is
-\begin{align*}
-    Q_{1}
-\end{align*}
-
-The POVM is
-\begin{align*}
-    \Pi_{1} = \begin{bmatrix}
-                  1
-              \end{bmatrix} \\
-    \Pi_{2} = \begin{bmatrix}
-                  1
-              \end{bmatrix} \\
-    \Pi_{3} = \begin{bmatrix}
-                  1
-              \end{bmatrix} \\
-    \Pi_{?} =
-\end{align*}
-
-% Noise model
-
-\begin{itemize}
-    \item POVM results with annotation
-    \item solve time?
-    \item
-\end{itemize}
-
-% \subsubsection{$a=b=c$}
-% \subsubsection{$a>b>c$}
-\subsubsection{Parameter search}
-According to our SDP formulation, we can trade off
-error by adjusting the parameters. In this subsection we
-will discuss the results of different parameter search schemes.
-
-
-
-
-My research framework
-Experiment setup
-1. Qiskit
-
-2. Discriminate two-to-four-qubit state
-
-3. circuit
-
-According to previous publications, it is possible to find the optimal probability
-of the unambiguous quantum state discrimination by a semidefinite programming approach [].
-
-We apply a similar approach and convert it into a quantum circuit.
-A convex optimization problem is formed by the target states,
-which is a set of linearly independent pure quantum states.
-
-By optimal, it means the measurement gives the smallest possible
-probability of obtaining an inclusive result for unambiguous discrimination
-\cite{RN23}
-
+\subsection{Semidefinite Programming Formulation}
+The optimal POVM is defined as \(\Pi_i = c_i \ket{\tilde{\phi}_i} \bra{\tilde{\phi}_i}\),
+\(i = 1, \ldots, k\), with \(\Pi_0 = I - \sum_{i=1}^k \Pi_i\), where \(c_i \geq 0\).
+The SDP maximizes the success probability under no-noise conditions:
+\begin{align}
+    & \underset{\{c_i\}}{\text{maximize}} & & P_{\text{succ}} = \sum_{i=1}^k p_i c_i, \label{eq:uqsd_sdp_objective} \\
+    & \text{subject to} & & \Pi_0 = I - \sum_{i=1}^k c_i \ket{\tilde{\phi}_i} \bra{\tilde{\phi}_i} \succeq 0, \label{eq:uqsd_sdp_constraint} \\
+    & & & c_i \geq 0, \quad i = 1, \ldots, k. \label{eq:uqsd_sdp_positive}
+\end{align}
+For the example states with \(p_i = 1/3\), numerical solution yields
+\(c_1 \approx 0.9615\), \(c_2 \approx 0.8000\), \(c_3 \approx 0.6711\),
+giving \(P_{\text{succ}} \approx 0.8112\).
+This approach, extended to noisy scenarios in Chapter \ref{chap:error_uqsd},
+underpins our CrossQSD and FitQSD formulations.
 
 % Generated by Google Gemini 2.5 Flash
 \section{The Holevo Bound}
@@ -282,11 +232,3 @@ states may appear to carry a large amount of information, a single measurement
 is fundamentally limited in its ability to extract all of it.
 The Holevo bound reveals a crucial distinction between classical and quantum
 information, highlighting the inaccessibility of information encoded in non-orthogonal states.
-
-
-
-
-\section{Scalability/Complexity}
-
-
-state exclusion, hypothesis
