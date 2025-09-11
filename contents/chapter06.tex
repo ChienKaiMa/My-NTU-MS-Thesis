@@ -114,7 +114,10 @@ producing simpler circuits with fewer qubits, lower depth, and fewer two-qubit g
 
 For example, applying this to an MED POVM for the entangled states in Subsection
 \ref{subsec:entangled_states} (\(\ket{\psi_1}, \ket{\psi_2}, \ket{\psi_3}\))
-yields the circuit metrics in Table \ref{tab:med_circuit_size}, showing that
+yields four singular values per \(\Pi_i\) (\(i=1,2,3\)), with only two per
+element exceeding \(10^{-4}\) (e.g., \(\approx 1.0, 0.3333\)), reducing the
+number of rank-1 vectors from 12 to 6.
+This produces the circuit metrics in Table \ref{tab:med_circuit_size}, showing that
 discarding the elements with smaller \(\sigma_j\) improves circuit simplicity.
 The circuits in the table are produced by column-by-column decomposition (CCD)
 for isometries, and haven't been further transpiled or optimized yet.
