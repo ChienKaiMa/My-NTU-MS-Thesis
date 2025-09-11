@@ -140,7 +140,19 @@ circuits decomposed with the basis gate set \{u, cx\}.
     \end{tabular}
 \end{table}
 
-\section{Isometry decomposition}
+\subsection{Rank-1 Vectors to Isometry}
+To construct an isometry from the rank-1 vectors \(\{ \ket{v_j} \}_{j=1}^m\)
+obtained via SVD, we embed them into an orthonormal basis of a larger Hilbert
+space, per Naimark's dilation theorem.
+This dilates the POVM to a projective measurement in an extended space of
+dimension \(d' = 2^{\lceil \log_2 m \rceil}\), enabling efficient circuit synthesis.
+
+The isometry \(V \in \mathbb{C}^{d' \times m}\) is formed by placing each
+\(\ket{v_j}\) as a column in the \(j\)-th position of the extended basis,
+padded with zeros elsewhere.
+This sums outer products: \(V = \sum_{j=1}^m \ket{e_j} \bra{v_j}\), where
+\(\ket{e_j}\) is the standard basis vector in the dilated space.
+
 
 In this section, we will review the algorithms for isometry decomposition,
 that is, the process of converting an isometry to a decomposed unitary quantum
