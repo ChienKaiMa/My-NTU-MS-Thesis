@@ -100,9 +100,42 @@ approximate quantum compiling (AQC) to try to yield a quantum circuit with lower
 circuit depth. We will show the simulation results of the quantum circuits with
 and without the noise models in the next sections.
 
+\subsection{POVM Decomposition to Rank-1 Vectors}
+To implement POVMs in quantum circuits for QSD, we decompose each POVM element
+\(\Pi_i \in \{ \Pi_i \}_{i=0}^k\) into rank-1 vectors using singular value
+decomposition (SVD).
+For each \(\Pi_i\), SVD yields \(\Pi_i = U \Sigma V^\dagger\), where
+\(\Sigma = \text{diag}(\sigma_j)\) contains singular values \(\sigma_j\).
+We construct rank-1 vectors \(\ket{v_j} = \sqrt{\sigma_j} u_j\), where
+\( u_j \) is the \( j \)-th column of \( U \), discarding those with
+\(\sigma_j < 10^{-4}\).
+This reduces the input isometry size for the same isometry synthesis method,
+producing simpler circuits with fewer qubits, lower depth, and fewer two-qubit gates.
 
-\section{Naimark's dilation theorem}
-In practice (::thinking)
+For example, applying this to an MED POVM for the entangled states in Subsection
+\ref{subsec:entangled_states} (\(\ket{\psi_1}, \ket{\psi_2}, \ket{\psi_3}\))
+yields the circuit metrics in Table \ref{tab:med_circuit_size}, showing that
+discarding the elements with smaller \(\sigma_j\) improves circuit simplicity.
+The circuits in the table are produced by column-by-column decomposition (CCD)
+for isometries, and haven't been further transpiled or optimized yet.
+The circuit depth and the number of two-qubit gates are obtained by the
+circuits decomposed with the basis gate set \{u, cx, rz\}.
+
+\begin{table}[ht]
+    \centering
+    \caption{Circuit size metrics for MED POVM with entangled states, comparing no optimization to a non-zero SVD threshold.}
+    \label{tab:med_circuit_size}
+    \begin{tabular}{l c c}
+        \hline
+        \textbf{Metric}    & \textbf{No Optimization} & \textbf{Discard $\sigma$ < \(10^{-4}\)} \\
+        \hline
+        \# POVM Elements   & 12                       & 6                                       \\
+        \# Qubits          & 4                        & 3                                       \\
+        Circuit Depth      & 430                      & 84                                      \\
+        \# Two-Qubit Gates & 218                      & 41                                      \\
+        \hline
+    \end{tabular}
+\end{table}
 
 \section{Isometry decomposition}
 
