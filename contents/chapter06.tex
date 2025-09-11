@@ -153,41 +153,15 @@ padded with zeros elsewhere.
 This sums outer products: \(V = \sum_{j=1}^m \ket{e_j} \bra{v_j}\), where
 \(\ket{e_j}\) is the standard basis vector in the dilated space.
 
-
-In this section, we will review the algorithms for isometry decomposition,
-that is, the process of converting an isometry to a decomposed unitary quantum
-circuit.
-
-ucg qclib
-\cite{}
-
-Building block
-
-uniformly k-controlled gate
-
-\begin{equation}
-    \vcenter{
-        \hbox{
-            \begin{quantikz}
-                & \ctrl{1}  & \gate{R_{z}} & \gate{R_{y}} & \gate{R_{z}} & \qw \\
-                & \targ{}   & \gate{R_{x}} & \gate{R_{y}} & \gate{R_{x}} & \qw
-            \end{quantikz}
-            =
-            \begin{quantikz}
-                & \gate{R_{z}} & \ctrl{1}  & \gate{R_{y}} & \gate{R_{z}} & \qw \\
-                & \gate{R_{x}} & \targ{}   & \gate{R_{y}} & \gate{R_{x}} & \qw
-            \end{quantikz}
-        }
-    }
-\end{equation}
-
-
-\subsection{Gottesman-Knill algorithm}
-Brief
-\subsection{Cosine-sine decomposition}
-\subsection{Column-by-column decomposition}
-
-% Add scalability results
+\subsection{Isometry Decomposition}
+To synthesize the isometry \(V \in \mathbb{C}^{2^n \times m}\) into a quantum
+circuit for QSD, we use the \texttt{qclib} \cite{qclib} module’s
+implementations of three decomposition schemes from \cite{RN12} for isometries
+from \(m\) input to \(n\) output qubits.
+Given the isometry from the last subsection, we apply
+column-by-column decomposition (CCD) or cosine-sine decomposition (CSD),
+which typically outperform the Gottesman-Knill algorithm in circuit size
+(fewer two-qubit gates) and synthesis time for POVMs.
 
 \section{Resynthesis and Approximation}
 \label{sec:resynth}
