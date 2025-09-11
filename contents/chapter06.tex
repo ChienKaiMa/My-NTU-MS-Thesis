@@ -119,10 +119,10 @@ element exceeding \(10^{-4}\) (e.g., \(\approx 1.0, 0.3333\)), reducing the
 number of rank-1 vectors from 12 to 6.
 This produces the circuit metrics in Table \ref{tab:med_circuit_size}, showing that
 discarding the elements with smaller \(\sigma_j\) improves circuit simplicity.
-The circuits in the table are produced by column-by-column decomposition (CCD)
+The circuits in the table are produced by cosine-sine decomposition (CSD)
 for isometries, and haven't been further transpiled or optimized yet.
 The circuit depth and the number of two-qubit gates are obtained by the
-circuits decomposed with the basis gate set \{u, cx, rz\}.
+circuits decomposed with the basis gate set \{u, cx\}.
 
 \begin{table}[ht]
     \centering
@@ -134,8 +134,8 @@ circuits decomposed with the basis gate set \{u, cx, rz\}.
         \hline
         \# POVM Elements   & 12                       & 6                                       \\
         \# Qubits          & 4                        & 3                                       \\
-        Circuit Depth      & 430                      & 84                                      \\
-        \# Two-Qubit Gates & 218                      & 41                                      \\
+        Circuit Depth      & 158                      & 33                                      \\
+        \# Two-Qubit Gates & 68                       & 14                                      \\
         \hline
     \end{tabular}
 \end{table}
