@@ -460,3 +460,28 @@ A crucial observation is that changing the signs of these inequalities would
 lead to a problem similar to standard Minimum Error Discrimination, which does
 not enforce this behavior.
 
+
+
+\section{Trade-off between MED and UQSD}
+To create a hybrid discrimination scheme that balances a high success
+probability with an outcome distribution that approximates Unambiguous Quantum
+State Discrimination (UQSD), we formulate the following problem.
+This approach seeks to find a POVM that maximizes the probability of
+successful discrimination ($P_{succ}$) while simultaneously minimizing its
+$L_1$ distance from an ideal UQSD probability matrix.
+This trade-off is managed by introducing a weighting coefficient, $w$.
+
+The semidefinite programming (SDP) problem is formulated as follows:
+\begin{align}
+    \label{eq:roland_obj}
+     & \underset{\{\Pi\}}{\text{maximize}} &  & P_{\text{succ}} - w \|P-Q\|_{1}             \\
+     & \text{subject to}                   &  & \Pi_{i} \succeq 0, \quad i = 1, \ldots, k+1 \\
+     &                                     &  & \sum_{i=1}^{k+1} \Pi_i = I
+\end{align}
+Here, $P$ is the probability matrix for the POVM defined by the set of
+operators $\{\Pi_i\}$, and $Q$ is the target UQSD probability matrix.
+The objective function in Equation \ref{eq:roland_obj} balances the
+maximization of $P_{succ}$ with the minimization of the $L_1$ distance between $P$ and $Q$.
+The constraints ensure that the set of operators $\{\Pi_i\}$ constitutes a valid POVM.
+The weighting coefficient $w \geq 0$ allows us to tune the importance of
+minimizing the $L_1$ distance relative to maximizing the success probability.
