@@ -332,37 +332,131 @@ To illustrate CrossQSD’s performance, we consider three coherent states trunca
     \label{fig:crossqsd_results}
 \end{figure}
 
+\section{FitQSD}
+Since we know the optimal POVM for unambiguously
+discriminating pure states through noiseless channels,
+we ask if we can find a POVM such that the resulting probability distribution
+remains unchanged or changes the least.
+There are two things that need to be well-defined: "probability distribution"
+and "distance between two probability distributions".
+Different definitions will lead to very different solutions and results.
 
-The semidefinite programming formulation is as follows:
+The first definition we came up with, for the target probability distribution,
+is the probability distribution of the measurement outcomes of the POVM.
+The probability distribution $\{\pi\} \equiv \{\pi_{0}, \pi_{1}, \dots, \pi_{k}\}$,
+where $\pi_{i} = \sum_{j=1}^{k} p_{j} \operatorname{Tr}(\rho_{j} \Pi_{i})$.
+This definition sums the "error" terms with the "correct" terms as long as
+they belong to the same measurement operator. While this works when the errors
+are relatively small, we hoped to define a more meaningful problem.
+
+The modified definition of "probability distribution" separates the "correct"
+terms and "error" terms.
+Another nontrivial part is whether we separate the inconclusive part.
+A relatively trivial definition uses the probability matrix discussed in
+previous sections. We evaluate the distance by first flattening the matrices,
+then calculating the distances between two vectors.
+
+Assume the number of states is $k$, define the probability matrix $\textnormal{ProbMat}
+    \in \mathbb{R}^{k \times (k+1)}$.
+
+We can investigate different formulations with the same definition of the
+probability distribution and distance between two distributions.
+We have tried to make the names for these formulations straight forward.
+
+
+
+\subsection{Minimizing \texorpdfstring{$L_1$}{L1} Distance to Approximate UQSD}
+For a matrix $A$ with entries $a_{m,n}$, the "entry-wise $L_p$ norm" for
+$p \geq 1$ is defined as:
 \begin{align}
-     & \underset{\{\Pi\}}{\text{maximize}} &  & P_{D}=\sum_{i=1}^{k} p_{i} \operatorname{Tr}(\rho_{i} \Pi_{i})                                                                                                      \\
-     & \text{subject to}                   &  & \Pi_{i} \succeq 0, \quad i = 0, \ldots, k                                                                                                                           \\
-     &                                     &  & \sum_{i=0}^{k} \Pi_i = I                                                                                                                                            \\
-     &                                     &  & P(O_i \mid \rho_i) = \frac{p_i \, \operatorname{Tr}(\rho_i \Pi_i)}{\sum_{j=1}^{L} p_i \, \operatorname{Tr}(\rho_i \Pi_j)} \geq 1 - \alpha_i, \quad i = 1, \ldots, k \\
-     &                                     &  & P(\rho_i \mid O_i) = \frac{p_i \, \operatorname{Tr}(\rho_i \Pi_i)}{\sum_{j=1}^{L} p_j \, \operatorname{Tr}(\rho_j \Pi_i)} \geq 1 - \beta_i, \quad i = 1, \ldots, k
+    \left\| A \right\|_{p} \triangleq \left( \sum_{m=1}^{M} \sum_{n=1}^{N} |a_{m, n}| ^{p} \right) ^ {\frac{1}{p}}.
+\end{align}
+This definition is equivalent to the vector $p$-norm of the vectorized form of
+the matrix, as expressed by $\left\| A \right\|_{p} = \left\| \text{vec}(A) \right\|_{p}$.
+
+In this work, we use the $L_1$ norm to quantify the difference between two
+probability matrices.
+Let $Q$ be the ideal probability matrix for Unambiguous Quantum State
+Discrimination (UQSD) and $P$ be the probability matrix of a POVM that we are trying to optimize.
+We define the $L_1$ distance between these two matrices as $\left\| P-Q \right\|_{1}$.
+
+Our objective is to find a POVM that minimizes this $L_1$ distance.
+By minimizing $\left\| P-Q \right\|_{1}$, we obtain a measurement scheme whose
+performance, when applied to the given noisy quantum states, approximates the
+ideal UQSD outcome as closely as possible in an $L_1$ sense.
+
+The semidefinite programming problem can be formulated as follows:
+\begin{align}
+     & \underset{\{\Pi\}}{\text{minimize}} &  & ||P-Q||_{1}                               \\
+     & \text{subject to}                   &  & \Pi_{i} \succeq 0, \quad i = 0, \ldots, k \\
+     &                                     &  & \sum_{i=0}^{k} \Pi_i = I
 \end{align}
 
-\section{Formulation 2}
-Since we know the optimal POVM for pure states, we ask if we can find a POVM
-such that the resulting probability distribution remains unchanged. First we
-need to define the "probability distribution" here and how to evaluate the
-distance between two probability distributions.
+\subsection{Minimizing the Sum of Squares to Approximate UQSD}
+An alternative to minimizing the $L_1$ distance is to minimize the sum of
+squares of the differences between the probability matrices.
+This approach, equivalent to minimizing the squared $L_2$ norm, is often
+preferred in optimization due to its mathematical properties, such as being a
+continuously differentiable function.
+The squared $L_2$ norm penalizes large errors more heavily than the $L_1$ norm,
+which can be desirable for finding a more balanced solution.
 
-One of our ideas was to use gradient-based searching methods. We tried to
-iterate different hyperparameters and guessed that we would 
+Let $Q$ be the ideal UQSD probability matrix and $P$ be the probability matrix
+of our desired POVM, where the entries are $q_{m,i}$ and $p_{m,i}$ respectively. The sum of squares, denoted as $S$, is defined as:
+\begin{align}
+    S \triangleq \sum_{m,i} \left(p_{m,i} - q_{m,i}\right)^2.
+\end{align}
+This objective function, $S$, is a convex quadratic function of the POVM elements,
+which allows the optimization problem to be formulated as a semidefinite program (SDP).
+By minimizing $S$, we seek to find a POVM that minimizes the total squared
+deviation from the ideal UQSD probability matrix.
+This provides a different criterion for what constitutes an "optimal"
+approximation, emphasizing the reduction of larger discrepancies.
+However, in our experiments, this approach did not yield better results
+compared to minimizing the $L_1$ distance, due to the precision limitations of
+the numerical solvers used, particularly when dealing with the specific problem
+instances and their inherent numerical challenges.
 
-(Show gradient-based flow)
+\begin{align}
+     & \underset{\{\Pi\}}{\text{minimize}} &  & S                                         \\
+     & \text{subject to}                   &  & \Pi_{i} \succeq 0, \quad i = 0, \ldots, k \\
+     &                                     &  & \sum_{i=0}^{k} \Pi_i = I
+\end{align}
 
-\section{Flow 1}
+\subsection{Minimizing Error with Constrained Overlap}
+\label{sec:maxpsucc_mindiff}
 
-Just copy the SDP form and add the flow chart
+A novel approach to approximate Unambiguous Quantum State Discrimination (UQSD)
+is to modify the standard Minimum Error Discrimination (MED) problem.
+This method, which we term the "Minimizing Error with Constrained Overlap (MECO)"
+scheme, maximizes the probability of success while imposing constraints on the
+joint probabilities of the measurement outcomes.
+The objective is to push the solution toward a form where there is minimal
+overlap between different states' outcome probabilities, a key characteristic of UQSD.
 
-
-- New!! Unbounded/Unconstrained FRIO (E? but no pinc specified) (as a special case)
-may benefit in non-orthogonal cases (ex. two states)
-每個順便 Discussions
-- Other new formulations (many sections)
-- Final comparison/summary
-
-Since the pure states are known, we can first 
+The semidefinite programming (SDP) problem is formulated as follows:
+\begin{align}
+    \label{eq:maxpsucc_mindiff_obj}
+     & \underset{\{\Pi\}}{\text{maximize}} &  & P_{\text{succ}} = \sum_{i=1}^{k} p_{i} \operatorname{Tr}(\rho_{i} \Pi_{i})                          \\
+    \label{eq:maxpsucc_mindiff_constr1}
+     & \text{subject to}                   &  & \Pi_{i} \succeq 0, \quad i = 1, \ldots, k+1                                                         \\
+    \label{eq:maxpsucc_mindiff_constr2}
+     &                                     &  & \sum_{i=1}^{k+1} \Pi_i = I                                                                          \\
+    \label{eq:maxpsucc_mindiff_constr3}
+     &                                     &  & p_{i} \operatorname{Tr}(\rho_{i} \Pi_{j}) \leq p(i, j), \quad \text{for } i = j, \; i=1,\ldots,k    \\
+    \label{eq:maxpsucc_mindiff_constr4}
+     &                                     &  & p_{i} \operatorname{Tr}(\rho_{i} \Pi_{j}) \geq p(i, j), \quad \text{for } i \neq j, \; i=1,\ldots,k
+\end{align}
+In this formulation, the objective function is to maximize the overall success probability, $P_{\text{succ}}$.
+The constraints in Equations (\ref{eq:maxpsucc_mindiff_constr1}) and (\ref{eq:maxpsucc_mindiff_constr2}) define a valid POVM.
+The new constraints in (\ref{eq:maxpsucc_mindiff_constr3}) and (\ref{eq:maxpsucc_mindiff_constr4})
+are designed to control the entries of the probability matrix.
+Specifically, these constraints impose a lower bound on the off-diagonal
+entries and an upper bound on the diagonal entries.
+This effectively forces the solution to resemble a UQSD matrix, where the
+off-diagonal terms are zero and the diagonal terms are maximized, but within
+the confines of a minimum error formulation.
+A crucial observation is that changing the signs of these inequalities would
+lead to a problem similar to standard Minimum Error Discrimination, which does
+not enforce this behavior.
 
