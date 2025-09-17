@@ -245,36 +245,93 @@ The semidefinite programming problem can be formulated as follows:
      &                                     &  & \raisebox{-0.3em}{\textcolor{yellow}{\rule{1em}{1em}}} \; P_{inc}=\sum_{i=1}^{k} p_{i} \operatorname{Tr}(\rho_{i} \Pi_{k + 1}) \geq c_{lb}
 \end{align}
 
-One problem regarding to this formulation is that there is a
-hyperparameter $\beta$ that is equal to the probability of the
-inconclusive result $P_{inc}$. When $\beta$ is set to 0, the problem
-degenerates to minimum error discrimination.
 
-However, if we assume that the
-mixed states correspond to some pure states, it is likely that we can
-accelerate the solving process.
+\section{CrossQSD}
+Inspired by type-I and type-II errors in hypothesis testing, CrossQSD
+formulates a semidefinite programming (SDP) problem with novel constraints to
+design a POVM for quantum state discrimination (QSD) that is robust to noise
+and retains unambiguous QSD (UQSD) characteristics.
+Unlike FRIO, which assumes fixed mixed states \(\{ \rho_i \}_{i=1}^k\),
+CrossQSD targets pure states \(\{ \ket{\psi_i} \}_{i=1}^k\) degraded into
+mixed states by noise, aiming for a POVM effective under specific noise yet
+functional with reduced or no noise.
+By treating \(\rho_i\) as pure states and setting \(\alpha_i = \beta_i = 0\),
+CrossQSD degenerates to UQSD, which often fails in noisy environments.
+Our SDP achieves robustness by optimizing over flexible error constraints,
+resembling maximum confidence discrimination \cite{RN519} and worst-case a
+posteriori probability schemes \cite{kosut2004quantumstatedetectordesign}.
 
-For example...
-To view t
+The symbol \(O_i\) denotes the event of measuring the \(i\)-th outcome.
+The SDP uses density matrices \(\{ \rho_i \}_{i=1}^k\), assumed to be noisy
+versions of pure states.
+The SDP formulation is as follows:
+\begin{align}
+    \underset{\{\Pi_i\}}{\text{maximize}} \quad & P_{\text{succ}} = \sum_{i=1}^{k} p_i \operatorname{Tr}(\rho_i \Pi_i) \label{eq:crossqsd_obj}                                                                                          \\
+    \text{subject to} \quad                     & \Pi_i \succeq 0, \quad i = 0, \ldots, k \label{eq:crossqsd_psd}                                                                                                                       \\
+                                                & \sum_{i=0}^{k} \Pi_i = I \label{eq:crossqsd_sum}                                                                                                                                      \\
+                                                & P(O_i \mid \rho_i) = \frac{p_i \operatorname{Tr}(\rho_i \Pi_i)}{\sum_{j=1}^k p_j \operatorname{Tr}(\rho_j \Pi_i)} \geq 1 - \alpha_i, \quad i = 1, \ldots, k \label{eq:crossqsd_type1} \\
+                                                & P(\rho_i \mid O_i) = \frac{p_i \operatorname{Tr}(\rho_i \Pi_i)}{\sum_{j=1}^k p_j \operatorname{Tr}(\rho_j \Pi_i)} \geq 1 - \beta_i, \quad i = 1, \ldots, k \label{eq:crossqsd_type2}
+\end{align}
 
-\section{Formulation 1}
-We are inspired by the type-I error and type-II error in hypothesis testing,
-and we include a different set of constraints in the semidefinite programming
-problem such that a desired alternative POVM can be obtained. Note that there
-is an abundance of discussions about quantum hypothesis testing, which
-includes quantum state discrimination, but we will not discuss it for now.
-% Assume a set of $k$ input quantum states are expressed in density matrices,
-% denoted by $\{ \rho_{1}, \rho_{2}, \dots, \rho_{k}\}$.
-The notations are almost identical to FRIO, but our constraints further
-consider the error part of the conclusive results.
-The formulation also resembles the maximum confidence discrimination scheme
-\cite{RN519} and the scheme considering the worst-case a posteriori
-probability of detection \cite{kosut2004quantumstatedetectordesign}.
+To illustrate CrossQSD’s performance, we consider three coherent states truncated to 3 qubits, with eigenvalues defined by amplitudes \([1, 1, 1]\) and angles \([0, \pi/3, 2\pi/3]\). OptUQSD, applied to these pure states, discards the second state, yielding \(P_{\text{succ}} = 0.2343\). For CrossQSD, we solve the SDP with input density matrices \(\rho_i = (1-\lambda_{\text{SDP}})\ket{\psi_i}\bra{\psi_i} + \lambda_{\text{SDP}} I/d\), using a fixed depolarizing noise parameter \(\lambda_{\text{SDP}} = 0.01\) and error tolerances \(\alpha_i = \beta_i = 0.01\), where \(d\) is the dimension of the Hilbert space. The resulting POVM is evaluated with density matrices \(\rho_i = (1-\lambda_{\text{eval}})\ket{\psi_i}\bra{\psi_i} + \lambda_{\text{eval}} I/d\), where \(\lambda_{\text{eval}}\) varies, computing \(P_{\text{succ}}\), \(P_{\text{err}}\), and their ratio \(P_{\text{err}} / P_{\text{succ}}\), as shown in Figure \ref{fig:crossqsd_results} and Table \ref{tab:crossqsd_results}. The resulting POVM depend on \(\lambda_{\text{SDP}}\), \(\alpha_i\), and \(\beta_i\); setting \(\lambda_{\text{SDP}} \approx \alpha_i, \beta_i\) ensures non-trivial solutions, as large \(\lambda_{\text{SDP}}\) leads to an inconclusive POVM (\(\Pi_0 = I\)), while small \(\lambda_{\text{SDP}}\) limits robustness to a narrow noise range.
 
-The symbol $O_{i}$ denotes the event that the $i$-th outcome is measured.
-The density matrices could be treated without assuming that the states are
-related to some pure states. Later, we may assume the mixed states are related
-to some pure states or can be expressed by ensembles of pure states.
+\begin{table}[ht]
+    \centering
+    \caption{CrossQSD performance for three coherent states truncated to 3 qubits, with SDP input noise \(\lambda_{\text{SDP}} = 0.01\) and \(\alpha_i = \beta_i = 0.01\). Results show \(P_{\text{succ}}\), \(P_{\text{err}}\), and their ratio \(P_{\text{err}} / P_{\text{succ}}\) for varying evaluation noise levels \(\lambda_{\text{eval}}\).}
+    \label{tab:crossqsd_results}
+    \begin{tabular}{c c c c}
+        \hline
+        \textbf{\(\lambda_{\text{eval}}\)} & \textbf{\(P_{\text{succ}}\)} & \textbf{\(P_{\text{err}}\)} & \textbf{\(P_{\text{err}} / P_{\text{succ}}\)} \\
+        \hline
+        \(0\)                              & 0.25197                      & 0.00129                     & 0.00511                                       \\
+        \(1.0000 \times 10^{-6}\)          & 0.25197                      & 0.00129                     & 0.00511                                       \\
+        \(1.0000 \times 10^{-5}\)          & 0.25197                      & 0.00129                     & 0.00512                                       \\
+        \(1.0000 \times 10^{-4}\)          & 0.25195                      & 0.00130                     & 0.00516                                       \\
+        \(1.0000 \times 10^{-3}\)          & 0.25178                      & 0.00141                     & 0.00561                                       \\
+        \(1.0000 \times 10^{-2}\)          & 0.25008                      & 0.00253                     & 0.01010                                       \\
+        \(1.0000 \times 10^{-1}\)          & 0.23303                      & 0.01366                     & 0.05863                                       \\
+        \(1.0000 \times 10^{0}\)           & 0.06251                      & 0.12502                     & 2.00000                                       \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}[ht]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            xlabel={Evaluation Noise Parameter \(\lambda_{\text{eval}}\)},
+            ylabel={Error-to-Success Ratio \(P_{\text{err}} / P_{\text{succ}}\)},
+            xmode=log,
+            ymode=log,
+            xmin=1e-6, xmax=1,
+            ymin=1e-3, ymax=10,
+            grid=major,
+            width=0.8\textwidth,
+            height=6cm,
+            legend pos=north west,
+            title={CrossQSD Error-to-Success Ratio under Depolarizing Noise}
+        ]
+        \addplot[mark=*, blue] coordinates {
+            (1.0000e-06, 0.00511489) (1.77828e-06, 0.00511527) (3.16228e-06, 0.00511596) 
+            (5.62341e-06, 0.00511718) (1.0000e-05, 0.00511934) (1.77828e-05, 0.00512320)
+            (3.16228e-05, 0.00513005) (5.62341e-05, 0.00514223) (1.0000e-04, 0.00516389)
+            (1.77828e-04, 0.00520242) (3.16228e-04, 0.00527094) (5.62341e-04, 0.00539282)
+            (1.0000e-03, 0.00560968) (1.77828e-03, 0.00599567) (3.16228e-03, 0.00668318)
+            (5.62341e-03, 0.00790931) (1.77828e-02, 0.0140346)
+            (3.16228e-02, 0.0211461) (5.62341e-02, 0.0341741) (1.0000e-01, 0.0586295)
+            (1.77828e-01, 0.106708) (5.62341e-01, 0.487311) (1.0000e+00, 2.00000)
+        };
+        \addlegendentry{CrossQSD}
+        \addplot[mark=square*, red, mark size=3pt] coordinates {
+            (1.0000e-02, 0.0101010)
+        } node[above, red] {};
+        \addlegendentry{\(\lambda_{\text{eval}} = 10^{-2}\)}
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Error-to-success ratio \(P_{\text{err}} / P_{\text{succ}}\) versus evaluation noise parameter \(\lambda_{\text{eval}}\) for CrossQSD applied to three coherent states truncated to 3 qubits, with SDP input noise \(\lambda_{\text{SDP}} = 0.01\) and \(\alpha_i = \beta_i = 0.01\). The low ratio at small \(\lambda_{\text{eval}}\) indicates robust discrimination, increasing as evaluation noise degrades performance. The red marker at \(\lambda_{\text{eval}} = 10^{-2}\) matches the SDP constraints.}
+    \label{fig:crossqsd_results}
+\end{figure}
+
 
 The semidefinite programming formulation is as follows:
 \begin{align}
