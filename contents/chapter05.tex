@@ -460,6 +460,20 @@ A crucial observation is that changing the signs of these inequalities would
 lead to a problem similar to standard Minimum Error Discrimination, which does
 not enforce this behavior.
 
+\subsection{Results}
+To evaluate the FitQSD formulations, we consider two-qubit entangled states with parameters $a_1 = 0.2$, $a_2 = 0.5$, $a_3 = 0.7$ (Subsection \ref{subsec:entangled_states}) and equal prior probabilities $1/3$.
+The states are subject to depolarizing noise with $\lambda_{\text{SDP}}$ ranging from $10^{-6}$ to $10^{-1}$, defining noisy density matrices $\rho_i = (1-\lambda_{\text{SDP}})\ket{\psi_i}\bra{\psi_i} + \lambda_{\text{SDP}} I/d$, where $d = 4$ is the Hilbert space dimension.
+The MinL1, MinSS, and MECO methods are solved using the MOSEK solver with precisions $\epsilon = 10^{-8}$ and $10^{-9}$, comparing the $L_2$ norm and success probability $P_{\text{succ}}$, as shown in Table \ref{tab:fitqsd_results} and Figure \ref{fig:fitqsd_results}.
+
+\input{figures/fitqsd_table.tex}
+\input{figures/fitqsd_fig.tex}
+
+All three methods achieve the FitQSD goal of approximating UQSD under noise.
+However, MinL1 and MECO yield similar $L_2$ norms and $P_{\text{succ}}$, while
+MinSS exhibits higher $L_2$ norms at small $\lambda_{\text{SDP}}$, indicating
+poorer approximation due to numerical precision limitations.
+Using MOSEK with precisions $\epsilon = 10^{-8}$ and $10^{-9}$, the latter
+reduces precision loss, though $\epsilon = 10^{-9}$ is the solver's limit.
 
 
 \section{Trade-off between MED and UQSD}
