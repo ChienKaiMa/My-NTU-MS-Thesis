@@ -159,22 +159,22 @@ which typically outperform the Gottesman-Knill algorithm in circuit size
 \section{Resynthesis and Approximation}
 \label{sec:resynth}
 
-According to Qiskit's documentation \cite{ibmSynthesizeUnitary}, sometimes it
-is beneficial to resynthesize the unitary circuit for a lower circuit depth.
-Qiskit's transpile function automatically performs this resynthesis for a
-sufficiently high optimization level.
+To optimize quantum circuits synthesized from a POVM with rank-1 operators
+(Section \ref{sec:qc_workflow}), resynthesis and approximation techniques
+reduce circuit depth for efficient execution on IBM Quantum backends.
+According to Qiskit’s documentation \cite{ibmSynthesizeUnitary}, resynthesis
+rewrites the unitary circuit to minimize depth, often performed automatically
+during Qiskit’s \texttt{transpile} function at high optimization levels.
+Transpilation then maps the circuit to the backend’s basis gates and
+connectivity constraints, improving performance in noisy environments.
 
-Qiskit also provides an option to approximate the circuit to some degree
-\cite{ibmCommonlyUsed}.
-
-\section{Approximate quantum compiling (AQC)}
-9 qubits
-
-The inclusion of AQC in the synthesis flow is inspired by \cite{dc_gm}
-
-We will show the scaling of the quantum circuits synthesized with the proposed
-flow. While the size of the circuit grows with both, it grows faster with the
-number of qubits than the number of states to discriminate.
+\subsection{Approximate Quantum Compiling}
+Inspired by the work on multiqubit measurement circuits \cite{dc_gm}, we
+include approximate quantum compiling (AQC) in our synthesis workflow to
+approximate the target unitary, reducing circuit depth while maintaining
+acceptable fidelity.
+AQC is optionally applied after \texttt{qclib} generates a CNOT-rotation-based
+circuit, enhancing efficiency for IBM Quantum backend execution.
 
 \section{Example - three coherent states}
 
