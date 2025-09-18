@@ -293,14 +293,32 @@ models. Sometimes we add the depolarizing channel direct to our input states
 and sometimes we make an assumption that a depolarizing channel is present
 after executing certain quantum gates.
 
-\section{Quantum circuits}
+\section{Quantum Circuits}
+Quantum circuits provide a universal framework for quantum computation,
+enabling a diverse set of tasks including variational quantum algorithms (VQA)
+\cite{peruzzo2014variational}, Grover’s search algorithm \cite{grover1996fast},
+and Shor’s factoring algorithm \cite{shor1994algorithms}.
+In the gate model, quantum circuits are constructed from sequences of unitary
+gates, such as Hadamard, CNOT, and single-qubit rotations, applied to qubits
+to perform computations or measurements.
+These gates manipulate quantum states in a controlled manner, forming the
+basis for implementing algorithms or measurement schemes, such as those used
+for state discrimination tasks in subsequent chapters.
+The universality of the gate model ensures that any quantum computation can be
+approximated with a suitable sequence of gates, making it a cornerstone of
+quantum information processing.
 
-In this section, we will briefly introduce the keys elements of the quantum
-circuit model, in the hope to make the thesis more self-contained. Readers may
-refer to Chapter 4 in \cite{qcqi} for more details.
-
-
-The basis gate set for ibm\_blah is
+While quantum circuits can be executed on various platforms, including
+ion-trap or photonic systems, we focus on IBM Quantum backends, typically
+superconducting quantum processors with constrained qubit connectivity, using
+the Qiskit framework for simulation and execution \cite{qiskit2023}.
+Qiskit facilitates circuit design, simulation, and deployment on noisy
+hardware environments, where errors like decoherence impact performance.
+Transpilation maps high-level circuit designs to the backend’s basis gates
+(e.g., CX, RZ), optimizing gate sequences to account for connectivity
+constraints and minimize errors.
+This process is critical for reliable execution of computational tasks, as
+explored in later sections for specific applications like state discrimination.
 
 \section{Other properties}
 \subsection{State Fidelity}
