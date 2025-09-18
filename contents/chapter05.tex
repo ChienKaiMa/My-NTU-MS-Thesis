@@ -499,3 +499,57 @@ maximization of $P_{succ}$ with the minimization of the $L_1$ distance between $
 The constraints ensure that the set of operators $\{\Pi_i\}$ constitutes a valid POVM.
 The weighting coefficient $w \geq 0$ allows us to tune the importance of
 minimizing the $L_1$ distance relative to maximizing the success probability.
+
+To evaluate the trade-off between MED and UQSD, we apply the hybrid
+discrimination scheme to two state sets: two non-orthogonal states
+(Chapter 3, Equation \ref{eq:qsd_example_states}) and two-qubit entangled
+states with parameters $a_1 = 0.2$, $a_2 = 0.5$, $a_3 = 0.7$
+(Chapter 2, Subsection \ref{subsec:entangled_states}, Equation \ref{eq:entangled_state_set}),
+both with equal prior probabilities.
+Input states are pure states mixed with depolarizing noise parameterized by
+$\lambda_{\text{SDP}}$, and $P_{\text{succ}}$ is evaluated on these noisy states.
+Results are compared against MED and OptUQSD baselines for pure states,
+plotted as horizontal lines in the figures (Figures \ref{fig:entangled_psucc},
+\ref{fig:entangled_l2}, \ref{fig:nonortho_psucc}, \ref{fig:nonortho_l2}).
+The SDP solution, tuned by the weighting coefficient $w$, shows a positive
+correlation between $P_{\text{succ}}$ and $L_2$ distance, saturating to MED or
+UQSD at extreme $w$ values, causing overlapping lines in the figures;
+determining the effective $w$ range requires trial and error, a notable drawback.
+At high $\lambda_{\text{SDP}}$, results become less interpretable due to
+significant noise effects, consistent with expected degradation in discrimination performance.
+
+\begin{figure}[ht]
+    \centering
+    \scalebox{0.7}{
+        \includegraphics{figures/3_entangled_psucc.png}
+    }
+    \caption{Success probability $P_{\text{succ}}$ versus $\lambda_{\text{SDP}}$ and $w$ for the trade-off scheme on two-qubit entangled states with parameters $a_1 = 0.2$, $a_2 = 0.5$, $a_3 = 0.7$ (Subsection \ref{subsec:entangled_states}, Equation \ref{eq:entangled_state_set}). Horizontal lines show MED and OptUQSD baselines for pure states.}
+    \label{fig:entangled_psucc}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \scalebox{0.7}{
+        \includegraphics{figures/3_entangled_sqrtd.png}
+    }
+    \caption{$L_2$ distance $\|P-Q\|_2$ versus $\lambda_{\text{SDP}}$ and $w$ for the trade-off scheme on two-qubit entangled states with parameters $a_1 = 0.2$, $a_2 = 0.5$, $a_3 = 0.7$ (Subsection \ref{subsec:entangled_states}, Equation \ref{eq:entangled_state_set}). Results saturate to MED or UQSD at extreme $w$.}
+    \label{fig:entangled_l2}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \scalebox{0.7}{
+        \includegraphics{figures/2_nonortho_psucc.png}
+    }
+    \caption{Success probability $P_{\text{succ}}$ versus $\lambda_{\text{SDP}}$ and $w$ for the trade-off scheme on two non-orthogonal states (Chapter 3, Equation \ref{eq:qsd_example_states}). Horizontal lines show MED and OptUQSD baselines for pure states.}
+    \label{fig:nonortho_psucc}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \scalebox{0.7}{
+        \includegraphics{figures/2_nonortho_sqrtd.png}
+    }
+    \caption{$L_2$ distance $\|P-Q\|_2$ versus $\lambda_{\text{SDP}}$ and $w$ for the trade-off scheme on two non-orthogonal states (Chapter 3, Equation \ref{eq:qsd_example_states}). Results saturate to MED or UQSD at extreme $w$.}
+    \label{fig:nonortho_l2}
+\end{figure}
