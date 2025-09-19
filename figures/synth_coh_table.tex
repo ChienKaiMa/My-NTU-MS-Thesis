@@ -1,29 +1,29 @@
 \begin{table}[htbp]
     \centering
     \caption{Comparison of quantum circuit synthesis methods for
-        discriminating three
-        coherent states. Here 2Q means the number of two-qubit gates, which is
+        discriminating three coherent states.
+        Here 2Q means the number of two-qubit gates, which is
         also the number of CNOT gates in this case.
-        Fidelity is rounded down to the fifth digit.}
+        The numbers for the state fidelity and process fidelity are rounded down to the fifth digit.}
     \label{tab:synth_comparison}
-    \scalebox{0.56}{
+    \scalebox{0.45}{
         \renewcommand{\arraystretch}{1.2}
         \begin{tabular}{|c|c||rr||rrr|rrr|rrr|rrr|}
             \hline
             \textbf{\# Qubits}
-              & \multicolumn{1}{c||}{\textbf{Fidelity}}
+              & \multicolumn{1}{c||}{\textbf{State Fidelity}}
               & \multicolumn{2}{c||}{\textbf{Original}}
               & \multicolumn{3}{c|}{\textbf{Resynthesis}}
               & \multicolumn{3}{c|}{\textbf{Approx\_deg = 1.00}}
               & \multicolumn{3}{c|}{\textbf{Approx\_deg = 0.97}}
-              & \multicolumn{3}{c|}{\shortstack{\textbf{AQC (2Q = 10)}}}                                                                                                                       \\
-              &                                                             & Depth & 2Q    & Depth & 2Q   & Fidelity & Depth & 2Q   & Fidelity & Depth & 2Q   & Fidelity & Depth & 2Q & Fidelity \\
+              & \multicolumn{3}{c|}{\shortstack{\textbf{AQC (2Q = 10)}}}                                                                                                                                                       \\
+              &                                                          & Depth & 2Q    & Depth & 2Q   & Process Fidelity & Depth & 2Q   & Process Fidelity & Depth & 2Q   & Process Fidelity & Depth & 2Q & Process Fidelity \\
             \hline
-            2 & 0.97803                                                     & 84    & 41    & 45    & 20   & 1.00000  & 29    & 14   & 0.99999  & 29    & 14   & 0.59409  & 21    & 10 & 0.35564  \\
-            3 & 0.99998                                                     & 430   & 218   & 225   & 100  & 0.99999  & 83    & 61   & 0.99992  & 83    & 61   & 0.88925  & 15    & 10 & 0.96252  \\
-            4 & 0.99999                                                     & 2034  & 1025  & 1009  & 444  & 0.99999  & 253   & 252  & 0.99989  & 253   & 252  & 0.13754  & 11    & 10 & 0.32505  \\
-            5 & 0.99999                                                     & 8916  & 4474  & 4273  & 1868 & 0.99999  & 817   & 1020 & 0.99990  & 817   & 1020 & 0.00032  & 9     & 10 & 0.25978  \\
-            6 & 0.99999                                                     & 37220 & 18634 & 17585 & 7660 & 0.99999  & 2729  & 4091 & 0.99984  & -     & -    & -        & -     & -  & -        \\
+            2 & 0.97803                                                  & 84    & 41    & 45    & 20   & 1.00000          & 29    & 14   & 0.99999          & 29    & 14   & 0.59409          & 21    & 10 & 0.35564          \\
+            3 & 0.99998                                                  & 430   & 218   & 225   & 100  & 0.99999          & 83    & 61   & 0.99992          & 83    & 61   & 0.88925          & 15    & 10 & 0.96252          \\
+            4 & 0.99999                                                  & 2034  & 1025  & 1009  & 444  & 0.99999          & 253   & 252  & 0.99989          & 253   & 252  & 0.13754          & 11    & 10 & 0.32505          \\
+            5 & 0.99999                                                  & 8916  & 4474  & 4273  & 1868 & 0.99999          & 817   & 1020 & 0.99990          & 817   & 1020 & 0.00032          & 9     & 10 & 0.25978          \\
+            6 & 0.99999                                                  & 37220 & 18634 & 17585 & 7660 & 0.99999          & 2729  & 4091 & 0.99984          & -     & -    & -                & -     & -  & -                \\
             \hline
         \end{tabular}
     }
