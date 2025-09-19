@@ -176,24 +176,22 @@ acceptable fidelity.
 AQC is optionally applied after \texttt{qclib} generates a CNOT-rotation-based
 circuit, enhancing efficiency for IBM Quantum backend execution.
 
-\section{Example - three coherent states}
+\section{Example: Three Coherent States}
+\label{sec:coherent_example}
 
-For truncated coherent states with the same $\alpha$, representation in a
-higher dimension means higher fidelity with respect to the state without
-truncation. However, if we want a discrimination circuit, the higher
-dimension means the increase of circuit depth and compilation time. We will
-perform the following experiment to discuss the trade-off.
-
-For the discussion, we select the coherent states with
-$\alpha = e^{i \frac{2\pi}{3} j}; i = 0, 1, 2; j = \sqrt{-1}; |\alpha| = 1$.
-We use QuTiP \cite{lambert2024qutip5quantumtoolbox} to generate and visualize
-the truncated coherent states. The Wigner functions of the three states are
-drawn together in the following figures \ref{fig:coh_comparison}. From the
-figures we can see the states are overlapped.
+To investigate the trade-off between state fidelity and circuit complexity in
+unambiguous quantum state discrimination (UQSD), we consider three coherent
+states with \(\alpha = e^{i \frac{2\pi}{3} j}\), \(j = \sqrt{-1}\), \(|\alpha| = 1\).
+Higher-dimensional truncation enhances fidelity relative to an ideal coherent
+state (approximated by a 1024-Fock basis truncation) but increases circuit
+depth and compilation time.
+Using QuTiP \cite{lambert2024qutip5quantumtoolbox}, we generate and visualize
+these states, with their Wigner functions in Figure \ref{fig:coh_comparison}
+showing significant overlap.
 
 \input{figures/three_coh_wigner.tex}
 
-\subsection{Circuit generation}
+\subsection{Circuit Generation}
 Since the three states are linearly independent and are pure states, we can
 use the method in Section~\ref{sec:optimal_povm_for_uqsd} to quickly generate
 the optimal POVM for circuit synthesis. We will show several methods to reduce
