@@ -299,33 +299,33 @@ To illustrate CrossQSD’s performance, we consider three coherent states trunca
     \centering
     \begin{tikzpicture}
         \begin{axis}[
-            xlabel={Evaluation Noise Parameter \(\lambda_{\text{eval}}\)},
-            ylabel={Error-to-Success Ratio \(P_{\text{err}} / P_{\text{succ}}\)},
-            xmode=log,
-            ymode=log,
-            xmin=1e-6, xmax=1,
-            ymin=1e-3, ymax=10,
-            grid=major,
-            width=0.8\textwidth,
-            height=6cm,
-            legend pos=north west,
-            title={CrossQSD Error-to-Success Ratio under Depolarizing Noise}
-        ]
-        \addplot[mark=*, blue] coordinates {
-            (1.0000e-06, 0.00511489) (1.77828e-06, 0.00511527) (3.16228e-06, 0.00511596) 
-            (5.62341e-06, 0.00511718) (1.0000e-05, 0.00511934) (1.77828e-05, 0.00512320)
-            (3.16228e-05, 0.00513005) (5.62341e-05, 0.00514223) (1.0000e-04, 0.00516389)
-            (1.77828e-04, 0.00520242) (3.16228e-04, 0.00527094) (5.62341e-04, 0.00539282)
-            (1.0000e-03, 0.00560968) (1.77828e-03, 0.00599567) (3.16228e-03, 0.00668318)
-            (5.62341e-03, 0.00790931) (1.77828e-02, 0.0140346)
-            (3.16228e-02, 0.0211461) (5.62341e-02, 0.0341741) (1.0000e-01, 0.0586295)
-            (1.77828e-01, 0.106708) (5.62341e-01, 0.487311) (1.0000e+00, 2.00000)
-        };
-        \addlegendentry{CrossQSD}
-        \addplot[mark=square*, red, mark size=3pt] coordinates {
-            (1.0000e-02, 0.0101010)
-        } node[above, red] {};
-        \addlegendentry{\(\lambda_{\text{eval}} = 10^{-2}\)}
+                xlabel={Evaluation Noise Parameter \(\lambda_{\text{eval}}\)},
+                ylabel={Error-to-Success Ratio \(P_{\text{err}} / P_{\text{succ}}\)},
+                xmode=log,
+                ymode=log,
+                xmin=1e-6, xmax=1,
+                ymin=1e-3, ymax=10,
+                grid=major,
+                width=0.8\textwidth,
+                height=6cm,
+                legend pos=north west,
+                title={CrossQSD Error-to-Success Ratio under Depolarizing Noise}
+            ]
+            \addplot[mark=*, blue] coordinates {
+                    (1.0000e-06, 0.00511489) (1.77828e-06, 0.00511527) (3.16228e-06, 0.00511596)
+                    (5.62341e-06, 0.00511718) (1.0000e-05, 0.00511934) (1.77828e-05, 0.00512320)
+                    (3.16228e-05, 0.00513005) (5.62341e-05, 0.00514223) (1.0000e-04, 0.00516389)
+                    (1.77828e-04, 0.00520242) (3.16228e-04, 0.00527094) (5.62341e-04, 0.00539282)
+                    (1.0000e-03, 0.00560968) (1.77828e-03, 0.00599567) (3.16228e-03, 0.00668318)
+                    (5.62341e-03, 0.00790931) (1.77828e-02, 0.0140346)
+                    (3.16228e-02, 0.0211461) (5.62341e-02, 0.0341741) (1.0000e-01, 0.0586295)
+                    (1.77828e-01, 0.106708) (5.62341e-01, 0.487311) (1.0000e+00, 2.00000)
+                };
+            \addlegendentry{CrossQSD}
+            \addplot[mark=square*, red, mark size=3pt] coordinates {
+                    (1.0000e-02, 0.0101010)
+                } node[above, red] {};
+            \addlegendentry{\(\lambda_{\text{eval}} = 10^{-2}\)}
         \end{axis}
     \end{tikzpicture}
     \caption{Error-to-success ratio \(P_{\text{err}} / P_{\text{succ}}\) versus evaluation noise parameter \(\lambda_{\text{eval}}\) for CrossQSD applied to three coherent states truncated to 3 qubits, with SDP input noise \(\lambda_{\text{SDP}} = 0.01\) and \(\alpha_i = \beta_i = 0.01\). The low ratio at small \(\lambda_{\text{eval}}\) indicates robust discrimination, increasing as evaluation noise degrades performance. The red marker at \(\lambda_{\text{eval}} = 10^{-2}\) matches the SDP constraints.}
