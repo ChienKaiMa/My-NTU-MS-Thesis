@@ -277,42 +277,40 @@ ambiguous outcomes.
     \end{tabular}
 \end{table}
 
+To assess the impact of noise on the discrimination results and evaluate the
+robustness of our circuits, we perform noisy simulations using Qiskit's Aer
+simulator.
+Circuits with excessive depth (e.g., 6-qubit original) are excluded.
+The testing circuits are identical to those described in the ideal simulation section,
+with the exception that the input state in the presented analysis is fixed to
+\(\ket{\psi_3}\).
+Probability amplitudes are obtained via the \texttt{get\_statevector().probabilities()}
+function, capturing the distribution of measurement outcomes after applying noise.
+The circuits are executed with 1024 shots to ensure statistical reliability
+while maintaining computational efficiency.
+The testing circuits utilize 6-qubit input states, which are processed through
+designed 4-qubit circuits derived from 3-qubit truncated coherent states,
+followed by resynthesis to reduce circuit depth.
 
-We are also curious about how noise will affect the discrimination results,
-and we want to see if smaller circuits work well enough for the states using
-more qubits.
-We expect the circuits with high process fidelity to run successfully, so we
-will show the results together with noisy simulation.
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/6q_4circ.png}
+    \caption{UQSD probability amplitudes with two-qubit depolarizing noise (input state fixed to \(\ket{\psi_3}\)). The legend indicates outcomes: 0 (\(\ket{\psi_1}\)), 1 (\(\ket{\psi_2}\)), and 2 (\(\ket{\psi_3}\)).}
+    \label{fig:noisy_simulation}
+\end{figure}
 
-
-
-The noise model we apply for the quantum circuits is a depolarizing channel
-on every two-qubit gate. Since we use Qiskit for noisy simulation, we follow
-Qiskit's definition \cite{qiskitDepolarizing_errorQiskit} of the depolarizing
-channel, described as follows:
+The noise model employs a depolarizing channel on every two-qubit gate,
+defined according to Qiskit’s specification~\cite{qiskitDepolarizing_errorQiskit} as:
 \begin{align}
-    E(\rho) = (1 - \lambda) \rho + \lambda \text{Tr}[\rho] \frac{I}{2^n}
+    E(\rho) = (1 - \lambda) \rho + \lambda \text{Tr}[\rho] \frac{I}{2^n},
 \end{align}
-with $0 \le \lambda \le 4^n / (4^n - 1)$,
-where $\lambda$ is the depolarizing error param and $n$ is the number of qubits.
-
-The parameters for $\lambda$ span from \(1 \times 10^{-6}\) to \(1 \times 10^{-1}\),
-with 3 representative values per order of magnitude (\(1\times\), \(2\times\), and \(5\times\)). This pattern captures typical values within each scale.
-
-We won't simulate some circuits because their circuit depths are too large
-from the start.
-
-
-% Brief intro to quantum circuits
-% Scalability
-% Lower bound (cite)
-% table of the paper and our own numbers
-
-\section{Conclusion}
-
-% Construct the isometry circuits
-% In this section, I provide the results why we build our circuits with
-% Qiskit.circuit.library.Isometry instead of qclib.decompose.
-
-% To determine the best scheme for the isometry circuit,
-% we design
+where $0 \le \lambda \le 4^n / (4^n - 1)$, $\lambda$ is the depolarizing error
+parameter, and $n$ is the number of qubits.
+The parameter $\lambda$ ranges from $1 \times 10^{-6}$ to $1 \times 10^{-1}$,
+with three representative values per order of magnitude ($1\times$, $2\times$,
+and $5\times$), capturing typical noise scales.
+As shown in Figure~\ref{fig:noisy_simulation}, the probability amplitudes
+remain stable for $\lambda$ values to the left of the vertical line, indicating
+that the quantum circuit is resistant to noise up to a certain threshold.
+Beyond this point, sampling noise begins to appear, reflecting increased
+degradation in performance.
