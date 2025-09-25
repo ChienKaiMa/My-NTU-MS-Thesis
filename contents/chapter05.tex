@@ -198,53 +198,131 @@ MED, it helps as a bridge to build a more intuitive proof for the corollary.
 
 
 \section{Fixed Rate of Inconclusive Outcome (FRIO)}
-% Revised by Google Gemini 2.5 Flash
-For the discrimination of mixed quantum states, a semidefinite programming
-(SDP) approach was proposed by \cite{RN37}.
-This formulation has been influential, serving as the theoretical basis for a
-number of subsequent optical experiments \cite{RN48, RN221, RN29}.
+\label{sec:frio}
+For the discrimination of mixed quantum states, a semidefinite programming (SDP)
+approach was proposed in~\cite{RN37}, and it has served as the theoretical basis
+for several optical experiments~\cite{RN48,RN221,RN29}.
 
-A key feature of this formulation is the introduction of a constant real number,
-$c_{lb}$, that directly controls the probability of an inconclusive outcome.
-By imposing a constraint on the inconclusive POVM element $\Pi_{k+1}$, the
-probability of an inconclusive outcome is lower bounded by some value $c_{lb}$.
-In the numerical implementation using semidefinite programming, an inequality
-constraint is employed to ensure that the rate of inconclusive outcomes is at least $c_{lb}$.
-A value of $c_{lb} = 0$ corresponds to the minimum error discrimination problem,
-where no inconclusive outcome is permitted.
+A key feature of this formulation is the introduction of a real parameter
+\(\clb \in [0,1]\) that directly constrains the probability of an inconclusive
+outcome. By imposing a constraint on the inconclusive POVM element \(\Pi_{0}\),
+the inconclusive probability is lower-bounded by \(\clb\). In numerical
+implementations, this is enforced as an inequality ensuring
+\(P_{\mathrm{inc}} \ge \clb\). The special case \(\clb=0\) recovers
+minimum-error discrimination (MED), where no inconclusive outcome is permitted.
 
-This formulation, however, assumes a general mixed-state scenario.
-If we assume that the mixed states arise from a well-defined channel acting on
-pure states, it may be possible to reformulate the optimization problem to
-exploit this structure, potentially accelerating the solving process.
+The generic FRIO formulation assumes arbitrary mixed states. If, however, the
+mixed states arise from a specified channel acting on pure states, one can
+exploit this structure to reformulate or accelerate the optimization.
 
-As illustrated in Table \ref{tab:frio_prob_mat}, the joint probability for the
-inconclusive outcome (indicated in yellow) is directly influenced by this
-lower bound.
+As illustrated in Table~\ref{tab:frio_prob_mat}, the (prior-weighted) entries
+associated with the inconclusive outcome depend directly on the lower bound.
 
-% Depends on {table}{xcolor}
 \begin{table}[ht]
     \centering
     \begin{tabular}{c | c c c c}
-                   & $\Pi_{1}$            & $\Pi_{2}$            & $\Pi_{3}$            & $\Pi_{?}$                       \\
+                     & \(\Pi_{1}\)          & \(\Pi_{2}\)          & \(\Pi_{3}\)          & \(\Pi_{0}\)                    \\
         \hline
-        $\rho_{1}$ & \cellcolor{green!20} & \cellcolor{red!20}   & \cellcolor{red!20}   & \cellcolor{yellow!30}           \\
-        $\rho_{2}$ & \cellcolor{red!20}   & \cellcolor{green!20} & \cellcolor{red!20}   & \cellcolor{yellow!30}  $c_{lb}$ \\
-        $\rho_{3}$ & \cellcolor{red!20}   & \cellcolor{red!20}   & \cellcolor{green!20} & \cellcolor{yellow!30}           \\
+        \(\rho_{1}\) & \cellcolor{green!20} & \cellcolor{red!20}   & \cellcolor{red!20}   & \cellcolor{yellow!30}          \\
+        \(\rho_{2}\) & \cellcolor{red!20}   & \cellcolor{green!20} & \cellcolor{red!20}   & \cellcolor{yellow!30} \(\clb\) \\
+        \(\rho_{3}\) & \cellcolor{red!20}   & \cellcolor{red!20}   & \cellcolor{green!20} & \cellcolor{yellow!30}          \\
     \end{tabular}
-    \caption{Probability matrix $p(m,i) = p_{i} \bra{\psi_{i}} \Pi_{m} \ket{\psi_{i}}$}
-    % \caption{Semidefinite programming for FRIO}
+    \caption{Prior-weighted probability matrix \(p(m,i)=p_i\,\mathrm{Tr}(\rho_i \Pi_m)\).
+        If states are pure, \(\rho_i=\ket{\psi_i}\bra{\psi_i}\).}
     \label{tab:frio_prob_mat}
 \end{table}
 
-The semidefinite programming problem can be formulated as follows:
+The SDP for FRIO can be written as
 \begin{align}
-     & \underset{\{\Pi\}}{\text{maximize}} &  & \raisebox{-0.3em}{\textcolor{green}{\rule{1em}{1em}}} \; \psucc=\sum_{i=1}^{k} p_{i} \operatorname{Tr}(\rho_{i} \Pi_{i})                 \\
-     & \text{subject to}                   &  & \Pi_{i} \succeq 0, \quad i = 1, \ldots, k + 1                                                                                            \\
-     &                                     &  & \sum_{i=1}^{k + 1} \Pi_i = I                                                                                                             \\
-     &                                     &  & \raisebox{-0.3em}{\textcolor{yellow}{\rule{1em}{1em}}} \; \pinc=\sum_{i=1}^{k} p_{i} \operatorname{Tr}(\rho_{i} \Pi_{k + 1}) \geq c_{lb}
+     & \underset{\{\Pi_m\}_{m=0}^{k}}{\text{maximize}}
+     &                                                 & \psucc \;=\; \sum_{i=1}^{k} p_{i}\,\mathrm{Tr}(\rho_{i}\Pi_{i})                                                                                    \\[0.25em]
+     & \text{subject to}
+     &                                                 & \Pi_{m} \succeq 0,\quad m=0,1,\ldots,k                                                                                                             \\[0.25em]
+     &                                                 &                                                                 & \sum_{m=0}^{k} \Pi_{m} = I                                                       \\[0.25em]
+     &                                                 &                                                                 & \pinc \;=\; \sum_{i=1}^{k} p_{i}\,\mathrm{Tr}(\rho_{i}\Pi_{0}) \;\ge\; \clb \, .
 \end{align}
 
+We computed FRIO-optimized POVMs for ensembles where the depolarizing noise used
+in the SDP construction and in the evaluation are matched, i.e., \(\lSDP=\leval\).
+This focuses the presentation on the intrinsic FRIO trade-off. Tables~\ref{tab:frio_two_states}
+and \ref{tab:frio_three_states} summarize results for two single-qubit states and
+for three nearly orthogonal two-qubit states (Sec.~\ref{subsec:entangled_states}).
+For each lower bound \(\clb\) on the inconclusive rate we report
+\((\psucc,\perr,\pinc)\). Because \(\pinc\ge\clb\) implies \(\psucc \le 1-\clb\),
+large \(\clb\) can yield uninformative solutions.
+
+By “solution” we mean any POVM returned by the SDP that satisfies the FRIO
+constraints; this includes the trivial POVM \(\Pi_{0}=I,\ \Pi_{i}=0\ (i\ge1)\),
+for which \(\pinc=1\) and \(\psucc=\perr=0\). When unambiguous discrimination is
+achievable for the ensemble, the \(\clb\)-scan provides a meaningful interpolation
+from MED (\(\clb=0,\ \pinc=0\)) toward the UQSD operating point; otherwise the
+curve approaches the trivial endpoint \(\pinc\to 1\).
+
+\begin{table}[t]
+    \centering
+    \caption{FRIO for two single-qubit states with matched construction/evaluation noise (\(\lSDP=\leval\)). Columns: \(\psucc\), \(\perr\), \(\pinc\).}
+    \label{tab:frio_two_states}
+    \footnotesize
+    \setlength{\tabcolsep}{4pt}%
+    \renewcommand{\arraystretch}{1.08}%
+    \begin{tabular}{@{}r|rrr|rrr|rrr@{}}
+        \toprule
+                                                 & \multicolumn{3}{c|}{\(\lambda=0\)} &
+        \multicolumn{3}{c|}{\(\lambda=10^{-3}\)} &
+        \multicolumn{3}{c}{\(\lambda=0.1\)}                                                                                                                   \\
+        \(\text{lb}\)                            & \(\psucc\)                         & \(\perr\) & \(\pinc\) &
+        \(\psucc\)                               & \(\perr\)                          & \(\pinc\) &
+        \(\psucc\)                               & \(\perr\)                          & \(\pinc\)                                                             \\
+        \midrule
+        0.0                                      & 0.854                              & 0.146     & 0.000     & 0.853 & 0.147 & 0.000 & 0.818 & 0.182 & 0.000 \\
+        0.1                                      & 0.782                              & 0.118     & 0.100     & 0.782 & 0.118 & 0.100 & 0.748 & 0.152 & 0.100 \\
+        0.2                                      & 0.709                              & 0.091     & 0.200     & 0.709 & 0.091 & 0.200 & 0.677 & 0.123 & 0.200 \\
+        0.3                                      & 0.635                              & 0.065     & 0.300     & 0.634 & 0.066 & 0.300 & 0.603 & 0.097 & 0.300 \\
+        0.4                                      & 0.558                              & 0.042     & 0.400     & 0.557 & 0.043 & 0.400 & 0.527 & 0.073 & 0.400 \\
+        0.5                                      & 0.478                              & 0.022     & 0.500     & 0.477 & 0.023 & 0.500 & 0.448 & 0.052 & 0.500 \\
+        0.6                                      & 0.393                              & 0.007     & 0.600     & 0.392 & 0.008 & 0.600 & 0.364 & 0.036 & 0.600 \\
+        0.7                                      & 0.300                              & 0.000     & 0.700     & 0.300 & 0.000 & 0.700 & 0.274 & 0.026 & 0.700 \\
+        0.8                                      & 0.200                              & 0.000     & 0.800     & 0.200 & 0.000 & 0.800 & 0.183 & 0.017 & 0.800 \\
+        0.9                                      & 0.100                              & 0.000     & 0.900     & 0.100 & 0.000 & 0.900 & 0.091 & 0.009 & 0.900 \\
+        \bottomrule
+    \end{tabular}
+
+    \par\vspace{2pt}\footnotesize
+    Values rounded to three decimals.
+\end{table}
+
+\begin{table}[t]
+    \centering
+    \caption{FRIO for three nearly orthogonal two-qubit states (Sec.~\ref{subsec:entangled_states}) with matched construction/evaluation noise (\(\lSDP=\leval\)). Columns: \(\psucc\), \(\perr\), \(\pinc\).}
+    \label{tab:frio_three_states}
+    \footnotesize
+    \setlength{\tabcolsep}{4pt}%
+    \renewcommand{\arraystretch}{1.08}%
+    \begin{tabular}{@{}r|rrr|rrr|rrr@{}}
+        \toprule
+                                                 & \multicolumn{3}{c|}{\(\lambda=0\)} &
+        \multicolumn{3}{c|}{\(\lambda=10^{-3}\)} &
+        \multicolumn{3}{c}{\(\lambda=0.1\)}                                                                                                                   \\
+        \(\text{lb}\)                            & \(\psucc\)                         & \(\perr\) & \(\pinc\) &
+        \(\psucc\)                               & \(\perr\)                          & \(\pinc\) &
+        \(\psucc\)                               & \(\perr\)                          & \(\pinc\)                                                             \\
+        \midrule
+        0.0                                      & 0.986                              & 0.014     & 0.000     & 0.985 & 0.015 & 0.000 & 0.921 & 0.079 & 0.000 \\
+        0.1                                      & 0.897                              & 0.003     & 0.100     & 0.896 & 0.004 & 0.100 & 0.848 & 0.052 & 0.100 \\
+        0.2                                      & 0.800                              & 0.000     & 0.200     & 0.800 & 0.000 & 0.200 & 0.757 & 0.043 & 0.200 \\
+        0.3                                      & 0.700                              & 0.000     & 0.300     & 0.700 & 0.000 & 0.300 & 0.663 & 0.037 & 0.300 \\
+        0.4                                      & 0.600                              & 0.000     & 0.400     & 0.600 & 0.000 & 0.400 & 0.568 & 0.032 & 0.400 \\
+        0.5                                      & 0.500                              & 0.000     & 0.500     & 0.500 & 0.000 & 0.500 & 0.474 & 0.027 & 0.500 \\
+        0.6                                      & 0.400                              & 0.000     & 0.600     & 0.400 & 0.000 & 0.600 & 0.379 & 0.021 & 0.600 \\
+        0.7                                      & 0.300                              & 0.000     & 0.700     & 0.300 & 0.000 & 0.700 & 0.284 & 0.016 & 0.700 \\
+        0.8                                      & 0.200                              & 0.000     & 0.800     & 0.200 & 0.000 & 0.800 & 0.190 & 0.010 & 0.800 \\
+        0.9                                      & 0.100                              & 0.000     & 0.900     & 0.100 & 0.000 & 0.900 & 0.095 & 0.005 & 0.900 \\
+        \bottomrule
+    \end{tabular}
+
+    \par\vspace{2pt}\footnotesize
+    Values rounded to three decimals.
+\end{table}
 
 \section{CrossQSD}
 \label{sec:crossqsd}
