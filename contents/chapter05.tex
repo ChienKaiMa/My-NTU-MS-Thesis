@@ -97,7 +97,7 @@ error-minimizing approach. Specifically, we distinguish between:
 The semidefinite programming problem is formulated as follows:
 \begin{align}
      & \underset{\{\Pi\}}{\text{maximize}} &  & \psucc=\sum_{i=1}^{k} p_{i} \operatorname{Tr}(\rho_{i} \Pi_{i}) \\
-     & \text{subject to}                   &  & \Pi_{i} \succeq 0, \quad i = 1, \ldots, k+1                       \\
+     & \text{subject to}                   &  & \Pi_{i} \succeq 0, \quad i = 1, \ldots, k+1                     \\
      &                                     &  & \sum_{i=1}^{k+1} \Pi_i = I
 \end{align}
 
@@ -240,8 +240,8 @@ lower bound.
 The semidefinite programming problem can be formulated as follows:
 \begin{align}
      & \underset{\{\Pi\}}{\text{maximize}} &  & \raisebox{-0.3em}{\textcolor{green}{\rule{1em}{1em}}} \; \psucc=\sum_{i=1}^{k} p_{i} \operatorname{Tr}(\rho_{i} \Pi_{i})                 \\
-     & \text{subject to}                   &  & \Pi_{i} \succeq 0, \quad i = 1, \ldots, k + 1                                                                                              \\
-     &                                     &  & \sum_{i=1}^{k + 1} \Pi_i = I                                                                                                               \\
+     & \text{subject to}                   &  & \Pi_{i} \succeq 0, \quad i = 1, \ldots, k + 1                                                                                            \\
+     &                                     &  & \sum_{i=1}^{k + 1} \Pi_i = I                                                                                                             \\
      &                                     &  & \raisebox{-0.3em}{\textcolor{yellow}{\rule{1em}{1em}}} \; \pinc=\sum_{i=1}^{k} p_{i} \operatorname{Tr}(\rho_{i} \Pi_{k + 1}) \geq c_{lb}
 \end{align}
 
@@ -266,31 +266,31 @@ The SDP uses density matrices \(\{ \rho_i \}_{i=1}^k\), assumed to be noisy
 versions of pure states.
 The SDP formulation is as follows:
 \begin{align}
-    \underset{\{\Pi_i\}}{\text{maximize}} \quad & \psucc = \sum_{i=1}^{k} p_i \operatorname{Tr}(\rho_i \Pi_i) \label{eq:crossqsd_obj}                                                                                          \\
+    \underset{\{\Pi_i\}}{\text{maximize}} \quad & \psucc = \sum_{i=1}^{k} p_i \operatorname{Tr}(\rho_i \Pi_i) \label{eq:crossqsd_obj}                                                                                                   \\
     \text{subject to} \quad                     & \Pi_i \succeq 0, \quad i = 0, \ldots, k \label{eq:crossqsd_psd}                                                                                                                       \\
                                                 & \sum_{i=0}^{k} \Pi_i = I \label{eq:crossqsd_sum}                                                                                                                                      \\
                                                 & P(O_i \mid \rho_i) = \frac{p_i \operatorname{Tr}(\rho_i \Pi_i)}{\sum_{j=1}^k p_j \operatorname{Tr}(\rho_j \Pi_i)} \geq 1 - \alpha_i, \quad i = 1, \ldots, k \label{eq:crossqsd_type1} \\
                                                 & P(\rho_i \mid O_i) = \frac{p_i \operatorname{Tr}(\rho_i \Pi_i)}{\sum_{j=1}^k p_j \operatorname{Tr}(\rho_j \Pi_i)} \geq 1 - \beta_i, \quad i = 1, \ldots, k \label{eq:crossqsd_type2}
 \end{align}
 
-To illustrate CrossQSD’s performance, we consider three coherent states truncated to 3 qubits, with eigenvalues defined by amplitudes \([1, 1, 1]\) and angles \([0, \pi/3, 2\pi/3]\). OptUQSD, applied to these pure states, discards the second state, yielding \(\psucc = 0.2343\). For CrossQSD, we solve the SDP with input density matrices \(\rho_i = (1-\lambda_{\text{SDP}})\ket{\psi_i}\bra{\psi_i} + \lambda_{\text{SDP}} I/d\), using a fixed depolarizing noise parameter \(\lambda_{\text{SDP}} = 0.01\) and error tolerances \(\alpha_i = \beta_i = 0.01\), where \(d\) is the dimension of the Hilbert space. The resulting POVM is evaluated with density matrices \(\rho_i = (1-\lambda_{\text{eval}})\ket{\psi_i}\bra{\psi_i} + \lambda_{\text{eval}} I/d\), where \(\lambda_{\text{eval}}\) varies, computing \(\psucc\), \(\perr\), and their ratio \(\perr / \psucc\), as shown in Figure \ref{fig:crossqsd_results} and Table \ref{tab:crossqsd_results}. The resulting POVM depend on \(\lambda_{\text{SDP}}\), \(\alpha_i\), and \(\beta_i\); setting \(\lambda_{\text{SDP}} \approx \alpha_i, \beta_i\) ensures non-trivial solutions, as large \(\lambda_{\text{SDP}}\) leads to an inconclusive POVM (\(\Pi_0 = I\)), while small \(\lambda_{\text{SDP}}\) limits robustness to a narrow noise range.
+To illustrate CrossQSD’s performance, we consider three coherent states truncated to 3 qubits, with eigenvalues defined by amplitudes \([1, 1, 1]\) and angles \([0, \pi/3, 2\pi/3]\). OptUQSD, applied to these pure states, discards the second state, yielding \(\psucc = 0.2343\). For CrossQSD, we solve the SDP with input density matrices \(\rho_i = (1-\lSDP)\ket{\psi_i}\bra{\psi_i} + \lSDP I/d\), using a fixed depolarizing noise parameter \(\lSDP = 0.01\) and error tolerances \(\alpha_i = \beta_i = 0.01\), where \(d\) is the dimension of the Hilbert space. The resulting POVM is evaluated with density matrices \(\rho_i = (1-\leval)\ket{\psi_i}\bra{\psi_i} + \leval I/d\), where \(\leval\) varies, computing \(\psucc\), \(\perr\), and their ratio \(\perr / \psucc\), as shown in Figure \ref{fig:crossqsd_results} and Table \ref{tab:crossqsd_results}. The resulting POVM depend on \(\lSDP\), \(\alpha_i\), and \(\beta_i\); setting \(\lSDP \approx \alpha_i, \beta_i\) ensures non-trivial solutions, as large \(\lSDP\) leads to an inconclusive POVM (\(\Pi_0 = I\)), while small \(\lSDP\) limits robustness to a narrow noise range.
 
 \begin{table}[ht]
     \centering
-    \caption{CrossQSD performance for three coherent states truncated to 3 qubits, with SDP input noise \(\lambda_{\text{SDP}} = 0.01\) and \(\alpha_i = \beta_i = 0.01\). Results show \(\psucc\), \(\perr\), and their ratio \(\perr / \psucc\) for varying evaluation noise levels \(\lambda_{\text{eval}}\).}
+    \caption{CrossQSD performance for three coherent states truncated to 3 qubits, with SDP input noise \(\lSDP = 0.01\) and \(\alpha_i = \beta_i = 0.01\). Results show \(\psucc\), \(\perr\), and their ratio \(\perr / \psucc\) for varying evaluation noise levels \(\leval\).}
     \label{tab:crossqsd_results}
     \begin{tabular}{c c c c}
         \hline
-        \textbf{\(\lambda_{\text{eval}}\)} & \textbf{\(\psucc\)} & \textbf{\(\perr\)} & \textbf{\(\perr / \psucc\)} \\
+        \textbf{\(\leval\)}       & \textbf{\(\psucc\)} & \textbf{\(\perr\)} & \textbf{\(\perr / \psucc\)} \\
         \hline
-        \(0\)                              & 0.25197                      & 0.00129                     & 0.00511                                       \\
-        \(1.0000 \times 10^{-6}\)          & 0.25197                      & 0.00129                     & 0.00511                                       \\
-        \(1.0000 \times 10^{-5}\)          & 0.25197                      & 0.00129                     & 0.00512                                       \\
-        \(1.0000 \times 10^{-4}\)          & 0.25195                      & 0.00130                     & 0.00516                                       \\
-        \(1.0000 \times 10^{-3}\)          & 0.25178                      & 0.00141                     & 0.00561                                       \\
-        \(1.0000 \times 10^{-2}\)          & 0.25008                      & 0.00253                     & 0.01010                                       \\
-        \(1.0000 \times 10^{-1}\)          & 0.23303                      & 0.01366                     & 0.05863                                       \\
-        \(1.0000 \times 10^{0}\)           & 0.06251                      & 0.12502                     & 2.00000                                       \\
+        \(0\)                     & 0.25197             & 0.00129            & 0.00511                     \\
+        \(1.0000 \times 10^{-6}\) & 0.25197             & 0.00129            & 0.00511                     \\
+        \(1.0000 \times 10^{-5}\) & 0.25197             & 0.00129            & 0.00512                     \\
+        \(1.0000 \times 10^{-4}\) & 0.25195             & 0.00130            & 0.00516                     \\
+        \(1.0000 \times 10^{-3}\) & 0.25178             & 0.00141            & 0.00561                     \\
+        \(1.0000 \times 10^{-2}\) & 0.25008             & 0.00253            & 0.01010                     \\
+        \(1.0000 \times 10^{-1}\) & 0.23303             & 0.01366            & 0.05863                     \\
+        \(1.0000 \times 10^{0}\)  & 0.06251             & 0.12502            & 2.00000                     \\
         \hline
     \end{tabular}
 \end{table}
@@ -299,7 +299,7 @@ To illustrate CrossQSD’s performance, we consider three coherent states trunca
     \centering
     \begin{tikzpicture}
         \begin{axis}[
-                xlabel={Evaluation Noise Parameter \(\lambda_{\text{eval}}\)},
+                xlabel={Evaluation Noise Parameter \(\leval\)},
                 ylabel={Error-to-Success Ratio \(\perr / \psucc\)},
                 xmode=log,
                 ymode=log,
@@ -325,10 +325,10 @@ To illustrate CrossQSD’s performance, we consider three coherent states trunca
             \addplot[mark=square*, red, mark size=3pt] coordinates {
                     (1.0000e-02, 0.0101010)
                 } node[above, red] {};
-            \addlegendentry{\(\lambda_{\text{eval}} = 10^{-2}\)}
+            \addlegendentry{\(\leval = 10^{-2}\)}
         \end{axis}
     \end{tikzpicture}
-    \caption{Error-to-success ratio \(\perr / \psucc\) versus evaluation noise parameter \(\lambda_{\text{eval}}\) for CrossQSD applied to three coherent states truncated to 3 qubits, with SDP input noise \(\lambda_{\text{SDP}} = 0.01\) and \(\alpha_i = \beta_i = 0.01\). The low ratio at small \(\lambda_{\text{eval}}\) indicates robust discrimination, increasing as evaluation noise degrades performance. The red marker at \(\lambda_{\text{eval}} = 10^{-2}\) matches the SDP constraints.}
+    \caption{Error-to-success ratio \(\perr / \psucc\) versus evaluation noise parameter \(\leval\) for CrossQSD applied to three coherent states truncated to 3 qubits, with SDP input noise \(\lSDP = 0.01\) and \(\alpha_i = \beta_i = 0.01\). The low ratio at small \(\leval\) indicates robust discrimination, increasing as evaluation noise degrades performance. The red marker at \(\leval = 10^{-2}\) matches the SDP constraints.}
     \label{fig:crossqsd_results}
 \end{figure}
 
@@ -437,7 +437,7 @@ overlap between different states' outcome probabilities, a key characteristic of
 The semidefinite programming (SDP) problem is formulated as follows:
 \begin{align}
     \label{eq:maxpsucc_mindiff_obj}
-     & \underset{\{\Pi\}}{\text{maximize}} &  & \psucc = \sum_{i=1}^{k} p_{i} \operatorname{Tr}(\rho_{i} \Pi_{i})                          \\
+     & \underset{\{\Pi\}}{\text{maximize}} &  & \psucc = \sum_{i=1}^{k} p_{i} \operatorname{Tr}(\rho_{i} \Pi_{i})                                   \\
     \label{eq:maxpsucc_mindiff_constr1}
      & \text{subject to}                   &  & \Pi_{i} \succeq 0, \quad i = 1, \ldots, k+1                                                         \\
     \label{eq:maxpsucc_mindiff_constr2}
@@ -462,7 +462,7 @@ not enforce this behavior.
 
 \subsection{Results}
 To evaluate the FitQSD formulations, we consider two-qubit entangled states with parameters $a_1 = 0.2$, $a_2 = 0.5$, $a_3 = 0.7$ (Subsection \ref{subsec:entangled_states}) and equal prior probabilities $1/3$.
-The states are subject to depolarizing noise with $\lambda_{\text{SDP}}$ ranging from $10^{-6}$ to $10^{-1}$, defining noisy density matrices $\rho_i = (1-\lambda_{\text{SDP}})\ket{\psi_i}\bra{\psi_i} + \lambda_{\text{SDP}} I/d$, where $d = 4$ is the Hilbert space dimension.
+The states are subject to depolarizing noise with $\lSDP$ ranging from $10^{-6}$ to $10^{-1}$, defining noisy density matrices $\rho_i = (1-\lSDP)\ket{\psi_i}\bra{\psi_i} + \lSDP I/d$, where $d = 4$ is the Hilbert space dimension.
 The MinL1, MinSS, and MECO methods are solved using the MOSEK solver with precisions $\epsilon = 10^{-8}$ and $10^{-9}$, comparing the $L_2$ norm and success probability $\psucc$, as shown in Table \ref{tab:fitqsd_results} and Figure \ref{fig:fitqsd_results}.
 
 \input{figures/fitqsd_table.tex}
@@ -470,7 +470,7 @@ The MinL1, MinSS, and MECO methods are solved using the MOSEK solver with precis
 
 All three methods achieve the FitQSD goal of approximating UQSD under noise.
 However, MinL1 and MECO yield similar $L_2$ norms and $\psucc$, while
-MinSS exhibits higher $L_2$ norms at small $\lambda_{\text{SDP}}$, indicating
+MinSS exhibits higher $L_2$ norms at small $\lSDP$, indicating
 poorer approximation due to numerical precision limitations.
 Using MOSEK with precisions $\epsilon = 10^{-8}$ and $10^{-9}$, the latter
 reduces precision loss, though $\epsilon = 10^{-9}$ is the solver's limit.
@@ -488,7 +488,7 @@ This trade-off is managed by introducing a weighting coefficient, $w$.
 The semidefinite programming (SDP) problem is formulated as follows:
 \begin{align}
     \label{eq:roland_obj}
-     & \underset{\{\Pi\}}{\text{maximize}} &  & \psucc - w \|P-Q\|_{1}             \\
+     & \underset{\{\Pi\}}{\text{maximize}} &  & \psucc - w \|P-Q\|_{1}                      \\
      & \text{subject to}                   &  & \Pi_{i} \succeq 0, \quad i = 1, \ldots, k+1 \\
      &                                     &  & \sum_{i=1}^{k+1} \Pi_i = I
 \end{align}
@@ -507,7 +507,7 @@ states with parameters $a_1 = 0.2$, $a_2 = 0.5$, $a_3 = 0.7$
 (Chapter 2, Subsection \ref{subsec:entangled_states}, Equation \ref{eq:entangled_state_set}),
 both with equal prior probabilities.
 Input states are pure states mixed with depolarizing noise parameterized by
-$\lambda_{\text{SDP}}$, and $\psucc$ is evaluated on these noisy states.
+$\lSDP$, and $\psucc$ is evaluated on these noisy states.
 Results are compared against MED and OptUQSD baselines for pure states,
 plotted as horizontal lines in the figures (Figures \ref{fig:entangled_psucc},
 \ref{fig:entangled_l2}, \ref{fig:nonortho_psucc}, \ref{fig:nonortho_l2}).
@@ -515,7 +515,7 @@ The SDP solution, tuned by the weighting coefficient $w$, shows a positive
 correlation between $\psucc$ and $L_2$ distance, saturating to MED or
 UQSD at extreme $w$ values, causing overlapping lines in the figures;
 determining the effective $w$ range requires trial and error, a notable drawback.
-At high $\lambda_{\text{SDP}}$, results become less interpretable due to
+At high $\lSDP$, results become less interpretable due to
 significant noise effects, consistent with expected degradation in discrimination performance.
 
 \begin{figure}[ht]
@@ -523,7 +523,7 @@ significant noise effects, consistent with expected degradation in discriminatio
     \scalebox{0.7}{
         \includegraphics{figures/3_entangled_psucc.png}
     }
-    \caption{Success probability $\psucc$ versus $\lambda_{\text{SDP}}$ and $w$ for the trade-off scheme on two-qubit entangled states with parameters $a_1 = 0.2$, $a_2 = 0.5$, $a_3 = 0.7$ (Subsection \ref{subsec:entangled_states}, Equation \ref{eq:entangled_state_set}). Horizontal lines show MED and OptUQSD baselines for pure states.}
+    \caption{Success probability $\psucc$ versus $\lSDP$ and $w$ for the trade-off scheme on two-qubit entangled states with parameters $a_1 = 0.2$, $a_2 = 0.5$, $a_3 = 0.7$ (Subsection \ref{subsec:entangled_states}, Equation \ref{eq:entangled_state_set}). Horizontal lines show MED and OptUQSD baselines for pure states.}
     \label{fig:entangled_psucc}
 \end{figure}
 
@@ -532,7 +532,7 @@ significant noise effects, consistent with expected degradation in discriminatio
     \scalebox{0.7}{
         \includegraphics{figures/3_entangled_sqrtd.png}
     }
-    \caption{$L_2$ distance $\|P-Q\|_2$ versus $\lambda_{\text{SDP}}$ and $w$ for the trade-off scheme on two-qubit entangled states with parameters $a_1 = 0.2$, $a_2 = 0.5$, $a_3 = 0.7$ (Subsection \ref{subsec:entangled_states}, Equation \ref{eq:entangled_state_set}). Results saturate to MED or UQSD at extreme $w$.}
+    \caption{$L_2$ distance $\|P-Q\|_2$ versus $\lSDP$ and $w$ for the trade-off scheme on two-qubit entangled states with parameters $a_1 = 0.2$, $a_2 = 0.5$, $a_3 = 0.7$ (Subsection \ref{subsec:entangled_states}, Equation \ref{eq:entangled_state_set}). Results saturate to MED or UQSD at extreme $w$.}
     \label{fig:entangled_l2}
 \end{figure}
 
@@ -541,7 +541,7 @@ significant noise effects, consistent with expected degradation in discriminatio
     \scalebox{0.7}{
         \includegraphics{figures/2_nonortho_psucc.png}
     }
-    \caption{Success probability $\psucc$ versus $\lambda_{\text{SDP}}$ and $w$ for the trade-off scheme on two non-orthogonal states (Chapter 3, Equation \ref{eq:qsd_example_states}). Horizontal lines show MED and OptUQSD baselines for pure states.}
+    \caption{Success probability $\psucc$ versus $\lSDP$ and $w$ for the trade-off scheme on two non-orthogonal states (Chapter 3, Equation \ref{eq:qsd_example_states}). Horizontal lines show MED and OptUQSD baselines for pure states.}
     \label{fig:nonortho_psucc}
 \end{figure}
 
@@ -550,6 +550,6 @@ significant noise effects, consistent with expected degradation in discriminatio
     \scalebox{0.7}{
         \includegraphics{figures/2_nonortho_sqrtd.png}
     }
-    \caption{$L_2$ distance $\|P-Q\|_2$ versus $\lambda_{\text{SDP}}$ and $w$ for the trade-off scheme on two non-orthogonal states (Chapter 3, Equation \ref{eq:qsd_example_states}). Results saturate to MED or UQSD at extreme $w$.}
+    \caption{$L_2$ distance $\|P-Q\|_2$ versus $\lSDP$ and $w$ for the trade-off scheme on two non-orthogonal states (Chapter 3, Equation \ref{eq:qsd_example_states}). Results saturate to MED or UQSD at extreme $w$.}
     \label{fig:nonortho_l2}
 \end{figure}
