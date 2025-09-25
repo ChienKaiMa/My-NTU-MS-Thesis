@@ -63,8 +63,8 @@ standard projective measurement in the computational basis:
 \end{align}
 The success probability is:
 \begin{align}
-    P_{\text{succ}} & = p_1 \langle \psi_1 | \Pi_1 | \psi_1 \rangle + p_2 \langle \psi_2 | \Pi_2 | \psi_2 \rangle \notag \\
-                    & = 0.5 \cdot 1 + 0.5 \cdot 0.5 = 0.75, \label{eq:proj_psucc}
+    \psucc & = p_1 \langle \psi_1 | \Pi_1 | \psi_1 \rangle + p_2 \langle \psi_2 | \Pi_2 | \psi_2 \rangle \notag \\
+           & = 0.5 \cdot 1 + 0.5 \cdot 0.5 = 0.75, \label{eq:proj_psucc}
 \end{align}
 since \(\langle \psi_1 | \Pi_1 | \psi_1 \rangle = 1\), \(\langle \psi_1 | \Pi_2 | \psi_1 \rangle = 0\), \(\langle \psi_2 | \Pi_1 | \psi_2 \rangle = 0.5\), and \(\langle \psi_2 | \Pi_2 | \psi_2 \rangle = 0.5\).
 Errors occur when Alice sends \(\ket{\psi_2}\) but Bob measures \(\Pi_1\) (50\% chance),
@@ -79,8 +79,8 @@ with prior probabilities \(\{ p_i \}_{i=1}^k\) by finding a POVM
 inconclusive outcomes.
 The error probability is:
 \begin{align}
-    P_{\text{err}} & = \sum_{i=1}^k \sum_{\substack{j=1                                                                           \\ j \neq i}}^k p_i \langle \psi_i | \Pi_j | \psi_i \rangle, \label{eq:med_error} \\
-                   & = 1 - P_{\text{succ}} = 1 - \sum_{i=1}^k p_i \langle \psi_i | \Pi_i | \psi_i \rangle, \label{eq:med_success}
+    \perr & = \sum_{i=1}^k \sum_{\substack{j=1                                                                  \\ j \neq i}}^k p_i \langle \psi_i | \Pi_j | \psi_i \rangle, \label{eq:med_error} \\
+          & = 1 - \psucc = 1 - \sum_{i=1}^k p_i \langle \psi_i | \Pi_i | \psi_i \rangle, \label{eq:med_success}
 \end{align}
 subject to:
 \begin{align}
@@ -89,12 +89,12 @@ subject to:
 For \(k = 2\), the optimal POVM, known as the Helstrom measurement \cite{Barnett:09},
 is analytically solvable to maximize:
 \begin{align}
-    P_{\text{succ}} & = p_1 \langle \psi_1 | \Pi_1 | \psi_1 \rangle + p_2 \langle \psi_2 | \Pi_2 | \psi_2 \rangle, \notag                                             \\
-                    & = p_2 + \operatorname{Tr} \left[ \left( p_1 \ket{\psi_1}\bra{\psi_1} - p_2 \ket{\psi_2}\bra{\psi_2} \right) \Pi_1 \right], \label{eq:med_psucc}
+    \psucc & = p_1 \langle \psi_1 | \Pi_1 | \psi_1 \rangle + p_2 \langle \psi_2 | \Pi_2 | \psi_2 \rangle, \notag                                             \\
+           & = p_2 + \operatorname{Tr} \left[ \left( p_1 \ket{\psi_1}\bra{\psi_1} - p_2 \ket{\psi_2}\bra{\psi_2} \right) \Pi_1 \right], \label{eq:med_psucc}
 \end{align}
 where \(\Pi_2 = I - \Pi_1\).
 For \(k > 2\), numerical methods like semidefinite programming are typically required.
-The maximum \(P_{\text{succ}}\) occurs when \(\Pi_1\) projects onto the positive
+The maximum \(\psucc\) occurs when \(\Pi_1\) projects onto the positive
 eigenspace of \(p_1 \ket{\psi_1}\bra{\psi_1} - p_2 \ket{\psi_2}\bra{\psi_2}\).
 
 For the example states in Equation \ref{eq:qsd_example_states}, with \(p_1 = p_2 = 0.5\):
@@ -111,10 +111,10 @@ The POVM operator \(\Pi_1 = v_1 v_1^T / (v_1^T v_1)\) is:
 \end{align}
 The success probability is:
 \begin{align}
-    P_{\text{succ}} & = 0.5 \langle \psi_1 | \Pi_1 | \psi_1 \rangle + 0.5 \langle \psi_2 | \Pi_2 | \psi_2 \rangle = \frac{2 + \sqrt{2}}{4} \approx 0.8536, \label{eq:med_psucc_result}
+    \psucc & = 0.5 \langle \psi_1 | \Pi_1 | \psi_1 \rangle + 0.5 \langle \psi_2 | \Pi_2 | \psi_2 \rangle = \frac{2 + \sqrt{2}}{4} \approx 0.8536, \label{eq:med_psucc_result}
 \end{align}
-which matches the Helstrom bound \(P_{\text{succ}} = \frac{1 + \sqrt{1 - |\langle \psi_1 | \psi_2 \rangle|^2}}{2} = \frac{1 + 1/\sqrt{2}}{2}\).
-This improvement over the projective measurement (\(P_{\text{succ}} = 0.75\))
+which matches the Helstrom bound \(\psucc = \frac{1 + \sqrt{1 - |\langle \psi_1 | \psi_2 \rangle|^2}}{2} = \frac{1 + 1/\sqrt{2}}{2}\).
+This improvement over the projective measurement (\(\psucc = 0.75\))
 demonstrates the advantage of optimized POVMs for non-orthogonal states.
 
 \section{Unambiguous Quantum State Discrimination}
@@ -130,16 +130,16 @@ For the example states in Equation \ref{eq:qsd_example_states},
 \(\ket{\psi_1} = \ket{0}\), \(\ket{\psi_2} = \frac{1}{\sqrt{2}} (\ket{0} + \ket{1})\),
 with prior probabilities \(p_1 = p_2 = 0.5\), an optimal UQSD POVM is:
 \begin{align}
-    \Pi_1 &= \frac{\sqrt{2}}{1 + \sqrt{2}} \frac{(\ket{0} - \ket{1})(\bra{0} - \bra{1})}{2} = \frac{1}{2 + \sqrt{2}} \begin{pmatrix} 1 & -1 \\ -1 & 1 \end{pmatrix}, \label{eq:uqsd_pi1} \\
-    \Pi_2 &= \frac{\sqrt{2}}{1 + \sqrt{2}} \ket{1}\bra{1} = \frac{\sqrt{2}}{1 + \sqrt{2}} \begin{pmatrix} 0 & 0 \\ 0 & 1 \end{pmatrix}, \label{eq:uqsd_pi2} \\
-    \Pi_0 &= I - \Pi_1 - \Pi_2. \label{eq:uqsd_pi0}
+    \Pi_1 & = \frac{\sqrt{2}}{1 + \sqrt{2}} \frac{(\ket{0} - \ket{1})(\bra{0} - \bra{1})}{2} = \frac{1}{2 + \sqrt{2}} \begin{pmatrix} 1 & -1 \\ -1 & 1 \end{pmatrix}, \label{eq:uqsd_pi1} \\
+    \Pi_2 & = \frac{\sqrt{2}}{1 + \sqrt{2}} \ket{1}\bra{1} = \frac{\sqrt{2}}{1 + \sqrt{2}} \begin{pmatrix} 0 & 0 \\ 0 & 1 \end{pmatrix}, \label{eq:uqsd_pi2}                              \\
+    \Pi_0 & = I - \Pi_1 - \Pi_2. \label{eq:uqsd_pi0}
 \end{align}
 The outcome probabilities, \( p(m|i) = \langle \psi_i | \Pi_m | \psi_i \rangle \), are:
 \begin{align}
-    p(1|1) &= 1 - \frac{1}{\sqrt{2}} \approx 0.2929, \quad p(2|1) = 0, \quad p(0|1) \approx 0.7071, \notag \\
-    p(1|2) &= 0, \quad p(2|2) = \frac{1}{\sqrt{2}} (1 - \frac{1}{\sqrt{2}}) \approx 0.2929, \quad p(0|2) \approx 0.7071. \notag
+    p(1|1) & = 1 - \frac{1}{\sqrt{2}} \approx 0.2929, \quad p(2|1) = 0, \quad p(0|1) \approx 0.7071, \notag                      \\
+    p(1|2) & = 0, \quad p(2|2) = \frac{1}{\sqrt{2}} (1 - \frac{1}{\sqrt{2}}) \approx 0.2929, \quad p(0|2) \approx 0.7071. \notag
 \end{align}
-The average success probability is \( P_{\text{succ}} = \sum_{i=1}^2 p_i p(i|i) \approx 0.2929 \).
+The average success probability is \( \psucc = \sum_{i=1}^2 p_i p(i|i) \approx 0.2929 \).
 This POVM is optimal for \( k = 2 \), as it can be derived analytically \cite{RN493}.
 For \( k > 2 \), numerical methods like semidefinite programming are required,
 as discussed in Section \ref{sec:optimal_povm_for_uqsd}.
@@ -170,9 +170,9 @@ where each row is a state vector in a \(2^n\)-dimensional Hilbert space,
 the reciprocal states are columns of \(\Phi = \Psi (\Psi^* \Psi)^{-1}\).
 For the example entangled states from Subsection \ref{subsec:entangled_states}, defined as:
 \begin{align}
-    \ket{\psi_1} &= \frac{1}{\sqrt{1 + 0.2^2}} (\ket{00} + 0.2 \ket{11}), \notag \\
-    \ket{\psi_2} &= \frac{1}{\sqrt{1 + 0.5^2}} (\ket{01} + 0.5 \ket{11}), \notag \\
-    \ket{\psi_3} &= \frac{1}{\sqrt{1 + 0.7^2}} (\ket{10} + 0.7 \ket{11}), \label{eq:uqsd_example_states}
+    \ket{\psi_1} & = \frac{1}{\sqrt{1 + 0.2^2}} (\ket{00} + 0.2 \ket{11}), \notag                         \\
+    \ket{\psi_2} & = \frac{1}{\sqrt{1 + 0.5^2}} (\ket{01} + 0.5 \ket{11}), \notag                         \\
+    \ket{\psi_3} & = \frac{1}{\sqrt{1 + 0.7^2}} (\ket{10} + 0.7 \ket{11}), \label{eq:uqsd_example_states}
 \end{align}
 with prior probabilities \(p_1 = p_2 = p_3 = 1/3\), the state matrix
 \(\Psi = [\ket{\psi_1}, \ket{\psi_2}, \ket{\psi_3}]^T\) is constructed with
@@ -180,7 +180,7 @@ each row as a state vector in the \(\{ \ket{00}, \ket{01}, \ket{10}, \ket{11} \}
 Computing \(\Phi = \Psi (\Psi^* \Psi)^{-1}\) yields reciprocal states
 (columns of \(\Phi^T\), rounded to four decimals):
 \begin{align}
-    \Phi^T &\approx \begin{pmatrix} 0.9969 & -0.0628 & -0.0960 & 0.1146 \\ -0.0573 & 0.9610 & -0.2400 & 0.3141 \\ -0.0802 & -0.2198 & 0.8846 & 0.4800 \end{pmatrix}. \label{eq:phi_matrix}
+    \Phi^T & \approx \begin{pmatrix} 0.9969 & -0.0628 & -0.0960 & 0.1146 \\ -0.0573 & 0.9610 & -0.2400 & 0.3141 \\ -0.0802 & -0.2198 & 0.8846 & 0.4800 \end{pmatrix}. \label{eq:phi_matrix}
 \end{align}
 
 \subsection{Semidefinite Programming Formulation}
@@ -188,13 +188,13 @@ The optimal POVM is defined as \(\Pi_i = c_i \ket{\tilde{\phi}_i} \bra{\tilde{\p
 \(i = 1, \ldots, k\), with \(\Pi_0 = I - \sum_{i=1}^k \Pi_i\), where \(c_i \geq 0\).
 The SDP maximizes the success probability under no-noise conditions:
 \begin{align}
-    & \underset{\{c_i\}}{\text{maximize}} & & P_{\text{succ}} = \sum_{i=1}^k p_i c_i, \label{eq:uqsd_sdp_objective} \\
-    & \text{subject to} & & \Pi_0 = I - \sum_{i=1}^k c_i \ket{\tilde{\phi}_i} \bra{\tilde{\phi}_i} \succeq 0, \label{eq:uqsd_sdp_constraint} \\
-    & & & c_i \geq 0, \quad i = 1, \ldots, k. \label{eq:uqsd_sdp_positive}
+     & \underset{\{c_i\}}{\text{maximize}} &  & \psucc = \sum_{i=1}^k p_i c_i, \label{eq:uqsd_sdp_objective}                                                     \\
+     & \text{subject to}                   &  & \Pi_0 = I - \sum_{i=1}^k c_i \ket{\tilde{\phi}_i} \bra{\tilde{\phi}_i} \succeq 0, \label{eq:uqsd_sdp_constraint} \\
+     &                                     &  & c_i \geq 0, \quad i = 1, \ldots, k. \label{eq:uqsd_sdp_positive}
 \end{align}
 For the example states with \(p_i = 1/3\), numerical solution yields
 \(c_1 \approx 0.9615\), \(c_2 \approx 0.8000\), \(c_3 \approx 0.6711\),
-giving \(P_{\text{succ}} \approx 0.8112\).
+giving \(\psucc \approx 0.8112\).
 This approach, extended to noisy scenarios in Chapter \ref{chap:error_uqsd},
 underpins our CrossQSD and FitQSD formulations.
 
