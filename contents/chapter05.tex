@@ -84,7 +84,7 @@ We investigate a modified discrimination scheme, hereafter referred to as MED+.
 This scheme extends standard Minimum Error Discrimination by explicitly
 incorporating an operator for inconclusive outcomes, akin to Unambiguous
 Quantum State Discrimination.
-We are curious whether it would yield better $P_{succ}$ than MED.
+We are curious whether it would yield better $\psucc$ than MED.
 In MED+, the measurement outcomes are categorized differently from a purely
 error-minimizing approach. Specifically, we distinguish between:
 \begin{itemize}
@@ -96,7 +96,7 @@ error-minimizing approach. Specifically, we distinguish between:
 
 The semidefinite programming problem is formulated as follows:
 \begin{align}
-     & \underset{\{\Pi\}}{\text{maximize}} &  & P_{succ}=\sum_{i=1}^{k} p_{i} \operatorname{Tr}(\rho_{i} \Pi_{i}) \\
+     & \underset{\{\Pi\}}{\text{maximize}} &  & \psucc=\sum_{i=1}^{k} p_{i} \operatorname{Tr}(\rho_{i} \Pi_{i}) \\
      & \text{subject to}                   &  & \Pi_{i} \succeq 0, \quad i = 1, \ldots, k+1                       \\
      &                                     &  & \sum_{i=1}^{k+1} \Pi_i = I
 \end{align}
